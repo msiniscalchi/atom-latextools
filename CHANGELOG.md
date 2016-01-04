@@ -1,3 +1,4 @@
 ## 0.1.0 - First Release
-* Every feature added
-* Every bug fixed
+* Compiling / previewing on Windows
+* Error log parsing
+* LaTeXTools snippets
