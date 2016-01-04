@@ -1,0 +1,223 @@
+'.text.tex.latex':
+  'textit':
+    'prefix': 'it'
+    'body': '\\\\textit{$1}$0'
+  'textbf':
+    'prefix': 'bf'
+    'body': '\\\\textbf{$1}$0'
+  'emph':
+    'prefix': 'em'
+    'body': '\\\\emph{$1}$0'
+  'underline':
+    'prefix': 'un'
+    'body': '\\\\underline{$1}$0'
+  'bigskip':
+    'prefix': 'bs'
+    'body': '\\\\bigskip'
+  'medskip':
+    'prefix': 'ms'
+    'body': '\\\\medskip'
+  'smallskip':
+    'prefix': 'ss'
+    'body': '\\\\smallskip'
+  'usepackage':
+    'prefix': 'use'
+    'body': '\\\\usepagage'
+  'unnumbered eqn':
+    'prefix': 'beq'
+    'body': '\\\\[\n$0\n\\\\]'
+  'numbered eqn':
+    'prefix': 'beqn'
+    'body': '\\\\begin{equation}\n$0\n\\\\end{equation}\n'
+  'gathern':
+    'prefix': 'bga'
+    'body': '\\\\begin{gather*}\n$0\n\\\\end{gather*}\n'
+  'gather':
+    'prefix': 'bgan'
+    'body': '\\\\begin{gather}\n$0\n\\\\end{gather}\n'
+  'alignn':
+    'prefix': 'bga'
+    'body': '\\\\begin{align*}\n$0\n\\\\end{align*}\n'
+  'align':
+    'prefix': 'bgan'
+    'body': '\\\\begin{align}\n$0\n\\\\end{align}\n'
+  'alignatn':
+    'prefix': 'bga'
+    'body': '\\\\begin{alignat*}\n$0\n\\\\end{alignat*}\n'
+  'alignat':
+    'prefix': 'bgan'
+    'body': '\\\\begin{alignat}\n$0\n\\\\end{alignat}\n'
+  'flalignn':
+    'prefix': 'bga'
+    'body': '\\\\begin{flalign*}\n$0\n\\\\end{flalign*}\n'
+  'flalign':
+    'prefix': 'bgan'
+    'body': '\\\\begin{flalign}\n$0\n\\\\end{flalign}\n'
+  'multilinen':
+    'prefix': 'bga'
+    'body': '\\\\begin{multiline*}\n$0\n\\\\end{multiline*}\n'
+  'multiline':
+    'prefix': 'bgan'
+    'body': '\\\\begin{multiline}\n$0\n\\\\end{multiline}\n'
+
+  'itemize':
+    'prefix': 'bit'
+    'body': '\\\\begin{itemize}\n\t\\\\item $1 \n\\\\end{itemize}\n'
+  'enumerate':
+    'prefix': 'ben'
+    'body': '\\\\begin{enumerate}\n\t\\\\item $1 \n\\\\end{enumerate}\n'
+  'item':
+    'prefix': 'i'
+    'body': '\\\\item '
+
+
+'.string.other.math.latex':
+  'epsilon':
+    'prefix': 'e'
+    'body': '\\\\epsilon'
+  'epsilon2varepsilon':
+    'prefix': 'epsilon'
+    'body': 'varepsilon'
+  'varepsilon2epsilon':
+    'prefix': 'varepsilon'
+    'body': 'epsilon'
+  'theta':
+    'prefix': 'q'
+    'body': '\\\\theta'
+  'theta2vartheta':
+    'prefix': 'theta'
+    'body': 'vartheta'
+  'vartheta2theta':
+    'prefix': 'vartheta'
+    'body': 'theta'
+  'iota':
+    'prefix': 'i'
+    'body': '\\\\iota'
+  'phi':
+    'prefix': 'f'
+    'body': '\\\\phi'
+  'phi2varphi':
+    'prefix': 'phi'
+    'body': 'varphi'
+  'varphi2phi':
+    'prefix': 'varphi'
+    'body': 'phi'
+
+  'cdot':
+    'prefix': 'cd'
+    'body': '\\\\cdot'
+  'cdot2cdots':
+    'prefix': 'cdot'
+    'body': 'cdots'
+  'cdots2cdot':
+    'prefix': 'cdots'
+    'body': 'cdot'
+  'bigcup':
+    'prefix': 'bcu'
+    'body': '\\\\bigcup'
+  'bigcap':
+    'prefix': 'bca'
+    'body': '\\\\bigcap'
+
+  'quad':
+    'prefix': 'qd'
+    'body': '\\\\quad'
+  'qquad':
+    'prefix': 'qq'
+    'body': '\\\\qquad'
+  'leftarrow':
+    'prefix': 'lar'
+    'body': '\\\\leftarrow'
+  'longleftarrow':
+    'prefix': 'leftarrow'
+    'body': 'longleftarrow'
+  'Leftarrow':
+    'prefix': 'Lar'
+    'body': '\\\\Leftarrow'
+  'Longleftarrow':
+    'prefix': 'Leftarrow'
+    'body': 'Longleftarrow'
+  'rightarrow':
+    'prefix': 'rar'
+    'body': '\\\\rightarrow'
+  'longrightarrow':
+    'prefix': 'rightarrow'
+    'body': 'longrightarrow'
+  'Leftarrow':
+    'prefix': 'Rar'
+    'body': '\\\\Rightarrow'
+  'Longrightarrow':
+    'prefix': 'Rightarrow'
+    'body': 'Longrightarrow'
+  'leftrightarrow':
+    'prefix': 'lr'
+    'body': '\\\\leftrightarrow'
+  'longleftrightarrow':
+    'prefix': 'leftrightarrow'
+    'body': 'longleftrightarrow'
+  'Leftrightarrow':
+    'prefix': 'Lr'
+    'body': '\\\\Leftrightarrow'
+  'Longleftrightarrow':
+    'prefix': 'Leftrightarrow'
+    'body': 'Longleftrightarrow'
+  'iff':
+    'prefix': 'iff'
+    'body': '\\\\Leftrightarrow'
+  'up':
+    'prefix': 'up'
+    'body': '\\\\uparrow'
+  'down':
+    'prefix': 'dn'
+    'body': '\\\\downarrow'
+
+  'mathit':
+    'prefix': 'it'
+    'body': '\\\\mathit{$1}$0'
+  'mathbf':
+    'prefix': 'bf'
+    'body': '\\\\mathbf{$1}$0'
+  'mathbb':
+    'prefix': 'bb'
+    'body': '\\\\mathbb{$1}$0'
+  'mathit':
+    'prefix': 'it'
+    'body': '\\\\mathit{$1}$0'
+  'mathbf':
+    'prefix': 'bf'
+    'body': '\\\\mathbf{$1}$0'
+  'mathrm':
+    'prefix': 'bb'
+    'body': '\\\\mathrm{$1}$0'
+  'mathsf':
+    'prefix': 'sf'
+    'body': '\\\\mathsf{$1}$0'
+  'mathcal':
+    'prefix': 'cal'
+    'body': '\\\\mathcal'
+  'mathcal2':
+    'prefix': 'mathcal'
+    'body': 'mathcal{$1}$0'
+
+  'leftpar':
+    'prefix': 'lp'
+    'body': '\\\\left( $1 \\\\right) $0'
+  'lefbrackets':
+    'prefix': 'lb'
+    'body': '\\\\left\\\\{ $1 \\\\right\\\\} $0'
+  'leftcurlybraces':
+    'prefix': 'lc'
+    'body': '\\\\left\\\\{ $1 \\\\right\\\\} $0'
+  'frac':
+    'prefix': 'fr'
+    'body': '\\\\frac'
+  'frac2':
+    'prefix': 'frac'
+    'body': 'frac{$1}{$2}$0'
+  'stack':
+    'prefix': 'stack'
+    'body': '\\\\stackrel{$1}{$2}$0'
+
+  'split':
+    'prefix': 'sp'
+    'body': '\\\\begin{split}\n $1 \n \\\\end{split}'

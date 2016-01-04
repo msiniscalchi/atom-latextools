@@ -1,0 +1,15 @@
+{
+  "name": "latextools",
+  "main": "./lib/latextools",
+  "version": "0.0.0",
+  "description": "LaTexTools for Atom",
+  "keywords": [
+  ],
+  "repository": "https://github.com/msiniscalchi/latextools4atom",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}
