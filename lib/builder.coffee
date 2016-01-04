@@ -24,7 +24,20 @@ class Builder extends LTool
   latexmk: (dir, texfile, texfilename, user_options, user_program) ->
     @ltConsole.addContent("latexmk builder",br=true)
 
-    options = ["latexmk", "-cd", "-e", "$pdflatex = '%E -interaction=nonstopmode -synctex=1 %S %O'", "-f", "-pdf"]
+    quotes = '\"'
+
+    options = ["-cd", "-e", "-f", "-pdf", "-interaction=nonstopmode"]
+
+    tex_options = ["-synctex=1"].concat(user_options)
+    tex_options_cmdline = ["-latexoption=\"" + texopt + "\"" for texopt in tex_options]
+    options = options.concat([tex_options_cmdline])
+
+    program = "pdflatex" # unused for now
+
+    command = ["latexmk"].concat(options).concat([quotes + texfile + quotes]).join(' ')
+    @ltConsole.addContent(command,br=true)
+
+    return command
 
   texify: (dir, texfile, texfilename, user_options, user_program) ->
     @ltConsole.addContent("texify builder (internal)",br=true)
