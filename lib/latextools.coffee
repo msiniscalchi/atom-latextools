@@ -80,7 +80,7 @@ module.exports = Latextools =
       properties:
         texpath:
           type: 'string'
-          default: "$PATH:/Library/TeX/texbin:/usr/texbin:/usr/local/bin:/opt/local/bin"
+          default: "/Library/TeX/texbin:/usr/texbin:/usr/local/bin:/opt/local/bin"
       order: 13
 
     windows:

@@ -84,6 +84,22 @@ class Builder extends LTool
     user_options = atom.config.get("latextools.builderSettings.options")
     user_program = "" # unused for now
 
+    # Now prepare path
+    # TODO: also env if needed
+    # Note: texpath must NOT include $PATH!!!
+
+    # Apparently the key is different on Win and non-Win
+    if process.platform == "windows"
+      current_path = process.env.Path
+    else
+      current_path = process.env.PATH
+    texpath = atom.config.get("latextools." + process.platform + ".texpath")
+    @ltConsole.addContent("Platform: #{process.platform}; texpath: #{texpath}")
+    cmd_env = process.env
+    if texpath
+      cmd_env.PATH = current_path + path.delimiter + texpath
+      @ltConsole.addContent("setting PATH = #{process.env.PATH}")
+
     @ltConsole.addContent("Processing file #{filebase} (#{filename}) in directory #{filedir}",br=true)
 
     builder = atom.config.get("latextools.builder")
@@ -98,13 +114,27 @@ class Builder extends LTool
       else
         command = @texify(filedir, filebase, filename, user_options, user_program)
 
+      cmd_env.MYTEST = "Hello, world!"
+      command = "printenv;" + command
+
       # cd to dir and run command; add output to console for now
-      exec command, {cwd: filedir}, (err, stdout, stderr) =>
+      exec command, {cwd: filedir, env: cmd_env}, (err, stdout, stderr) =>
+        # If there were errors, print them and return
+        if err
+          @ltConsole.addContent("BUILD ERROR!", br=true)
+          @ltConsole.addContent(line, br=true) for line in stdout.split('\n')
+          @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
+          return
         # Parse error log
         fulllogfile = path.join(filedir, filename + ".log") # takes care of quotes
         @ltConsole.addContent("Parsing " + fulllogfile, br=true)
         log = fs.readFileSync(fulllogfile, 'utf8')
 
+        # We need to cd to the root file directory for the
+        # file-matching logic to work with texlive (miktex reports full paths)
+        # NOTE: we could also do this earlier and avoid setting cwd in the
+        # exec call
+        process.chdir(filedir)
         [errors, warnings] = parse_tex_log(log)
 
         @ltConsole.addContent("ERRORS:", br=true)
