@@ -7,7 +7,7 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
-"atom-text-editor[data-grammar='text tex latex']":
+".platform-windows atom-text-editor[data-grammar='text tex latex']":
   'ctrl-l ctrl-l': 'editor:select-line'
   'ctrl-l ctrl-m': 'latextools:toggle-log'
   'ctrl-l a': 'latextools:add-log'
@@ -16,3 +16,13 @@
   'shift-escape': 'latextools:show-ltconsole'
   'ctrl-alt-b': 'latextools:build'
   'ctrl-l j': 'latextools:jump-to-pdf'
+
+".platform-darwin atom-text-editor[data-grammar='text tex latex']":
+  'cmd-l cmd-l': 'editor:select-line'
+  'cmd-l cmd-m': 'latextools:toggle-log'
+  'cmd-l a': 'latextools:add-log'
+  'cmd-l c': 'latextools:clear-log'
+  'escape': 'latextools:hide-ltconsole'
+  'shift-escape': 'latextools:show-ltconsole'
+  'cmd-alt-b': 'latextools:build'
+  'cmd-l j': 'latextools:jump-to-pdf'
