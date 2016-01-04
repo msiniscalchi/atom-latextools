@@ -99,10 +99,10 @@ class Builder extends LTool
         command = @texify(filedir, filebase, filename, user_options, user_program)
 
       # cd to dir and run command; add output to console for now
-      exec command, {cwd: dir}, (err, stdout, stderr) =>
+      exec command, {cwd: filedir}, (err, stdout, stderr) =>
         # Parse error log
         @ltConsole.addContent("Parsing ", br=true)
-        fulllogfile = path.join(dir, filename + ".log") # takes care of quotes
+        fulllogfile = path.join(filedir, filename + ".log") # takes care of quotes
         log = fs.readFileSync(fulllogfile, 'utf8')
         [errors, warnings] = parse_tex_log(log)
 
