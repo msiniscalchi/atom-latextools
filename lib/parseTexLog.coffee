@@ -1,6 +1,8 @@
 # Parsing code, ported from ST's LaTeXTools (python)
 
 fs = require 'fs'
+path = require 'path'
+process = require 'process'
 
 ## Some utility functions
 
@@ -14,9 +16,11 @@ debug = (str) ->
   if DEBUG
     if !parseDebugLog
       try
-        parseDebugLog = fs.openSync("c:\\Users\\Marciano\\Documents\\temp\\parseTeXLog.out", "w")
+        homedir = process.env.HOME || process.env.USERPROFILE
+        logfilename = path.join(homedir, "parseTeXLog.out")
+        parseDebugLog = fs.openSync(logfilename, 'w')
       catch e
-        console.log("cannot open parseTeXLog.out!")
+        console.log("cannot open " + logfilename)
     fs.writeSync(parseDebugLog, str + "\n")
 
 debug_skip_file = (filename) ->
