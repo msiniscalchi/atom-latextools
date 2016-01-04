@@ -26,9 +26,9 @@ class Builder extends LTool
 
     quotes = '\"'
 
-    options = ["-cd", "-e", "-f", "-pdf", "-interaction=nonstopmode"]
+    options = ["-cd", "-e", "-f", "-pdf", "-interaction=nonstopmode", "-synctex=1"]
 
-    tex_options = ["-synctex=1"].concat(user_options)
+    tex_options = user_options
     tex_options_cmdline = ["-latexoption=\"" + texopt + "\"" for texopt in tex_options]
     options = options.concat([tex_options_cmdline])
 
@@ -101,9 +101,10 @@ class Builder extends LTool
       # cd to dir and run command; add output to console for now
       exec command, {cwd: filedir}, (err, stdout, stderr) =>
         # Parse error log
-        @ltConsole.addContent("Parsing ", br=true)
         fulllogfile = path.join(filedir, filename + ".log") # takes care of quotes
+        @ltConsole.addContent("Parsing " + fulllogfile, br=true)
         log = fs.readFileSync(fulllogfile, 'utf8')
+
         [errors, warnings] = parse_tex_log(log)
 
         @ltConsole.addContent("ERRORS:", br=true)
