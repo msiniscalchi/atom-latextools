@@ -7,17 +7,17 @@ module.exports =
 class Viewer extends LTool
 
 
-  _jumpWindows: (texfile, pdffile, row, col) ->
+  _jumpWindows: (texfile, pdffile, row, col, forward_sync, keep_focus) ->
     sumatra_cmd = atom.config.get("latextools.windows.sumatra")
     sumatra_args = [] # ["-reuse-instance"]
 
-    if atom.config.get("latextools.forwardSync")
+    if forward_sync
       sumatra_args = sumatra_args.concat(["-forward-search", '\"'+texfile+'\"', "#{row}"])
 
     sumatra_args.push('\"'+pdffile+'\"')
 
     command = sumatra_cmd + ' ' + sumatra_args.join(' ')
-    @ltConsole.addContent("Executing " + command)
+    @ltConsole.addContent("Executing " + command, br = true)
 
     exec command, {}, (err, stdout, stderr) =>
       if err > 1 # weirdness
@@ -27,8 +27,28 @@ class Viewer extends LTool
 
 
 
-  _jumpDarwin: ->
-    alert("Not implemented yet")
+  _jumpDarwin: (texfile, pdffile, row, col, forward_sync, keep_focus) ->
+
+    if keep_focus
+      skim_args = "-r -g"
+    else
+      skim_args = "-r"
+
+    if forward_sync
+      skim_cmd = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+      command = skim_cmd + " #{skim_args} #{row} #{pdffile} #{texfile}"
+    else
+      displayfile_cmd = path.join(atom.packages.resolvePackagePath("latextools"), "lib/support/displayfile")
+      command = "sh " + displayfile_cmd + " #{skim_args} #{pdffile}"
+
+    @ltConsole.addContent("Executing " + command, br=true)
+
+    exec command, {}, (err, stdout, stderr) =>
+      if err  # weirdness
+        @ltConsole.addContent("ERROR #{err.code}: ", br=true)
+        @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
+
+
 
   _jumpLinux: ->
     alert("Not implemented yet")
@@ -36,10 +56,14 @@ class Viewer extends LTool
   _jumpToPdf: (texfile, pdffile, row, col=1) ->
 
     # TODO make modular, but for now...
+
+    forward_sync = atom.config.get("latextools.forwardSync")
+    keep_focus = atom.config.get("latextools.keepFocus")
+
     switch process.platform
-      when "darwin" then @_jumpDarwin(texfile, pdffile, row, col)
-      when "win32" then @_jumpWindows(texfile, pdffile, row, col)
-      when "linux" then @_jumpLinux(texfile, pdffile, row, col)
+      when "darwin" then @_jumpDarwin(texfile, pdffile, row, col, forward_sync, keep_focus)
+      when "win32" then @_jumpWindows(texfile, pdffile, row, col, forward_sync, keep_focus)
+      when "linux" then @_jumpLinux(texfile, pdffile, row, col, forward_sync, keep_focus)
       else
         alert("Sorry, no viewer for the current platform")
 

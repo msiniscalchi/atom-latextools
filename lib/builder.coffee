@@ -142,7 +142,6 @@ class Builder extends LTool
         @ltConsole.addContent("WARNINGS:", br=true)
         @ltConsole.addContent(warn, br=true) for warn in warnings
 
-        # Jump to PDF unless user told us not to
-        if !atom.config.get("latextools.keepFocus")
-          @ltConsole.addContent("Jumping to PDF...", br=true)
-          @viewer.jumpToPdf()
+        # Jump to PDF
+        @ltConsole.addContent("Jumping to PDF...", br=true)
+        @viewer.jumpToPdf()
