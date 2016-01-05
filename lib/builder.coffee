@@ -147,7 +147,8 @@ class Builder extends LTool
               err_string = "#{err[0]}:#{err[1]}: #{err[2]} [#{err[3]}]"
 #              @ltConsole.addContent err_string, br=true
               @ltConsole.addContent err_string, true, false, =>
-                te.setCursorBufferPosition([err[1]-1,0])
+                atom.workspace.open(err[0], {initialLine: err[1]-1})
+                #te.setCursorBufferPosition([err[1]-1,0])
 
         @ltConsole.addContent("WARNINGS:", br=true)
         for warn in warnings
@@ -159,7 +160,8 @@ class Builder extends LTool
               warn_string = "#{warn[0]}:#{warn[1]}: #{warn[2]}"
 #              @ltConsole.addContent warn_string, br=true
               @ltConsole.addContent warn_string, true, false, =>
-                te.setCursorBufferPosition([warn[1]-1,0])
+                atom.workspace.open(warn[0], {initialLine: warn[1]-1})
+                #te.setCursorBufferPosition([warn[1]-1,0])
 
         # Jump to PDF
         @ltConsole.addContent("Jumping to PDF...", br=true)
