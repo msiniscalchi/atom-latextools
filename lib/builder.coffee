@@ -89,7 +89,7 @@ class Builder extends LTool
     # Note: texpath must NOT include $PATH!!!
 
     # Apparently the key is different on Win and non-Win
-    if process.platform == "windows"
+    if process.platform == "win32"
       current_path = process.env.Path
     else
       current_path = process.env.PATH

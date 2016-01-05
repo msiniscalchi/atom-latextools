@@ -83,7 +83,7 @@ module.exports = Latextools =
           default: "/Library/TeX/texbin:/usr/texbin:/usr/local/bin:/opt/local/bin"
       order: 13
 
-    windows:
+    win32:
       type: 'object'
       properties:
         texpath:
