@@ -1,7 +1,7 @@
 LTConsole = require './ltconsole'
 Builder = require './builder'
 Viewer = require './viewer'
-#CompletionManager = require './completion-manager'
+CompletionManager = require './completion-manager'
 {CompositeDisposable} = require 'atom'
 
 module.exports = Latextools =
@@ -175,6 +175,7 @@ module.exports = Latextools =
     @viewer = new Viewer(@ltConsole)
     @builder = new Builder(@ltConsole)
     @builder.viewer = @viewer
+    @CompletionManager = new CompletionManager(@ltConsole)
 
 
 
@@ -198,6 +199,8 @@ module.exports = Latextools =
       @builder.build()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
       @viewer.jumpToPdf()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-complete': =>
+      @CompletionManager.ref_complete()
 
   deactivate: ->
     @subscriptions.dispose()
