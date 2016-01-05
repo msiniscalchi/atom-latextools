@@ -120,11 +120,11 @@ class Builder extends LTool
       # cd to dir and run command; add output to console for now
       exec command, {cwd: filedir, env: cmd_env}, (err, stdout, stderr) =>
         # If there were errors, print them and return
-        if err
-          @ltConsole.addContent("BUILD ERROR!", br=true)
-          @ltConsole.addContent(line, br=true) for line in stdout.split('\n')
-          @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
-          return
+        # if err
+        #   @ltConsole.addContent("BUILD ERROR!", br=true)
+        #   @ltConsole.addContent(line, br=true) for line in stdout.split('\n')
+        #   @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
+        # return
         # Parse error log
         fulllogfile = path.join(filedir, filename + ".log") # takes care of quotes
         @ltConsole.addContent("Parsing " + fulllogfile, br=true)
@@ -138,9 +138,28 @@ class Builder extends LTool
         [errors, warnings] = parse_tex_log(log)
 
         @ltConsole.addContent("ERRORS:", br=true)
-        @ltConsole.addContent(err, br=true) for err in errors
+        for err in errors
+          do (err) =>
+            if err[1] == -1
+              err_string = "#{err[0]}: #{err[2]} [#{err[3]}]"
+              @ltConsole.addContent(err_string, br=true)
+            else
+              err_string = "#{err[0]}:#{err[1]}: #{err[2]} [#{err[3]}]"
+#              @ltConsole.addContent err_string, br=true
+              @ltConsole.addContent err_string, true, false, =>
+                te.setCursorBufferPosition([err[1]-1,0])
+
         @ltConsole.addContent("WARNINGS:", br=true)
-        @ltConsole.addContent(warn, br=true) for warn in warnings
+        for warn in warnings
+          do (warn) =>
+            if warn[1] == -1
+              warn_string = "#{warn[0]}: #{warn[2]}"
+              @ltConsole.addContent(warn_string, br=true)
+            else
+              warn_string = "#{warn[0]}:#{warn[1]}: #{warn[2]}"
+#              @ltConsole.addContent warn_string, br=true
+              @ltConsole.addContent warn_string, true, false, =>
+                te.setCursorBufferPosition([warn[1]-1,0])
 
         # Jump to PDF
         @ltConsole.addContent("Jumping to PDF...", br=true)

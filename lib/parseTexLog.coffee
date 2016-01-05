@@ -165,9 +165,9 @@ module.exports.parse_tex_log = (data) ->
     warn_match_line = line_rx_latex_warn.exec(l)
     if warn_match_line
       warn_line = warn_match_line[1]
-      warnings.push(location + ":" + warn_line + ": " + l)
+      warnings.push([location, warn_line, l])
     else
-      warnings.push(location + ": " + l)
+      warnings.push([location, -1, l])
 
 
   # State definitions
@@ -321,7 +321,7 @@ module.exports.parse_tex_log = (data) ->
       else
         location = files[files.length-1]
       debug("Found error: " + err_msg)
-      errors.push(location + ":" + err_line + ": " + err_msg + " [" + err_text + "]")
+      errors.push([location, err_line, err_msg,  err_text])
       continue
     if state==STATE_REPORT_WARNING
       # add current line and check if we are done or not
@@ -366,8 +366,7 @@ module.exports.parse_tex_log = (data) ->
       log_next = log_iterator.next()
       [file_name, linelen] = log_next.value
       file_name = file_name.slice(3) # here is the file name with <*> in front
-      errors.push("TeX STOPPED: " + line.slice(2,-2)+prev_line.slice(-5))
-      errors.push("TeX reports the error was in file:" + file_name)
+      errors.push([file_name, -1, "TeX STOPPED: " + line.slice(2,-2)+prev_line.slice(-5), ""])
       continue
 
     # Here, make sure there was no uncaught error, in which case we do more special processing
@@ -375,7 +374,7 @@ module.exports.parse_tex_log = (data) ->
     if line.length>0 && line.indexOf("==> Fatal error occurred,") >= 0
       debug("Fatal error detected")
       if errors == []
-        errors.push("TeX STOPPED: fatal errors occurred. Check the TeX log file for details")
+        errors.push(["", -1, "TeX STOPPED: fatal errors occurred. Check the TeX log file for details",""])
       continue
 
     # If tex just stops processing, we will be left with files on stack, so we keep track of it
@@ -389,7 +388,7 @@ module.exports.parse_tex_log = (data) ->
     # we have to do differently from above (need to double-check: why not stop processing if
     # emergency stop, too?)
     if line.length>0 && line.indexOf("(That makes 100 errors; please try again.)") >= 0
-      errors.push("Too many errors. TeX stopped.")
+      errors.push(["", -1, "Too many errors. TeX stopped.", ""])
       debug("100 errors, stopping")
       break
 
@@ -413,8 +412,8 @@ module.exports.parse_tex_log = (data) ->
         if line.length>0 && line.slice(0,3) == " []" || line.slice(0,2) == "[]"
           ou_processing = false
       if ou_processing
-        warnings.push("Malformed LOG file: over/underfull")
-        warnings.push("Please let me know via GitHub")
+        warnings.push(["",-1, "Malformed LOG file: over/underfull"])
+        warnings.push(["", -1, "Please let me know via GitHub"])
         break
       else
         continue
@@ -593,8 +592,8 @@ module.exports.parse_tex_log = (data) ->
         err_msg = line.slice(1).trim() # remove '!' and possibly spaces
         # This may or may not have a file location associated with it.
         # Be conservative and do not try to report one.
-        errors.push(err_msg)
-        errors.push("Check the TeX log file for more information")
+        errors.push(["", -1, err_msg, ""])
+        errors.push(["", -1, "Check the TeX log file for more information",""])
         continue
       # Now it's a regular TeX error
       err_msg = line.slice(2) # skip "! "
@@ -627,7 +626,7 @@ module.exports.parse_tex_log = (data) ->
 
   # If there were parsing issues, output them to debug
   if parsing.length>0
-    warnings.push("(Log parsing issues. Disregard unless something else is wrong.)")
+    warnings(["", -1, "(Log parsing issues. Disregard unless something else is wrong.)"])
     print_debug = true
     for l in parsing
       debug(l)
