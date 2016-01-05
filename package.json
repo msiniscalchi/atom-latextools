@@ -3,7 +3,7 @@
   "main": "./lib/latextools",
   "version": "0.3.1",
   "description": "LaTexTools for Atom",
-  "keywords": [],
+  "keywords": ["tex", "latex", "latexmk", "texlive", "latextools"],
   "repository": "https://github.com/msiniscalchi/atom-latextools",
   "license": "MIT",
   "engines": {
