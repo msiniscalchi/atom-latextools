@@ -115,7 +115,7 @@ class Builder extends LTool
         command = @texify(filedir, filebase, filename, user_options, user_program)
 
       cmd_env.MYTEST = "Hello, world!"
-      command = "printenv;" + command
+      command = command
 
       # cd to dir and run command; add output to console for now
       exec command, {cwd: filedir, env: cmd_env}, (err, stdout, stderr) =>
