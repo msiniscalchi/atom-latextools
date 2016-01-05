@@ -5,3 +5,6 @@
 
 ## 0.2.0 - OSX support
 * Compiling / previewing on OSX
+
+## 0.3.0 - Jump to errors / warnings
+* What it says on the tin
