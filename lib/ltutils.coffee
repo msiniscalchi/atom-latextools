@@ -74,18 +74,29 @@ module.exports.find_in_files = (rootdir, src, rx) ->
   else
     console.log("Need to find extension for #{src}")
     not_found = true
-    i = 0 # old-style looping
-    while not_found && i < tex_exts.length
-      tex_src = src + tex_exts[i] # ext contains a dot
-      i++
+    for ext in tex_exts
+      tex_src = src + ext
       try
         s = fs.statSync(path.join(rootdir, tex_src))
-      catch e
+      catch e # statSync errors out if tex_src doesn't exist
         continue
       not_found = false if s.isFile()
     if not_found
       alert("Could not find #{src}")
       return null
+    
+    # i = 0 # old-style looping
+    # while not_found && i < tex_exts.length
+    #   tex_src = src + tex_exts[i] # ext contains a dot
+    #   i++
+    #   try
+    #     s = fs.statSync(path.join(rootdir, tex_src))
+    #   catch e
+    #     continue
+    #   not_found = false if s.isFile()
+    # if not_found
+    #   alert("Could not find #{src}")
+    #   return null
 
   file_path = path.join(rootdir, tex_src) # automatically normalizes
   console.log("find_in_files: searching #{file_path}")
