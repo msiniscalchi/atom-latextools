@@ -1,19 +1,37 @@
 {SelectListView} = require 'atom-space-pen-views'
 
+module.exports =
 class LTSelectListView extends SelectListView
- initialize: ->
-   super
-   @addClass('overlay from-top')
-   @setItems(['Hello', 'World'])
-   @panel ?= atom.workspace.addModalPanel(item: this)
-   @panel.show()
-   @focusFilterEditor()
+  callback: null
 
- viewForItem: (item) ->
-   "<li>#{item}</li>"
+  initialize: ->
+    super
+    @addClass('overlay from-top')
+    @panel = atom.workspace.addModalPanel(item: this)
+    @panel.hide()
 
- confirmed: (item) ->
-   console.log("#{item} was selected")
+  viewForItem: (item) ->
+    "<li>#{item}</li>"
 
- cancelled: ->
-   console.log("This view was cancelled")
+  confirmed: (item) ->
+    @selected_item = item
+    @restoreFocus()
+    @panel.hide()
+    @callback(item)
+
+  cancelled: ->
+    @restoreFocus()
+    @panel.hide()
+
+  start: (@callback) ->
+    @selected_item = null
+    @panel.show()
+    @storeFocusedElement()
+    @focusFilterEditor()
+
+  getPanel: ->
+    return @panel
+
+  destroy: ->
+    @panel.remove()
+    @panel.destroy()

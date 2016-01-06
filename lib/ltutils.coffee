@@ -52,3 +52,28 @@ module.exports.get_tex_root = (texFile) ->
     i++
 
   return root
+
+# Find all matches of a regex starting from a master file
+# and working our way through all included files
+#
+# Based on LaTeXTools' find_labels_in_files
+module.exports.find_in_files = (rootdir, src, rx, results) ->
+
+  include_rx = /\\(?:input|include)\{([^\{\}]+)\}/
+
+  file_path = path.join(rootdir, src) # automatically normalizes
+  console.log("find_in_files: searching #{file_path}")
+
+  try
+    src_content = fs.readFileSync(file_path, 'utf-8')
+  catch e
+    alert("Could not read #{file_path}; encoding issues?")
+    return
+
+  newresults = []
+  while (r = rx.exec(src_content)) != null
+    newresults.push(r[1])
+
+  console.log(newresults)
+
+  return results.concat(newresults)
