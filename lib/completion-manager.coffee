@@ -27,7 +27,7 @@ class CompletionManager extends LTool
     filedir = parsed_fname.dir
     filebase = parsed_fname.base  # name only includes the name (no dir, no ext)
 
-    labels = find_in_files(filedir, filebase, /\\label\{([^\}]+)\}/g, [])
+    labels = find_in_files(filedir, filebase, /\\label\{([^\}]+)\}/g)
 
     # TODO add partially specified label to search field
     @sel_view.setItems(labels)
@@ -51,8 +51,8 @@ class CompletionManager extends LTool
     current_point = te.getCursorBufferPosition()
     initial_point = [current_point.row, max(0,current_point.column - max_length)]
     range = [initial_point, current_point]
-    console.log(range)
-    console.log(te.getTextInBufferRange(range))
+    # console.log(range)
+    # console.log(te.getTextInBufferRange(range))
 
     te.backwardsScanInBufferRange ref_rx, range, ({match, stop}) =>
       console.log("found match")
