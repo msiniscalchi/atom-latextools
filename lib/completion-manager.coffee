@@ -1,5 +1,6 @@
 {LTool,get_tex_root,find_in_files} = require './ltutils'
 LTSelectListView = require './ltselectlist-view'
+LTSelectList2View = require './ltselectlist2-view'
 #get_ref_completions = require './get-ref-completions'
 #get_bib_completions = require './get-bib-completions'
 path = require 'path'
@@ -9,11 +10,13 @@ module.exports =
 
 class CompletionManager extends LTool
   sel_view: null
+  sel2_view: null
   sel_panel: null
 
   constructor: (@ltconsole) ->
     super
     @sel_view = new LTSelectListView
+    @sel2_view = new LTSelectList2View
 
 
   refComplete: ->
@@ -59,5 +62,19 @@ class CompletionManager extends LTool
       @refComplete()
       stop()
 
+
+  citeComplete: ->
+
+    # just a test for now
+    items = [
+      {"primary": "First Item", "secondary": "A cool item", "id":0},
+      {"primary": "Second Item", "secondary": "An equally cool item", "id":1}
+    ]
+
+    @sel2_view.setItems(items)
+    @sel2_view.start (item) =>
+      alert(item["id"])
+
   destroy: ->
-    @sel_panel.destroy()
+    @sel2_view.destroy()
+    @sel_view.destroy()

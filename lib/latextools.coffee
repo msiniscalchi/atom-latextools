@@ -202,6 +202,8 @@ module.exports = Latextools =
       @viewer.jumpToPdf()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-complete': =>
       @CompletionManager.refComplete()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:cite-complete': =>
+      @CompletionManager.citeComplete()
 
     # Autotriggered functionality
     # add autocomplete to every text editor that has a tex file

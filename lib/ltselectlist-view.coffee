@@ -19,7 +19,9 @@ class LTSelectListView extends SelectListView
     @panel.hide()
     @callback(item)
 
-  cancelled: ->
+  # API unclear: cancel or cancelled?
+  cancel: ->
+    super
     @restoreFocus()
     @panel.hide()
 
