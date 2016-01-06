@@ -3,6 +3,7 @@ Builder = require './builder'
 Viewer = require './viewer'
 CompletionManager = require './completion-manager'
 {CompositeDisposable} = require 'atom'
+path = require 'path'
 
 module.exports = Latextools =
   ltConsole: null
@@ -200,7 +201,16 @@ module.exports = Latextools =
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
       @viewer.jumpToPdf()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-complete': =>
-      @CompletionManager.ref_complete()
+      @CompletionManager.refComplete()
+
+    # Autotriggered functionality
+    # add autocomplete to every text editor that has a tex file
+    atom.workspace.observeTextEditors (te) =>
+      if !( path.extname(te.getPath()) in atom.config.get('latextools.texFileExtensions') )
+        return
+      @subscriptions.add te.onDidStopChanging =>
+        @CompletionManager.refCompleteAuto(te) if atom.config.get("latextools.refAutoTrigger")
+        # add more here?
 
   deactivate: ->
     @subscriptions.dispose()
