@@ -52,6 +52,16 @@ module.exports.get_tex_root = (texFile) ->
 
   return root
 
+
+# Check if a file exists
+module.exports.is_file = (fname) ->
+  try
+    s = fs.statSync(fname)
+  catch e # statSync errors out if tex_src doesn't exist
+    return false
+  return s.isFile()
+
+
 # Find all matches of a regex starting from a master file
 # and working our way through all included files
 #
@@ -76,15 +86,14 @@ module.exports.find_in_files = (rootdir, src, rx) ->
     not_found = true
     for ext in tex_exts
       tex_src = src + ext
-      try
-        s = fs.statSync(path.join(rootdir, tex_src))
-      catch e # statSync errors out if tex_src doesn't exist
-        continue
-      not_found = false if s.isFile()
+      if module.exports.is_file(path.join(rootdir, tex_src))
+        not_found = false
+        break
+
     if not_found
       alert("Could not find #{src}")
       return null
-    
+
     # i = 0 # old-style looping
     # while not_found && i < tex_exts.length
     #   tex_src = src + tex_exts[i] # ext contains a dot

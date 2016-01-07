@@ -1,4 +1,4 @@
-{LTool,get_tex_root,find_in_files} = require './ltutils'
+{LTool,get_tex_root,find_in_files,is_file} = require './ltutils'
 LTSelectListView = require './ltselectlist-view'
 LTSelectList2View = require './ltselectlist2-view'
 #get_ref_completions = require './get-ref-completions'
@@ -64,6 +64,37 @@ class CompletionManager extends LTool
 
 
   citeComplete: ->
+
+    te = atom.workspace.getActiveTextEditor()
+
+    fname = get_tex_root(te.getPath())
+
+    parsed_fname = path.parse(fname)
+
+    filedir = parsed_fname.dir
+    filebase = parsed_fname.base  # name only includes the name (no dir, no ext)
+
+    bib_rx = /\\(?:bibliography|nobibliography|addbibresource)\{([^\}]+)\}/g
+    raw_bibs = find_in_files(filedir, filebase, bib_rx)
+
+    # Split multiple bib files
+    bibs = []
+    for b in raw_bibs
+      bibs = bibs.concat(b.split(','))
+
+    # Trim and take care of .bib extension
+    bibs = ( if path.extname(b)=='.bib' then path.join(filedir, b.trim()) else path.join(filedir, b.trim() + '.bib') for b in bibs )
+
+    # Check to see if they exist
+    bibs = ( b for b in bibs when is_file(b) )
+
+    # If it's a single string, put it in an array
+    if typeof bibs == 'string'
+      bibs = [bibs]
+
+    bibentries = []
+    for b in bibs
+      bibentries = bibentries.concat(get_bib_completions(b))
 
     # just a test for now
     items = [
