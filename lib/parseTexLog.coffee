@@ -197,7 +197,7 @@ module.exports.parse_tex_log = (data) ->
     # first of all, see if we have a line to recycle (see heuristic for "l.<nn>" lines)
     if recycle_extra
       [line, linelen] = [extra, extralen]
-      recycle_extra = False
+      recycle_extra = false
       line_num +=1
     else if reprocess_extra
       line = extra # NOTE: we must remember that we are reprocessing. See long-line heuristics
