@@ -36,7 +36,7 @@ class Viewer extends LTool
 
     if forward_sync
       skim_cmd = '/Applications/Skim.app/Contents/SharedSupport/displayline'
-      command = skim_cmd + " #{skim_args} #{row} #{pdffile} #{texfile}"
+      command = skim_cmd + " #{skim_args} #{row} \"#{pdffile}\" \"#{texfile}\""
     else
       displayfile_cmd = path.join(atom.packages.resolvePackagePath("latextools"), "lib/support/displayfile")
       command = "sh " + displayfile_cmd + " #{skim_args} #{pdffile}"
