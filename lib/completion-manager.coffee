@@ -2,7 +2,7 @@
 LTSelectListView = require './ltselectlist-view'
 LTSelectList2View = require './ltselectlist2-view'
 #get_ref_completions = require './get-ref-completions'
-#get_bib_completions = require './get-bib-completions'
+get_bib_completions = require './get-bib-completions'
 path = require 'path'
 fs = require 'fs'
 
@@ -94,15 +94,11 @@ class CompletionManager extends LTool
 
     bibentries = []
     for b in bibs
-      bibentries = bibentries.concat(get_bib_completions(b))
+      [keywords, titles, authors, years, authors_short, titles_short, journals] = get_bib_completions(b)
+      # TODO formatting here
+      bibentries = bibentries.concat( ({"primary": "#{titles[i]} (#{keywords[i]})", "secondary": authors[i], "id": keywords[i]} for i in [0...keywords.length]) )
 
-    # just a test for now
-    items = [
-      {"primary": "First Item", "secondary": "A cool item", "id":0},
-      {"primary": "Second Item", "secondary": "An equally cool item", "id":1}
-    ]
-
-    @sel2_view.setItems(items)
+    @sel2_view.setItems(bibentries)
     @sel2_view.start (item) =>
       alert(item["id"])
 

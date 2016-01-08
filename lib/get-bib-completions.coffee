@@ -14,99 +14,96 @@ get_bib_completions = (bibfile) ->
     alert("cannot read " + bibfile)
     return
 
-    # FIXME from here on, it's Python!
+  keywords = []
+  titles = []
+  authors = []
+  years = []
+  journals = []
 
-    keywords = []
-    titles = []
-    authors = []
-    years = []
-    journals = []
-
-    entry = {   "keyword": "",
-                "title": "",
-                "author": "",
-                "year": "",
-                "editor": "",
-                "journal": "",
-                "eprint": "" }
-    for line in bib:
-      line = line.strip()
-      # Let's get rid of irrelevant lines first
-      if line == "" or line[0] == '%':
-        continue
-      if line.lower()[0:8] == "@comment":
-        continue
-      if line.lower()[0:7] == "@string":
-        continue
-      if line.lower()[0:9] == "@preamble":
-        continue
-      if line[0] == "@":
-        # First, see if we can add a record; the keyword must be non-empty, other fields not
-        if entry["keyword"]:
-          keywords.append(entry["keyword"])
-          titles.append(entry["title"])
-          years.append(entry["year"])
-          # For author, if there is an editor, that's good enough
-          authors.append(entry["author"] or entry["editor"] or "????")
-          journals.append(entry["journal"] or entry["eprint"] or "????")
-          # Now reset for the next iteration
-          entry["keyword"] = ""
-          entry["title"] = ""
-          entry["year"] = ""
-          entry["author"] = ""
-          entry["editor"] = ""
-          entry["journal"] = ""
-          entry["eprint"] = ""
-        # Now see if we get a new keyword
-        kp_match = kp.search(line)
-        if kp_match:
-          entry["keyword"] = kp_match.group(1)
-        else:
-          print ("Cannot process this @ line: " + line)
-          print ("Previous keyword (if any): " + entry["keyword"])
-        continue
-      # Now test for title, author, etc.
-      # Note: we capture only the first line, but that's OK for our purposes
-      multip_match = multip.search(line)
-      if multip_match:
-        key = multip_match.group(1).lower()     # no longer decode. Was:    .decode('ascii','ignore')
-        value = multip_match.group(2)           #                           .decode('ascii','ignore')
-          entry[key] = value
+  entry = {   "keyword": "", "title": "", "author": "", "year": "", "editor": "", "journal": "", "eprint": "" }
+  for line in bib
+    line = line.trim()
+    # Let's get rid of irrelevant lines first
+    if line == "" || line[0] == '%'
       continue
+    if line.toLowerCase()[0...8] == "@comment"
+      continue
+    if line.toLowerCase()[0...7] == "@string"
+      continue
+    if line.toLowerCase()[0...9] == "@preamble"
+      continue
+    if line[0] == "@"
+      # First, see if we can add a record; the keyword must be non-empty, other fields not
+      if entry["keyword"]
+        keywords.push(entry["keyword"])
+        titles.push(entry["title"])
+        years.push(entry["year"])
+        # For author, if there is an editor, that's good enough
+        authors.push(entry["author"] || entry["editor"] || "????")
+        journals.push(entry["journal"] || entry["eprint"] || "????")
+        # Now reset for the next iteration
+        entry["keyword"] = ""
+        entry["title"] = ""
+        entry["year"] = ""
+        entry["author"] = ""
+        entry["editor"] = ""
+        entry["journal"] = ""
+        entry["eprint"] = ""
+      # Now see if we get a new keyword
+      kp_match = kp_rx.exec(line)
+      if kp_match
+        entry["keyword"] = kp_match[1]
+      else
+        console.log("Cannot process this @ line: " + line)
+        console.log("Previous keyword (if any): " + entry["keyword"])
+      continue
+    # Now test for title, author, etc.
+    # Note: we capture only the first line, but that's OK for our purposes
+    multi_match = multi_rx.exec(line)
+    if multi_match
+      key = multi_match[1].toLowerCase()
+      value = multi_match[2]
+      entry[key] = value
+    continue
 
   # at the end, we are left with one bib entry
-  keywords.append(entry["keyword"])
-  titles.append(entry["title"])
-  years.append(entry["year"])
-  authors.append(entry["author"] or entry["editor"] or "????")
-  journals.append(entry["journal"] or entry["eprint"] or "????")
+  keywords.push(entry["keyword"])
+  titles.push(entry["title"])
+  years.push(entry["year"])
+  authors.push(entry["author"] || entry["editor"] || "????")
+  journals.push(entry["journal"] || entry["eprint"] || "????")
 
-  print ( "Found %d total bib entries" % (len(keywords),) )
+  console.log( "Found #{keywords.length} total bib entries")
 
   # # Filter out }'s at the end. There should be no commas left
-  titles = [t.replace('{\\textquoteright}', '').replace('{','').replace('}','') for t in titles]
+
+  console.log(titles)
+  titles = (t.replace('{\\textquoteright}', '').replace(/\{/g,'').replace(/\}/g,'') for t in titles)
 
   # format author field
-  def format_author(authors):
-    # print(authors)
+  format_author = (authors) ->
     # split authors using ' and ' and get last name for 'last, first' format
-    authors = [a.split(", ")[0].strip(' ') for a in authors.split(" and ")]
+    authors = [a.split(", ")[0].trim() for a in authors.split(" and ")]
     # get last name for 'first last' format (preserve {...} text)
-    authors = [a.split(" ")[-1] if a[-1] != '}' or a.find('{') == -1 else re.sub(r'{|}', '', a[len(a) - a[::-1].index('{'):-1]) for a in authors]
-    #     authors = [a.split(" ")[-1] for a in authors]
+    # FIXME: I can't understand what this does!!!!
+    ## authors = [if a[-1] != '}' || a.find('{') == -1 then a.split(" ")[-1] else re.sub(r'{|}', '', a[len(a) - a[::-1].index('{'):-1]) for a in authors]
     # truncate and add 'et al.'
-    if len(authors) > 2:
+    if authors.length > 2
       authors = authors[0] + " et al."
-    else:
-      authors = ' & '.join(authors)
+    else
+      authors = authors.join(' & ')
     # return formated string
     # print(authors)
     return authors
 
   # format list of authors
-  authors_short = [format_author(author) for author in authors]
+  authors_short = (format_author(author) for author in authors)
 
   # short title
-  sep = re.compile(":|\.|\?")
-  titles_short = [sep.split(title)[0] for title in titles]
-  titles_short = [title[0:60] + '...' if len(title) > 60 else title for title in titles_short]
+  sep = /:|\.|\?/
+
+  console.log(titles)
+  titles_short = (title.split(sep)[0] for title in titles)
+  titles_short = (if title.length > 60 then title[0...60] + '...' else title for title in titles_short)
+
+  return [keywords, titles, authors, years, authors_short, titles_short, journals]
