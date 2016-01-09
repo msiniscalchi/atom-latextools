@@ -1,7 +1,7 @@
 {
   "name": "latextools",
   "main": "./lib/latextools",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "LaTeXTools for Atom: comprehensive support for LaTeX documents",
   "keywords": [
     "tex",
