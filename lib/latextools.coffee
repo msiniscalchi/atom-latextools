@@ -200,10 +200,8 @@ module.exports = Latextools =
       @builder.build()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
       @viewer.jumpToPdf()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-complete': =>
-      @CompletionManager.refComplete()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:cite-complete': =>
-      @CompletionManager.citeComplete()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-cite-complete': =>
+      @CompletionManager.refCiteComplete()
 
     # Autotriggered functionality
     # add autocomplete to every text editor that has a tex file
@@ -211,7 +209,7 @@ module.exports = Latextools =
       if !( path.extname(te.getPath()) in atom.config.get('latextools.texFileExtensions') )
         return
       @subscriptions.add te.onDidStopChanging =>
-        @CompletionManager.refCompleteAuto(te) if atom.config.get("latextools.refAutoTrigger")
+        @CompletionManager.refCiteComplete() if atom.config.get("latextools.refAutoTrigger")
         # add more here?
 
   deactivate: ->

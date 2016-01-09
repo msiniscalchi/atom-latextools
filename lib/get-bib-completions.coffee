@@ -52,11 +52,11 @@ get_bib_completions = (bibfile) ->
       # Now see if we get a new keyword
       kp_match = kp_rx.exec(line)
       if kp_match
-        console.log("keyword: #{kp_match[1]}")
+        # console.log("keyword: #{kp_match[1]}")
         entry["keyword"] = kp_match[1]
       else
-        console.log("Cannot process this @ line: " + line)
-        console.log("Previous keyword (if any): " + entry["keyword"])
+        # console.log("Cannot process this @ line: " + line)
+        # console.log("Previous keyword (if any): " + entry["keyword"])
       continue
     # Now test for title, author, etc.
     # Note: we capture only the first line, but that's OK for our purposes
@@ -65,9 +65,9 @@ get_bib_completions = (bibfile) ->
       key = multi_match[1].toLowerCase()
       value = multi_match[2]
       entry[key] = value
-      console.log("key = #{key}: value = #{value}")
+      # console.log("key = #{key}: value = #{value}")
     else
-      console.log("no multi_match for line: #{line}")
+      # console.log("no multi_match for line: #{line}")
     continue
 
   # at the end, we are left with one bib entry
@@ -77,11 +77,11 @@ get_bib_completions = (bibfile) ->
   authors.push(entry["author"] || entry["editor"] || "????")
   journals.push(entry["journal"] || entry["eprint"] || "????")
 
-  console.log( "Found #{keywords.length} total bib entries")
+  # console.log( "Found #{keywords.length} total bib entries")
 
   # # Filter out }'s at the end. There should be no commas left
 
-  console.log(titles)
+  # console.log(titles)
   titles = (t.replace('{\\textquoteright}', '').replace(/\{/g,'').replace(/\}/g,'') for t in titles)
 
   # format author field
@@ -106,8 +106,8 @@ get_bib_completions = (bibfile) ->
   # short title
   sep = /:|\.|\?/
 
-  console.log(titles)
+  # console.log(titles)
   titles_short = (title.split(sep)[0] for title in titles)
-  titles_short = (if title.length > 60 then title[0...60] + '...' else title for title in titles_short)
+  titles_short = (if title.length > 40 then title[0...40] + '...' else title for title in titles_short)
 
   return [keywords, titles, authors, years, authors_short, titles_short, journals]

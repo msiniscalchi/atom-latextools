@@ -19,9 +19,44 @@ class CompletionManager extends LTool
     @sel2_view = new LTSelectList2View
 
 
-  refComplete: ->
+  refCiteComplete:  ->
 
     te = atom.workspace.getActiveTextEditor()
+
+    max_length = 10 # max length of ref command, including backslash
+    ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
+    cite_rx = /\\cite([a-zX*]*?)(\[.*?\]){0,2}\{(?:[^{},]*,)*([^{}]*)/
+    # cite_rx_rev = /([^{},]*)(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
+
+    current_point = te.getCursorBufferPosition()
+    initial_point = [current_point.row, Math.max(0,current_point.column - max_length)]
+    range = [initial_point, current_point]
+    # console.log(range)
+    # console.log(te.getTextInBufferRange(range))
+
+    got_ref = false
+    te.backwardsScanInBufferRange ref_rx, range, ({match, stop}) =>
+      console.log("found match")
+      @refComplete(te)
+      stop()
+      got_ref = true
+
+    return if got_ref
+
+    got_cite = false
+    te.backwardsScanInBufferRange cite_rx, range, ({match, stop}) =>
+      console.log("found match")
+      @citeComplete(te)
+      stop()
+      got_cite = true
+
+    return if got_cite
+    # Need to show this ONLY if activated via trigger!
+    # alert("Did not recognize citation / reference command")
+
+
+
+  refComplete: (te) ->
 
     fname = get_tex_root(te.getPath())
 
@@ -43,29 +78,9 @@ class CompletionManager extends LTool
         te.moveRight()
 
 
-  refCompleteAuto: (te) ->
-
-    max_length = 10 # max length of ref command, including backslash
-    ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
-
-    max = (a,b) ->
-      if a > b then a else b
-
-    current_point = te.getCursorBufferPosition()
-    initial_point = [current_point.row, max(0,current_point.column - max_length)]
-    range = [initial_point, current_point]
-    # console.log(range)
-    # console.log(te.getTextInBufferRange(range))
-
-    te.backwardsScanInBufferRange ref_rx, range, ({match, stop}) =>
-      console.log("found match")
-      @refComplete()
-      stop()
 
 
-  citeComplete: ->
-
-    te = atom.workspace.getActiveTextEditor()
+  citeComplete: (te) ->
 
     fname = get_tex_root(te.getPath())
 
@@ -96,11 +111,39 @@ class CompletionManager extends LTool
     for b in bibs
       [keywords, titles, authors, years, authors_short, titles_short, journals] = get_bib_completions(b)
       # TODO formatting here
-      bibentries = bibentries.concat( ({"primary": "#{titles[i]} (#{keywords[i]})", "secondary": authors[i], "id": keywords[i]} for i in [0...keywords.length]) )
+      item_fmt = atom.config.get("latextools.citePanelFormat")
+
+      if item_fmt.length != 2
+        alert "Incorrect citePanelFormat specification. Check your preferences!"
+        return
+
+      # Inelegant but safe
+      for i in [0...keywords.length]
+        primary = item_fmt[0].replace("{keyword}", keywords[i])
+        primary = primary.replace("{title}", titles[i])
+        primary = primary.replace("{author}", authors[i])
+        primary = primary.replace("{year}", years[i])
+        primary = primary.replace("{author_short}", authors_short[i])
+        primary = primary.replace("{title_short}", titles_short[i])
+        primary = primary.replace("{journal}", journals[i])
+        secondary = item_fmt[1].replace("{keyword}", keywords[i])
+        secondary = secondary.replace("{title}", titles[i])
+        secondary = secondary.replace("{author}", authors[i])
+        secondary = secondary.replace("{year}", years[i])
+        secondary = secondary.replace("{author_short}", authors_short[i])
+        secondary = secondary.replace("{title_short}", titles_short[i])
+        secondary = secondary.replace("{journal}", journals[i])
+        bibentries.push( {"primary": primary, "secondary": secondary, "id": keywords[i]} )
 
     @sel2_view.setItems(bibentries)
     @sel2_view.start (item) =>
-      alert(item["id"])
+      te.insertText(item.id)
+      # see if we need to skip a brace
+      pt = te.getCursorBufferPosition()
+      ran = [[pt.row, pt.column], [pt.row, pt.column+1]]
+      if te.getTextInBufferRange(ran) == '}'
+        te.moveRight()
+
 
   destroy: ->
     @sel2_view.destroy()
