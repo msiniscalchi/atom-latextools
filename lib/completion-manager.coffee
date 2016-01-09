@@ -23,36 +23,50 @@ class CompletionManager extends LTool
 
     te = atom.workspace.getActiveTextEditor()
 
-    max_length = 10 # max length of ref command, including backslash
-    ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
-    cite_rx = /\\cite([a-zX*]*?)(\[.*?\]){0,2}\{(?:[^{},]*,)*([^{}]*)/
-    # cite_rx_rev = /([^{},]*)(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
+    max_length = 100 # max length of ref/cite command, including backslash
+    #ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
+    ref_rx_rev = /^\{fer(?:qe|egap|v|V|otua|eman|c|C|egapc)?/
+    #cite_rx = /\\cite[a-z\*]*?(?:\[.*?\]){0,2}\{/
+    cite_rx_rev = /^([^{},]*)(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
 
     current_point = te.getCursorBufferPosition()
     initial_point = [current_point.row, Math.max(0,current_point.column - max_length)]
     range = [initial_point, current_point]
-    # console.log(range)
-    # console.log(te.getTextInBufferRange(range))
+    line = te.getTextInBufferRange(range)
 
-    got_ref = false
-    te.backwardsScanInBufferRange ref_rx, range, ({match, stop}) =>
+    # This is JPS's awesome trick: reverse the line and match backward regexes!
+    # JS/CS don't have string reverse, so instead go to array and reverse that
+
+    line = line.split("").reverse().join("")
+
+    # TODO: pass initial match to select list
+
+    if m = ref_rx_rev.exec(line)
       console.log("found match")
       @refComplete(te)
-      stop()
-      got_ref = true
-
-    return if got_ref
-
-    got_cite = false
-    te.backwardsScanInBufferRange cite_rx, range, ({match, stop}) =>
+    else if m = cite_rx_rev.exec(line)
       console.log("found match")
+      console.log(m)
       @citeComplete(te)
-      stop()
-      got_cite = true
 
-    return if got_cite
-    # Need to show this ONLY if activated via trigger!
-    # alert("Did not recognize citation / reference command")
+    # got_ref = false
+    # te.backwardsScanInBufferRange ref_rx, range, ({match, stop}) =>
+    #   console.log("found match")
+    #   @refComplete(te)
+    #   stop()
+    #   got_ref = true
+    #
+    # return if got_ref
+    #
+    # got_cite = false
+    # te.backwardsScanInBufferRange cite_rx, range, ({match, stop}) =>
+    #   console.log("found match")
+    #   console.log(match)
+    #   @citeComplete(te)
+    #   stop()
+    #   got_cite = true
+    #
+    # return if got_cite
 
 
 
