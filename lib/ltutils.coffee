@@ -116,8 +116,7 @@ module.exports.find_in_files = (rootdir, src, rx) ->
     alert("Could not read #{file_path}; encoding issues?")
     return null
 
-
-  # TODO get rid of commented out lines
+  src_content = src_content.replace(/%.*/g, "")
 
   # Look for matches in the current file
   results = []

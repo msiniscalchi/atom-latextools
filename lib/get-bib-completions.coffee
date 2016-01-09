@@ -6,7 +6,7 @@ get_bib_completions = (bibfile) ->
   completions = []
 
   kp_rx = /@[^\{]+\{(.+),/
-  multi_rx = /\b(author|title|year|editor|journal|eprint)\s*=\s*(?:\{|"|\b)(.+?)(?:\}+|"|\b)\s*,?\s*\Z/i
+  multi_rx = /\b(author|title|year|editor|journal|eprint)\s*=\s*(?:\{|"|\b)(.+?)(?:\}+|"|\b)\s*,?\s*$/i    # Python's \Z = JS's $
 
   try
     bib = fs.readFileSync(bibfile, 'utf-8').split('\n')
@@ -52,6 +52,7 @@ get_bib_completions = (bibfile) ->
       # Now see if we get a new keyword
       kp_match = kp_rx.exec(line)
       if kp_match
+        console.log("keyword: #{kp_match[1]}")
         entry["keyword"] = kp_match[1]
       else
         console.log("Cannot process this @ line: " + line)
@@ -64,6 +65,9 @@ get_bib_completions = (bibfile) ->
       key = multi_match[1].toLowerCase()
       value = multi_match[2]
       entry[key] = value
+      console.log("key = #{key}: value = #{value}")
+    else
+      console.log("no multi_match for line: #{line}")
     continue
 
   # at the end, we are left with one bib entry
