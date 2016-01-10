@@ -76,7 +76,7 @@ class Viewer extends LTool
     # this is the file currently being edited, which is where the user wants to jump to
     current_file = te.getPath()
     # it need not be the master file, so we look for that, too
-    master_file = get_tex_root(current_file)
+    master_file = get_tex_root(te)
 
     parsed_master = path.parse(master_file)
     parsed_current = path.parse(current_file)

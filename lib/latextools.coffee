@@ -196,7 +196,7 @@ module.exports = Latextools =
       @ltConsole.hide()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:show-ltconsole': =>
       @ltConsole.show()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:build': =>
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:build': =>
       @builder.build()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
       @viewer.jumpToPdf()

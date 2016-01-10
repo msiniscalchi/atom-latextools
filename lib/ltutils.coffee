@@ -1,4 +1,5 @@
 {CompositeDisposable} = require 'atom'
+parse_tex_directives = require './parsers/tex-directive-parser'
 fs = require 'fs'
 path = require 'path'
 
@@ -22,34 +23,15 @@ class LTool
 # TODO add support for configurable extensions
 
 # In: current tex file; Out: file to be compiled
-module.exports.get_tex_root = (texFile) ->
+module.exports.get_tex_root = (editor) ->
+  if typeof(editor) is 'string'
+    root = editor
+  else
+    root = editor.getPath()
 
-  root_rx = /// ^         # at beginning of Line
-            %\s*!TEX      # %!TEX, with spaces between % and !
-            \s+           # at least one space after TEX
-            root\s*=\s*   # then root=, possibly with spaces before / after =
-            (.*\.tex)     # then file name.tex
-            $ ///i         # then EOL; match case-insensitiive
-
-  root = texFile
-
-  lines = fs.readFileSync(texFile, 'utf-8').split('\n')
-
-  i = 0
-  while i < lines.length
-    line = lines[i]
-    break if line[0] != '%'
-    root_match = root_rx.exec(line)
-    if root_match
-      root = root_match[1]
-      # Now handle relative paths
-      if !path.isAbsolute(root)
-        dir = path.dirname(texFile)
-        root = path.join(dir, root) # already normalized, unlike Python
-      else
-        root = path.normalize(root)
-    i++
-
+  directives = parse_tex_directives editor
+  if directives.root?
+    root = path.resolve(path.dirname(root), directives.root)
   return root
 
 

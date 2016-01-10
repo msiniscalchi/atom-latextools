@@ -2,7 +2,8 @@
 {exec} = require 'child_process'
 path = require 'path'
 fs = require 'fs'
-{parse_tex_log} = require './parseTeXLog'
+{parse_tex_log} = require './parsers/parseTeXLog'
+parse_tex_directives = require './parsers/tex-directive-parser'
 
 module.exports =
 
@@ -24,17 +25,15 @@ class Builder extends LTool
   latexmk: (dir, texfile, texfilename, user_options, user_program) ->
     @ltConsole.addContent("latexmk builder",br=true)
 
-    quotes = '\"'
+    user_program = 'pdf' if user_program is 'pdflatex'
 
-    options = ["-cd", "-e", "-f", "-pdf", "-interaction=nonstopmode", "-synctex=1"]
-
-    tex_options = user_options
-    tex_options_cmdline = ["-latexoption=\"" + texopt + "\"" for texopt in tex_options]
-    options = options.concat([tex_options_cmdline])
+    options =  ["-cd", "-e", "-f", "-#{user_program}",
+      "-interaction=nonstopmode", "-synctex=1"]\
+        .concat ["-latexoption=\"#{texopt}\"" for texopt in user_options]
 
     program = "pdflatex" # unused for now
 
-    command = ["latexmk"].concat(options).concat([quotes + texfile + quotes]).join(' ')
+    command = ["latexmk"].concat(options, "\"#{texfile}\"").join(' ')
     @ltConsole.addContent(command,br=true)
 
     return command
@@ -42,21 +41,26 @@ class Builder extends LTool
   texify: (dir, texfile, texfilename, user_options, user_program) ->
     @ltConsole.addContent("texify builder (internal)",br=true)
 
-    quotes = '\"'
-
     options = ["-b", "-p"]
 
-    tex_options = ["--synctex=1"].concat(user_options)
-    tex_options_string = "--tex-option=\"" + tex_options.join(' ') + "\""
-    options = options.concat([tex_options_string])
+    user_program = switch user_program
+      when 'pdflatex' then 'pdftex'
+      when 'xelatex' then 'xetex'
+      when 'lualatex' then 'luatex'
+      else user_program
+
+    options.push "--engine=#{user_program}"
+
+    tex_options = ["--synctex=1"].concat user_options
+    tex_options_string = "--tex-option=\"#{tex_options.join(' ')}\""
+    options = options.concat [tex_options_string]
 
     program = "pdflatex" # unused for now
 
-    command = ["texify"].concat(options).concat([quotes + texfile + quotes]).join(' ')
+    command = ["texify"].concat(options, "\"#{texfile}\"").join(' ')
     @ltConsole.addContent(command,br=true)
 
     return command
-
 
   build: ->
     @ltConsole.show()
@@ -71,7 +75,7 @@ class Builder extends LTool
     if te.isModified()
       te.save()
 
-    fname = get_tex_root(te.getPath())
+    fname = get_tex_root(te)
 
     parsed_fname = path.parse(fname)
 
@@ -81,8 +85,18 @@ class Builder extends LTool
 
     # TODO also read from shebang line and "project" file
     # TODO get program as well
+    directives = parse_tex_directives fname,
+      keyMaps: 'ts-program': 'program',
+      multiValues: ['options']
+
     user_options = atom.config.get("latextools.builderSettings.options")
-    user_program = "" # unused for now
+    user_options = user_options.concat directives.options
+
+    # white-list the selectable programs
+    if directives.program in ["pdflatex", "xelatex", "lualatex"]
+      user_program = directives.program
+    else
+      user_program = atom.config.get("latextools.builderSettings.program")
 
     # Now prepare path
     # TODO: also env if needed

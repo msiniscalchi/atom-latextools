@@ -2,7 +2,7 @@
 LTSelectListView = require './ltselectlist-view'
 LTSelectList2View = require './ltselectlist2-view'
 #get_ref_completions = require './get-ref-completions'
-get_bib_completions = require './get-bib-completions'
+get_bib_completions = require './parsers/get-bib-completions'
 path = require 'path'
 fs = require 'fs'
 
@@ -72,7 +72,7 @@ class CompletionManager extends LTool
 
   refComplete: (te) ->
 
-    fname = get_tex_root(te.getPath())
+    fname = get_tex_root(te) # pass TextEditor, thanks to ig0777's patch
 
     parsed_fname = path.parse(fname)
 
@@ -96,7 +96,7 @@ class CompletionManager extends LTool
 
   citeComplete: (te) ->
 
-    fname = get_tex_root(te.getPath())
+    fname = get_tex_root(te)
 
     parsed_fname = path.parse(fname)
 
