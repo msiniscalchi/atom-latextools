@@ -64,6 +64,7 @@ class Builder extends LTool
 
   build: ->
     @ltConsole.show()
+    @ltConsole.clear()
 
     te = atom.workspace.getActiveTextEditor()
     if te == ''
