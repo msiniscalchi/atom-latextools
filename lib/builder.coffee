@@ -31,8 +31,6 @@ class Builder extends LTool
       "-interaction=nonstopmode", "-synctex=1"]\
         .concat ["-latexoption=\"#{texopt}\"" for texopt in user_options]
 
-    program = "pdflatex" # unused for now
-
     command = ["latexmk"].concat(options, "\"#{texfile}\"").join(' ')
     @ltConsole.addContent(command,br=true)
 
@@ -94,7 +92,11 @@ class Builder extends LTool
     user_options = user_options.concat directives.options
 
     # white-list the selectable programs
-    if directives.program in ["pdflatex", "xelatex", "lualatex"]
+    # on Windows / miktex, allow both pdftex, etc and pdflatex
+    whitelist = ["pdflatex", "xelatex", "lualatex"]
+    if process.platform == 'win32'
+      whitelist = whitelist.concat ["pdftex", "xetex", "luatex"]
+    if directives.program in whitelist
       user_program = directives.program
     else
       user_program = atom.config.get("latextools.builderSettings.program")
