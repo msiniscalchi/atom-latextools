@@ -8,7 +8,7 @@ process = require 'process'
 
 # debug
 
-DEBUG = true
+DEBUG = false
 
 parseDebugLog = null
 
@@ -78,13 +78,13 @@ isfile = (name) ->
 
 module.exports.parse_tex_log = (data) ->
 
-  console.log("Started parse_tex_log")
-
-  console.log("Testing utility functions")
-  console.log("isfile: ", isfile("c:\test.txt"))
-  console.log("repeat: " + repeat(2, "test"))
-  console.log("count:", count("apple", 'p'))
-  console.log("byteLength:", byteLength("apple"))
+  # console.log("Started parse_tex_log")
+  #
+  # console.log("Testing utility functions")
+  # console.log("isfile: ", isfile("c:\test.txt"))
+  # console.log("repeat: " + repeat(2, "test"))
+  # console.log("count:", count("apple", 'p'))
+  # console.log("byteLength:", byteLength("apple"))
 
   errors = []
   warnings = []
@@ -209,7 +209,7 @@ module.exports.parse_tex_log = (data) ->
         [line, linelen] = log_next.value
         line_num += 1
       catch e
-        console.log("could not read next iterator: line #{line_num}")
+        #console.log("could not read next iterator: line #{line_num}")
         break
 
     # Now we deal with TeX's decision to truncate all log lines at 79 characters
