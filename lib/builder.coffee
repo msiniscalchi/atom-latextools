@@ -84,13 +84,13 @@ class Builder extends LTool
 
     # Get options and programs
     directives = parse_tex_directives fname,
-      keyMaps: 'ts-program': 'program',
-      multiValues: ['options']
+      multiValues = ['option'],
+      keyMaps = {'ts-program': 'program'}
 
     user_options = atom.config.get("latextools.builderSettings.options")
-    user_options = user_options.concat directives.options
+    user_options = user_options.concat directives.option
 
-    # Clean up options: I think this may bbe a deeper issue, but for now:
+    # Special case: no default options, no user options give [undefined]
     if user_options.length==1 && user_options[0] == undefined
       user_options = []
 

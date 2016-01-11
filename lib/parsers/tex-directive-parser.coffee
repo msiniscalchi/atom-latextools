@@ -4,10 +4,9 @@ texDirectivePattern = /%\s*!(?:T|t)(?:E|e)(?:X|x)\s+([\w-]+)\s*=\s*(.*?)\s*$/
 latexCommandPattern = /\\[a-zA-Z]+\*?(?:\[[^\]]+\])*\{[^\}]+\}/
 
 module.exports = parse_tex_directives =
-  (editorOrPath, {multiValues, keyMaps} = {}) ->
-    multiValues ?= []
-    keyMaps     ?= {}
-    result      = new Object
+  (editorOrPath, multiValues = [], keyMaps = {}) ->
+
+    result      = {} # new Object
 
     lines =
       if typeof(editorOrPath) is 'string'
@@ -32,4 +31,5 @@ module.exports = parse_tex_directives =
             result[key] = [match[2]]
         else
           result[key] = match[2]
+
     return result
