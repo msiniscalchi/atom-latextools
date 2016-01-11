@@ -22,7 +22,7 @@
     'body': '\\\\smallskip'
   'usepackage':
     'prefix': 'use'
-    'body': '\\\\usepagage'
+    'body': '\\\\usepackage'
   'unnumbered eqn':
     'prefix': 'beq'
     'body': '\\\\[\n$0\n\\\\]'
