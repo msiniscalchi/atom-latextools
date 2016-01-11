@@ -14,3 +14,6 @@
 
 ## 0.5.0
 * Citation completion from bibliography files
+
+## 0.6.0
+* Setting `program` and `option`s using `%!TEX` lines (master file)
