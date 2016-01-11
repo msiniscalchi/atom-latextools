@@ -15,6 +15,8 @@
   'ctrl-alt-b': 'latextools:build'
   'ctrl-l j': 'latextools:jump-to-pdf'
   'ctrl-l x': 'latextools:ref-cite-complete'
+  'ctrl-l ctrl-c': 'latextools:wrap-in-command'
+  'ctrl-l ctrl-n': 'latextools:wrap-in-environment'
 
 ".platform-darwin atom-text-editor[data-grammar='text tex latex']":
   'cmd-l cmd-l': 'editor:select-line'
@@ -24,3 +26,5 @@
   'cmd-alt-b': 'latextools:build'
   'cmd-l j': 'latextools:jump-to-pdf'
   'cmd-l x': 'latextools:ref-cite-complete'
+  'cmd-l cmd-c': 'latextools:wrap-in-command'
+  'cmd-l cmd-n': 'latextools:wrap-in-environment'
