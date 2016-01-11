@@ -70,3 +70,28 @@ class SnippetManager extends LTool
     # Use snippets to easily remove selection, move cursor at end
     snippet = "\\\\#{cmd}\\{#{text}\\}$0"
     @snippetService.insertSnippet(snippet)
+
+
+  closeEnvironment: ->
+
+    begin_rx = /\\(begin|end)\{([^\}]*)\}/
+
+    te = atom.workspace.getActiveTextEditor()
+    cursor = te.getCursorBufferPosition()
+
+    found = false
+    # TODO make this smarter: look for UNOPENED environments from beginning
+    # NOTE: remember that the callback param is an OBJECT!
+    te.backwardsScanInBufferRange begin_rx, [[0,0],cursor], ({match, matchText, range, stop, replace}) =>
+      console.log(match)
+      console.log(stop)
+      # We only process one match, the first
+      if match[1] == 'begin'
+        te.insertText("\\end{#{match[2]}}\n")
+        found = true
+      # otherwise, match[1] == 'end', and we do nothing
+      # When we first match, stop, so we don't get any further matches
+      stop()
+
+    if !found
+      alert("No unmatched \\begin")

@@ -231,4 +231,5 @@ module.exports = Latextools =
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-bold': => @snippetManager.wrapIn("bold")
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-underline': => @snippetManager.wrapIn("underline")
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-monospace': => @snippetManager.wrapIn("texttt")
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:close-environment': => @snippetManager.closeEnvironment()
     new Disposable -> @snippets = null

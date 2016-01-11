@@ -17,3 +17,8 @@
 
 ## 0.6.0
 * Setting `program` and `option`s using `%!TEX` lines (master file)
+
+## 0.7.0
+* Wrap selection in emph, bold, and friends
+* Wrap selection in arbitrary command or environment
+* Close last opened environment
