@@ -82,14 +82,17 @@ class Builder extends LTool
     filebase = parsed_fname.base  # base includes the extension but not the dir
     filename = parsed_fname.name  # name only includes the name (no dir, no ext)
 
-    # TODO also read from shebang line and "project" file
-    # TODO get program as well
+    # Get options and programs
     directives = parse_tex_directives fname,
       keyMaps: 'ts-program': 'program',
       multiValues: ['options']
 
     user_options = atom.config.get("latextools.builderSettings.options")
     user_options = user_options.concat directives.options
+
+    # Clean up options: I think this may bbe a deeper issue, but for now:
+    if user_options.length==1 && user_options[0] == undefined
+      user_options = []
 
     # white-list the selectable programs
     # on Windows / miktex, allow both pdftex, etc and pdflatex
