@@ -55,3 +55,18 @@ class SnippetManager extends LTool
     @snippetService.insertSnippet(snippet)
     te.setSelectedBufferRange(cmd_range_begin)
     te.addSelectionForBufferRange(cmd_range_end)
+
+
+  wrapIn: (cmd) ->
+
+    if !@snippetService
+      alert("Still waiting for the snippets service to activate...")
+      return
+
+    te = atom.workspace.getActiveTextEditor()
+    range = te.getSelectedBufferRange()
+    text = te.getTextInBufferRange(range)
+
+    # Use snippets to easily remove selection, move cursor at end
+    snippet = "\\\\#{cmd}\\{#{text}\\}$0"
+    @snippetService.insertSnippet(snippet)

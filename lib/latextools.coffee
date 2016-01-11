@@ -172,7 +172,7 @@ module.exports = Latextools =
 
   activate: (state) ->
     @ltConsole = new LTConsole(state.ltConsoleState)
-    
+
     # Create viewer first, so by the time we run the builer, it is available
     @viewer = new Viewer(@ltConsole)
     @builder = new Builder(@ltConsole)
@@ -227,4 +227,8 @@ module.exports = Latextools =
     @snippetManager.setService(snippets) # potential race?
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-command': => @snippetManager.wrapInCommand()
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-environment': => @snippetManager.wrapInEnvironment()
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-emph': => @snippetManager.wrapIn("emph")
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-bold': => @snippetManager.wrapIn("bold")
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-underline': => @snippetManager.wrapIn("underline")
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-monospace': => @snippetManager.wrapIn("texttt")
     new Disposable -> @snippets = null
