@@ -172,8 +172,7 @@ module.exports = Latextools =
 
   activate: (state) ->
     @ltConsole = new LTConsole(state.ltConsoleState)
-    @ltConsole.addContent("<span class='text-info'>LaTeXTools for Atom v0.0.0 activated</span>",br=true,html=true)
-
+    
     # Create viewer first, so by the time we run the builer, it is available
     @viewer = new Viewer(@ltConsole)
     @builder = new Builder(@ltConsole)

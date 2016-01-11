@@ -9,22 +9,18 @@
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
 ".platform-win32 atom-text-editor[data-grammar='text tex latex']":
   'ctrl-l ctrl-l': 'editor:select-line'
-  'ctrl-l ctrl-m': 'latextools:toggle-log'
-  'ctrl-l a': 'latextools:add-log'
   'ctrl-l c': 'latextools:clear-log'
-  'escape': 'latextools:hide-ltconsole'
-  'shift-escape': 'latextools:show-ltconsole'
+  'ctrl-l escape': 'latextools:hide-ltconsole'
+  'ctrl-l shift-escape': 'latextools:show-ltconsole'
   'ctrl-alt-b': 'latextools:build'
   'ctrl-l j': 'latextools:jump-to-pdf'
   'ctrl-l x': 'latextools:ref-cite-complete'
 
 ".platform-darwin atom-text-editor[data-grammar='text tex latex']":
   'cmd-l cmd-l': 'editor:select-line'
-  'cmd-l cmd-m': 'latextools:toggle-log'
-  'cmd-l a': 'latextools:add-log'
   'cmd-l c': 'latextools:clear-log'
-  'escape': 'latextools:hide-ltconsole'
-  'shift-escape': 'latextools:show-ltconsole'
+  'cmd-l escape': 'latextools:hide-ltconsole'
+  'cmd-l shift-escape': 'latextools:show-ltconsole'
   'cmd-alt-b': 'latextools:build'
   'cmd-l j': 'latextools:jump-to-pdf'
   'cmd-l x': 'latextools:ref-cite-complete'
