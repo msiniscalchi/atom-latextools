@@ -2,12 +2,14 @@ LTConsole = require './ltconsole'
 Builder = require './builder'
 Viewer = require './viewer'
 CompletionManager = require './completion-manager'
-{CompositeDisposable} = require 'atom'
+SnippetManager = require './snippet-manager'
+{Disposable, CompositeDisposable} = require 'atom'
 path = require 'path'
 
 module.exports = Latextools =
   ltConsole: null
   subscriptions: null
+  snippets: null
 
   config:
     citeAutoTrigger:
@@ -176,7 +178,8 @@ module.exports = Latextools =
     @viewer = new Viewer(@ltConsole)
     @builder = new Builder(@ltConsole)
     @builder.viewer = @viewer
-    @CompletionManager = new CompletionManager(@ltConsole)
+    @completionManager = new CompletionManager(@ltConsole)
+    @snippetManager = new SnippetManager(@ltConsole)
 
 
 
@@ -201,7 +204,9 @@ module.exports = Latextools =
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
       @viewer.jumpToPdf()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-cite-complete': =>
-      @CompletionManager.refCiteComplete()
+      @completionManager.refCiteComplete()
+
+    # Snippet insertion: added in consumeSnippets
 
     # Autotriggered functionality
     # add autocomplete to every text editor that has a tex file
@@ -209,7 +214,7 @@ module.exports = Latextools =
       if !( path.extname(te.getPath()) in atom.config.get('latextools.texFileExtensions') )
         return
       @subscriptions.add te.onDidStopChanging =>
-        @CompletionManager.refCiteComplete() if atom.config.get("latextools.refAutoTrigger")
+        @completionManager.refCiteComplete() if atom.config.get("latextools.refAutoTrigger")
         # add more here?
 
   deactivate: ->
@@ -218,3 +223,9 @@ module.exports = Latextools =
 
   serialize: ->
     ltConsoleState: @ltConsole.serialize()
+
+  consumeSnippets: (snippets) ->
+    @snippetManager.setService(snippets) # potential race?
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-command': => @snippetManager.wrapInCommand()
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-environment': => @snippetManager.wrapInEnvironment()
+    new Disposable -> @snippets = null
