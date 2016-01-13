@@ -233,5 +233,7 @@ module.exports = Latextools =
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-monospace': => @snippetManager.wrapIn("texttt")
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:close-environment': => @snippetManager.closeEnvironment()
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:dollar-sign': => @snippetManager.dollarSign()
-
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:backquote': => @snippetManager.quotes('`', '\'')
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:quote': => @snippetManager.quotes('`', '\'')
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:double-quote': => @snippetManager.quotes('``', '\'\'')
     new Disposable -> @snippets = null

@@ -23,6 +23,9 @@
   'ctrl-l m': 'latextools:wrap-in-monospace'
   'ctrl-l .': 'latextools:close-environment'
   '$' : 'latextools:dollar-sign'
+  '`' : 'latextools:backquote'
+  '\'': 'latextools:quote'
+  '"' : 'latextools:double-quote'
 
 ".platform-darwin atom-text-editor[data-grammar='text tex latex']":
   'cmd-l cmd-l': 'editor:select-line'
@@ -40,3 +43,6 @@
   'cmd-l m': 'latextools:wrap-in-monospace'
   'cmd-l .': 'latextools:close-environment'
   '$' : 'latextools:dollar-sign'
+  '`' : 'latextools:backquote'
+  '\'': 'latextools:quote'
+  '"' : 'latextools:double-quote'

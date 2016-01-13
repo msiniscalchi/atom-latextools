@@ -119,8 +119,6 @@ class SnippetManager extends LTool
 
     pos = cursor.column
 
-    snippet = null
-
     # if cursor followed by $ or $$, skip themm
     if text[pos]? && text[pos] == '$'
       te.moveRight()
@@ -135,3 +133,20 @@ class SnippetManager extends LTool
       #te.addSelectionForBufferRange([[cursor.row,pos+1],[cursor.row, pos+2]])
     else
       te.insertText('$')
+
+
+  # Add matched quotes
+
+  quotes: (left, right) ->
+
+    te = atom.workspace.getActiveTextEditor()
+
+    # First, check if there is a selection, and if so, add $..$ around it
+    if text =  te.getSelectedText()
+      range = te.getSelectedBufferRange()
+      te.setSelectedBufferRange(range, '')
+      @snippetService.insertSnippet("#{left}#{text}#{right}")
+      return
+
+    snippet = "#{left}$0#{right}"
+    @snippetService.insertSnippet(snippet)
