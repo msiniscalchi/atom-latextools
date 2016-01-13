@@ -22,3 +22,7 @@
 * Wrap selection in emph, bold, and friends
 * Wrap selection in arbitrary command or environment
 * Close last opened environment
+
+## 0.7.1
+* $ and quotes matching and wrapping
+* Fixed issue with multiple options / latexmk
