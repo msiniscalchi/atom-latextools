@@ -95,3 +95,43 @@ class SnippetManager extends LTool
 
     if !found
       alert("No unmatched \\begin")
+
+  # Handle dollar-sign matching
+  # If there is a $ *after* the cursor, just move past it.
+  # If there is no $ after, and no $ before, add $[cursor]$
+  # Sane $$...$$ handling
+  # Add space between $ $ so highlighting doesn't go crazy
+  # Also handle selectioj
+
+  dollarSign: ->
+
+    te = atom.workspace.getActiveTextEditor()
+
+    # First, check if there is a selection, and if so, add $..$ around it
+    if text =  te.getSelectedText()
+      range = te.getSelectedBufferRange()
+      te.setSelectedBufferRange(range, '')
+      @snippetService.insertSnippet("\$#{text}\$")
+      return
+
+    cursor = te.getCursorBufferPosition()
+    text = te.getTextInBufferRange([[cursor.row,0],[cursor.row,cursor.column+1]])
+
+    pos = cursor.column
+
+    snippet = null
+
+    # if cursor followed by $ or $$, skip themm
+    if text[pos]? && text[pos] == '$'
+      te.moveRight()
+      if text[pos+1]? && text[pos+1] == '$'
+        te.moveRight()
+      return
+
+    # Here cursor is NOT followed by $. Then insert as needed
+    if (pos==0) || (pos>0) && !text[pos-1].match(/[a-zA-Z0-9\$\\]/)
+      snippet = "\$${1: }\$"
+      @snippetService.insertSnippet(snippet)
+      #te.addSelectionForBufferRange([[cursor.row,pos+1],[cursor.row, pos+2]])
+    else
+      te.insertText('$')

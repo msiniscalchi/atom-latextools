@@ -22,6 +22,7 @@
   'ctrl-l u': 'latextools:wrap-in-underline'
   'ctrl-l m': 'latextools:wrap-in-monospace'
   'ctrl-l .': 'latextools:close-environment'
+  '$' : 'latextools:dollar-sign'
 
 ".platform-darwin atom-text-editor[data-grammar='text tex latex']":
   'cmd-l cmd-l': 'editor:select-line'
@@ -38,3 +39,4 @@
   'cmd-l u': 'latextools:wrap-in-underline'
   'cmd-l m': 'latextools:wrap-in-monospace'
   'cmd-l .': 'latextools:close-environment'
+  '$' : 'latextools:dollar-sign'
