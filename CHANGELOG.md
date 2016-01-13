@@ -26,3 +26,6 @@
 ## 0.7.1
 * $ and quotes matching and wrapping
 * Fixed issue with multiple options / latexmk
+
+## 0.7.2
+* Patched annoying behavior with single-quote matching

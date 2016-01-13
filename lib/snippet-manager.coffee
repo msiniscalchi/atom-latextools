@@ -137,7 +137,7 @@ class SnippetManager extends LTool
 
   # Add matched quotes
 
-  quotes: (left, right) ->
+  quotes: (left, right, ch) ->
 
     te = atom.workspace.getActiveTextEditor()
 
@@ -146,6 +146,15 @@ class SnippetManager extends LTool
       range = te.getSelectedBufferRange()
       te.setSelectedBufferRange(range, '')
       @snippetService.insertSnippet("#{left}#{text}#{right}")
+      return
+
+    # Ensure there is no character preceding the quote
+
+    cursor = te.getCursorBufferPosition()
+    text = te.getTextInBufferRange([[cursor.row,0],[cursor.row,cursor.column]])
+
+    if text[cursor.column-1]? && !text[cursor.column-1].match(/\s/)
+      te.insertText(ch)
       return
 
     snippet = "#{left}$0#{right}"

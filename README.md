@@ -4,7 +4,7 @@ by Marciano Siniscalchi
 
 This is an Atom port of the [LaTeXTools package](http://github.com/SublimeText/LaTeXTools) for Sublime Text (currently maintained by Ian Bacher and myself).
 
-Currently (v0.7.1, 1/12/2016), the following features are implemented:
+Currently (v0.7.2, 1/13/2016), the following features are implemented:
 
 * Compile and view PDF files (Windows and OSX only for now), using the `MikTeX` distribution and the `SumatraPDF` previewer on Windows, and `MacTeX` and `Skim` on OSX.
 * The TeX program to use (`pdflatex`, `xelatex` or `lualatex`) can be selected either in the settings, or via a `%!TEX program = ` directive. Similarly, options can be passed to the TeX program via settings or via a `%!TEX option = ` directive.
