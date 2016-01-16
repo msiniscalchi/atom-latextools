@@ -2,7 +2,7 @@
 {exec} = require 'child_process'
 path = require 'path'
 fs = require 'fs'
-{parse_tex_log} = require './parsers/parseTeXLog'
+{parse_tex_log} = require './parsers/parse-tex-log'
 parse_tex_directives = require './parsers/tex-directive-parser'
 
 module.exports =
