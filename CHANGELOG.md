@@ -29,3 +29,6 @@
 
 ## 0.7.2
 * Patched annoying behavior with single-quote matching
+
+## 0.7.3
+* Linux support

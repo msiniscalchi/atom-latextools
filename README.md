@@ -4,9 +4,9 @@ by Marciano Siniscalchi
 
 This is an Atom port of the [LaTeXTools package](http://github.com/SublimeText/LaTeXTools) for Sublime Text (currently maintained by Ian Bacher and myself).
 
-Currently (v0.7.2, 1/13/2016), the following features are implemented:
+Currently (v0.7.3, 1/15/2016), the following features are implemented:
 
-* Compile and view PDF files (Windows and OSX only for now), using the `MikTeX` distribution and the `SumatraPDF` previewer on Windows, and `MacTeX` and `Skim` on OSX.
+* Compile and view PDF files, using the `MikTeX` distribution and the `SumatraPDF` previewer on Windows, `MacTeX` and `Skim` on OSX, and `texlive` and `okular` on Linux.
 * The TeX program to use (`pdflatex`, `xelatex` or `lualatex`) can be selected either in the settings, or via a `%!TEX program = ` directive. Similarly, options can be passed to the TeX program via settings or via a `%!TEX option = ` directive.
 * Forward and inverse search with the above PDF previewers
 * Parse the tex log output and list errors and warnings in the "LaTeXTools console." Jump to the line containing an error/warning by clicking on the error/warning message in the LaTeXTools Console.
@@ -18,14 +18,13 @@ Currently (v0.7.2, 1/13/2016), the following features are implemented:
 * Full support for multi-file projects by adding  `%!TEX root = master.tex` at the top of each included file. This includes error/warning reporting, forward / inverse search, and reference / citation completion. (Note: program and option directives must be given in the master file.)
 * Virtually all LaTeXTools snippets.
 
-**Keybindings**: by default, these are essentially the same as in Sublime Text, except that the **build** command is bound to `C-alt-b`, where `C` is `ctrl` on Windows and `cmd` on OSX. All other commands are triggered via combinations that start with `C-l`. As in Sublime, the "select line" command is remapped to `C-l,C-l`.
+**Keybindings**: by default, these are essentially the same as in Sublime Text, except that the **build** command is bound to `C-alt-b`, where `C` is `ctrl` on Windows and Linux, and `cmd` on OSX. All other commands are triggered via combinations that start with `C-l`. As in Sublime, the "select line" command is remapped to `C-l,C-l`.
 
 Missing functionality to be implemented, roughly in the order I plan to add it:
 
 * Fill helper (autocompletion of various commands, such as  `\include`/`\input`, `\usepackage`, `\includegraphics`, etc.)
 * Better documentation :)
 * Toggling functions on/off: e.g., temporarily stop jumping to the current line in the PDF file after compilation. (Actually I'm not sure about this; maybe the listener pattern used in Atom can serve as a good replacement.)
-* Compiling and viewing on Linux
 * Other functionality in the Sublime Text package
 
 
