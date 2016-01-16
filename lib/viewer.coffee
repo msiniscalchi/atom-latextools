@@ -50,8 +50,28 @@ class Viewer extends LTool
 
 
 
-  _jumpLinux: ->
-    alert("Not implemented yet")
+  _jumpLinux: -> (texfile, pdffile, row, col, forward_sync, keep_focus) ->
+
+    if keep_focus
+      okular_args = "--unique --noraise"
+    else
+      okular_args = "--unique"
+
+    okular_cmd = 'okular'
+
+    if forward_sync
+      command = okular_cmd + " #{okular_args} \"#{pdffile}\#src:#{row} #{texfile}\""
+    else
+      command = okular_cmd + " #{okular_args} #{pdffile}"
+
+    @ltConsole.addContent("Executing " + command, br=true)
+
+    exec command, {}, (err, stdout, stderr) =>
+      if err  # weirdness
+        @ltConsole.addContent("ERROR #{err.code}: ", br=true)
+        @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
+
+
 
   _jumpToPdf: (texfile, pdffile, row, col=1) ->
 
