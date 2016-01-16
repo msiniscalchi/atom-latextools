@@ -50,7 +50,9 @@ class Viewer extends LTool
 
 
 
-  _jumpLinux: -> (texfile, pdffile, row, col, forward_sync, keep_focus) ->
+  _jumpLinux: (texfile, pdffile, row, col, forward_sync, keep_focus) ->
+
+    console.log("in _jumpLinux")
 
     if keep_focus
       okular_args = "--unique --noraise"
@@ -65,6 +67,8 @@ class Viewer extends LTool
       command = okular_cmd + " #{okular_args} #{pdffile}"
 
     @ltConsole.addContent("Executing " + command, br=true)
+
+    console.log(command)
 
     exec command, {}, (err, stdout, stderr) =>
       if err  # weirdness
