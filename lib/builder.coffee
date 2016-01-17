@@ -131,10 +131,12 @@ class Builder extends LTool
     if builder=="texify-latexmk"
 
       # first, get command to execute, with options
-      if process.platform in ["darwin", "linux"]
-        command = @latexmk(filedir, filebase, filename, user_options, user_program)
-      else
-        command = @texify(filedir, filebase, filename, user_options, user_program)
+      command =
+        if process.platform is "win32" and
+            atom.config.get("latextools.win32.distro") isnt "texlive"
+          @texify(filedir, filebase, filename, user_options, user_program)
+        else
+          @latexmk(filedir, filebase, filename, user_options, user_program)
 
       cmd_env.MYTEST = "Hello, world!"
       command = command
