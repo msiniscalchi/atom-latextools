@@ -7,7 +7,13 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
-".platform-win32 atom-text-editor[data-grammar='text tex latex']":
+"atom-text-editor[data-grammar~='latex']":
+  '$' : 'latextools:dollar-sign'
+  '`' : 'latextools:backquote'
+  '\'': 'latextools:quote'
+  '"' : 'latextools:double-quote'
+
+"body:not([class~='platform-darwin']) atom-text-editor[data-grammar~='latex']":
   'ctrl-l ctrl-l': 'editor:select-line'
   'ctrl-l c': 'latextools:clear-log'
   'ctrl-l escape': 'latextools:hide-ltconsole'
@@ -22,32 +28,8 @@
   'ctrl-l u': 'latextools:wrap-in-underline'
   'ctrl-l m': 'latextools:wrap-in-monospace'
   'ctrl-l .': 'latextools:close-environment'
-  '$' : 'latextools:dollar-sign'
-  '`' : 'latextools:backquote'
-  '\'': 'latextools:quote'
-  '"' : 'latextools:double-quote'
 
-".platform-linux atom-text-editor[data-grammar='text tex latex']":
-  'ctrl-l ctrl-l': 'editor:select-line'
-  'ctrl-l c': 'latextools:clear-log'
-  'ctrl-l escape': 'latextools:hide-ltconsole'
-  'ctrl-l shift-escape': 'latextools:show-ltconsole'
-  'ctrl-alt-b': 'latextools:build'
-  'ctrl-l j': 'latextools:jump-to-pdf'
-  'ctrl-l x': 'latextools:ref-cite-complete'
-  'ctrl-l ctrl-c': 'latextools:wrap-in-command'
-  'ctrl-l ctrl-n': 'latextools:wrap-in-environment'
-  'ctrl-l e': 'latextools:wrap-in-emph'
-  'ctrl-l b': 'latextools:wrap-in-bold'
-  'ctrl-l u': 'latextools:wrap-in-underline'
-  'ctrl-l m': 'latextools:wrap-in-monospace'
-  'ctrl-l .': 'latextools:close-environment'
-  '$' : 'latextools:dollar-sign'
-  '`' : 'latextools:backquote'
-  '\'': 'latextools:quote'
-  '"' : 'latextools:double-quote'
-
-".platform-darwin atom-text-editor[data-grammar='text tex latex']":
+"body.platform-darwin atom-text-editor[data-grammar~='latex']":
   'cmd-l cmd-l': 'editor:select-line'
   'cmd-l c': 'latextools:clear-log'
   'cmd-l escape': 'latextools:hide-ltconsole'
@@ -62,7 +44,3 @@
   'cmd-l u': 'latextools:wrap-in-underline'
   'cmd-l m': 'latextools:wrap-in-monospace'
   'cmd-l .': 'latextools:close-environment'
-  '$' : 'latextools:dollar-sign'
-  '`' : 'latextools:backquote'
-  '\'': 'latextools:quote'
-  '"' : 'latextools:double-quote'
