@@ -20,7 +20,7 @@ class Viewer extends LTool
     @ltConsole.addContent("Executing " + command, br = true)
 
     exec command, {}, (err, stdout, stderr) =>
-      if err > 1 # weirdness
+      if err # weirdness
         @ltConsole.addContent("ERROR #{err.code}: ", br=true)
         @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
 
