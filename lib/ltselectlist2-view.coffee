@@ -11,12 +11,24 @@ class LTSelectList2View extends SelectListView
     @panel.hide()
 
   viewForItem: (item) ->
-    """
-    <li class='two lines'>
-      <div class='primary-line'>#{item.primary}</div>
-      <div class='secondary-line'>#{item.secondary}</div>
-    </li>
-    """
+    li = document.createElement('li')
+    li.classList.add('two_lines')
+    pri = document.createElement('div')
+    pri.classList.add('primary-line')
+    pri.textContent = item.primary
+    li.appendChild(pri)
+    sec = document.createElement('div')
+    sec.classList.add('secondary-line')
+    sec.textContent = item.secondary
+    li.appendChild(sec)
+    return li
+    #
+    # """
+    # <li class='two lines'>
+    #   <div class='primary-line'>#{item.primary}</div>
+    #   <div class='secondary-line'>#{item.secondary}</div>
+    # </li>
+    # """
 
   getFilterKey: ->
     'primary'
