@@ -33,7 +33,7 @@
 ## 0.7.3
 * Linux support
 
-## 0.7.4 IN PROGRESS
+## 0.7.4
 * Enable texlive on Windows
 * Fine-tuned quote insertion code
 * Small speed-up in cite completion
