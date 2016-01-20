@@ -19,7 +19,7 @@ class CompletionManager extends LTool
     @sel2_view = new LTSelectList2View
 
 
-  refCiteComplete:  ->
+  refCiteComplete: (keybinding = false) ->
 
     te = atom.workspace.getActiveTextEditor()
 
@@ -41,10 +41,12 @@ class CompletionManager extends LTool
 
     # TODO: pass initial match to select list
 
-    if m = ref_rx_rev.exec(line)
+    if (keybinding or atom.config.get("latextools.refAutoTrigger")) and
+    m = ref_rx_rev.exec(line)
       console.log("found match")
       @refComplete(te)
-    else if m = cite_rx_rev.exec(line)
+    else if (keybinding or atom.config.get("latextools.citeAutoTrigger")) and
+    m = cite_rx_rev.exec(line)
       console.log("found match")
       console.log(m)
       @citeComplete(te)

@@ -203,7 +203,7 @@ module.exports = Latextools =
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
       @viewer.jumpToPdf()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-cite-complete': =>
-      @completionManager.refCiteComplete()
+      @completionManager.refCiteComplete(keybinding=true)
 
     # Snippet insertion: added in consumeSnippets
 
@@ -213,7 +213,8 @@ module.exports = Latextools =
       if !( path.extname(te.getPath()) in atom.config.get('latextools.texFileExtensions') )
         return
       @subscriptions.add te.onDidStopChanging =>
-        @completionManager.refCiteComplete() if atom.config.get("latextools.refAutoTrigger")
+        @completionManager.refCiteComplete(keybinding=false) if atom.config.get("latextools.refAutoTrigger") or
+        atom.config.get("latextools.citeAutoTrigger")
         # add more here?
 
   deactivate: ->
