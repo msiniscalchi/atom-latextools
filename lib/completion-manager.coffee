@@ -119,6 +119,10 @@ class CompletionManager extends LTool
     # Check to see if they exist
     bibs = ( b for b in bibs when is_file(b) )
 
+    if bibs.length == 0
+      alert("Could not find bib files. Please check your \\bibliography statements")
+      return
+
     # If it's a single string, put it in an array
     if typeof bibs == 'string'
       bibs = [bibs]
