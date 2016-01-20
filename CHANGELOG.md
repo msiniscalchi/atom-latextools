@@ -36,3 +36,5 @@
 ## 0.7.4 IN PROGRESS
 * Enable texlive on Windows
 * Fine-tuned quote insertion code
+* Small speed-up in cite completion
+* Honor ref/cite autocompletion toggles
