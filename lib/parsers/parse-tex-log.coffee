@@ -626,7 +626,7 @@ module.exports.parse_tex_log = (data) ->
 
   # If there were parsing issues, output them to debug
   if parsing.length>0
-    warnings(["", -1, "(Log parsing issues. Disregard unless something else is wrong.)"])
+    warnings.push(["", -1, "(Log parsing issues. Disregard unless something else is wrong.)"])
     print_debug = true
     for l in parsing
       debug(l)
