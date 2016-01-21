@@ -199,9 +199,15 @@ module.exports = Latextools =
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:show-ltconsole': =>
       @ltConsole.show()
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:build': =>
-      @builder.build()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
-      @viewer.jumpToPdf()
+      # drop to JS to call this.getModel() which is the TextEditor the command
+      # is run on
+      te = `this.getModel()`
+      @builder.build(te)
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:jump-to-pdf': =>
+      # drop to JS to call this.getModel() which is the TextEditor the command
+      # is run on
+      te = `this.getModel()`
+      @viewer.jumpToPdf(te)
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-cite-complete': =>
       @completionManager.refCiteComplete(keybinding=true)
 

@@ -91,8 +91,12 @@ class Viewer extends LTool
       else
         alert("Sorry, no viewer for the current platform")
 
-  jumpToPdf: ->
-    te = atom.workspace.getActiveTextEditor()
+  jumpToPdf: (te) ->
+    # if te isn't set, do nothing...
+    unless te?
+      console.log 'Could not find TextEditor for jump'
+      return
+
     pt = te.getCursorBufferPosition()
     row = pt.row + 1 # Atom's rows/cols are 0-based, synctex's are 1-based
     col = pt.column + 1
