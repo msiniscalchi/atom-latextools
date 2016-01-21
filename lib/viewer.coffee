@@ -9,7 +9,7 @@ class Viewer extends LTool
 
   _jumpWindows: (texfile, pdffile, row, col, forward_sync, keep_focus) ->
     sumatra_cmd = atom.config.get("latextools.win32.sumatra")
-    sumatra_args = [] # ["-reuse-instance"]
+    sumatra_args = ["-reuse-instance"]
 
     if forward_sync
       sumatra_args = sumatra_args.concat(["-forward-search", '\"'+texfile+'\"', "#{row}"])
