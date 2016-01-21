@@ -66,15 +66,17 @@ class Builder extends LTool
     @ltConsole.show()
     @ltConsole.clear()
 
-    te = atom.workspace.getActiveTextEditor()
-    if te == ''
-      @ltConsole.addContent("Focus the text editor before invoking a build")
-      return
-
     # save on build
+    # if unsaved, run saveAs
+    unless te.getPath()?
+      atom.workspace.getActivePane().saveItem(te)
 
     if te.isModified()
       te.save()
+
+    unless te.getPath()?
+      alert 'Please save your file before attempting to build'
+      return
 
     fname = get_tex_root(te)
 
@@ -105,6 +107,10 @@ class Builder extends LTool
       user_program = directives.program
     else
       user_program = atom.config.get("latextools.builderSettings.program")
+
+    # prepare the build console
+    @ltConsole.show()
+    @ltConsole.clear()
 
     # Now prepare path
     # TODO: also env if needed
