@@ -114,7 +114,7 @@ class CompletionManager extends LTool
       bibs = bibs.concat(b.split(','))
 
     # Trim and take care of .bib extension
-    bibs = ( if path.extname(b)=='.bib' then path.join(filedir, b.trim()) else path.join(filedir, b.trim() + '.bib') for b in bibs )
+    bibs = ((if path.extname(b) isnt '.bib' then path.join(filedir, b.trim()) + '.bib' else path.join(filedir, b.trim())) for b in bibs)
 
     # Check to see if they exist
     bibs = ( b for b in bibs when is_file(b) )
