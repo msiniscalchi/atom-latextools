@@ -213,8 +213,13 @@ module.exports = Latextools =
       if !( path.extname(te.getPath()) in atom.config.get('latextools.texFileExtensions') )
         return
       @subscriptions.add te.onDidStopChanging =>
-        @completionManager.refCiteComplete(keybinding=false) if atom.config.get("latextools.refAutoTrigger") or
-        atom.config.get("latextools.citeAutoTrigger")
+        # it doesn't make sense to trigger completions on an inactive text editor
+        if te isnt atom.workspace.getActiveTextEditor()
+          return
+        @completionManager.refCiteComplete(te, keybinding=false) \
+        if atom.config.get("latextools.refAutoTrigger") or
+          atom.config.get("latextools.citeAutoTrigger")
+
         # add more here?
 
   deactivate: ->
