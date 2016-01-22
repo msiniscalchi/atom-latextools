@@ -19,10 +19,7 @@ class CompletionManager extends LTool
     @sel2_view = new LTSelectList2View
 
 
-  refCiteComplete: (keybinding = false) ->
-
-    te = atom.workspace.getActiveTextEditor()
-
+  refCiteComplete: (te, keybinding = false) ->
     max_length = 100 # max length of ref/cite command, including backslash
     #ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
     ref_rx_rev = /^\{fer(?:qe|egap|v|V|otua|eman|c|C|egapc)?/

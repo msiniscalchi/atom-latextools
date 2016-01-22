@@ -213,8 +213,10 @@ module.exports = Latextools =
       if !( path.extname(te.getPath()) in atom.config.get('latextools.texFileExtensions') )
         return
       @subscriptions.add te.onDidStopChanging =>
-        @completionManager.refCiteComplete(keybinding=false) if atom.config.get("latextools.refAutoTrigger") or
-        atom.config.get("latextools.citeAutoTrigger")
+        @completionManager.refCiteComplete(te, keybinding=false) \
+        if atom.config.get("latextools.refAutoTrigger") or
+          atom.config.get("latextools.citeAutoTrigger")
+
         # add more here?
 
   deactivate: ->
