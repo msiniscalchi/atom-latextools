@@ -63,20 +63,22 @@ class Builder extends LTool
     return command
 
   build: ->
+    te = atom.workspace.getActiveTextEditor()
+
     @ltConsole.show()
     @ltConsole.clear()
 
     # save on build
     # if unsaved, run saveAs
     unless te.getPath()?
-      atom.workspace.getActivePane().saveItem(te)
-
-    if te.isModified()
-      te.save()
+      atom.workspace.paneForItem(te)?.saveItem(te)
 
     unless te.getPath()?
       alert 'Please save your file before attempting to build'
       return
+
+    if te.isModified()
+      te.save()
 
     fname = get_tex_root(te)
 
