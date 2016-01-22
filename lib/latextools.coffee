@@ -59,7 +59,7 @@ module.exports = Latextools =
     latextoolsSetSyntax:
       type: 'boolean'
       default: true
-    order: 10
+      order: 10
 
     temporaryFileExtensions:
       type: 'array'
@@ -106,6 +106,7 @@ module.exports = Latextools =
           type: 'number'
           default: 0.5
       order:14
+
     linux:
       type: 'object'
       properties:
@@ -122,7 +123,7 @@ module.exports = Latextools =
           type: 'number'
           default: 1.5
         keepFocusDelay:
-          type: 'numer'
+          type: 'number'
           default: 0.5
       order: 15
 
@@ -167,7 +168,7 @@ module.exports = Latextools =
     citeAutocompleteFormat:
       type: 'string'
       default: "{keyword}: {title}"
-    order: 20
+      order: 20
 
 
   activate: (state) ->
