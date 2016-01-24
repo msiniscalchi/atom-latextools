@@ -20,7 +20,7 @@ class Viewer extends LTool
     @ltConsole.addContent("Executing " + command, br = true)
 
     exec command, {}, (err, stdout, stderr) =>
-      if err # weirdness
+      if err && !(err.code == 1 && !stderr) # when it is already running, Sumatra returns error code 1 but no error message, while "the jump" works just fine
         @ltConsole.addContent("ERROR #{err.code}: ", br=true)
         @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
 
