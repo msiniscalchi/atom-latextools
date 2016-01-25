@@ -160,7 +160,14 @@ class Builder extends LTool
         # Parse error log
         fulllogfile = path.join(filedir, filename + ".log") # takes care of quotes
         @ltConsole.addContent("Parsing " + fulllogfile, br=true)
-        log = fs.readFileSync(fulllogfile, 'utf8')
+        try
+          log = fs.readFileSync(fulllogfile, 'utf8')
+        catch error
+          @ltConsole.addContent("Could not read log file!")
+          console.log("Could not read log file #{fulllogfile}")
+          console.log(error)
+          return
+
 
         # We need to cd to the root file directory for the
         # file-matching logic to work with texlive (miktex reports full paths)
