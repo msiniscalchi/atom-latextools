@@ -68,7 +68,11 @@ class SnippetManager extends LTool
     text = te.getTextInBufferRange(range)
 
     # Use snippets to easily remove selection, move cursor at end
-    snippet = "\\\\#{cmd}\\{#{text}\\}$0"
+    # (but only if there is some text)
+    if text
+      snippet = "\\\\#{cmd}\\{#{text}\\}$0"
+    else
+      snippet = "\\\\#{cmd}\\{$1\\}$0"
     @snippetService.insertSnippet(snippet)
 
 
