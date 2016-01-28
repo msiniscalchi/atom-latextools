@@ -50,5 +50,5 @@
 * Fix wrap-in-bold command
 * Other bugfixes
 
-## 0.7.5.1
+## 0.7.6
 * Manual fixes
