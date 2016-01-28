@@ -234,6 +234,8 @@ module.exports = Latextools =
     @snippetManager.setService(snippets) # potential race?
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-command': => @snippetManager.wrapInCommand()
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-environment': => @snippetManager.wrapInEnvironment()
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:insert-command': => @snippetManager.insertCmdEnv("command")
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:insert-environment': => @snippetManager.insertCmdEnv("environment")
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-emph': => @snippetManager.wrapIn("emph")
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-bold': => @snippetManager.wrapIn("textbf")
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:wrap-in-underline': => @snippetManager.wrapIn("underline")
