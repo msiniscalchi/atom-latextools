@@ -94,9 +94,9 @@ By default, Atom uses `C-l` to select the current line. That is rebound to `C-l 
 
 ### Build command: general functionality
 
-| **Command:** | `latextools:build` |
-|-|-|
-| **Keybinding:** | `ctrl-alt-b` (Linux and Windows), `cmd-option-b` (OS X) |
+| Keybinding | Command |
+|---|----|
+| `ctrl-alt-b` (Linux and Windows), `cmd-option-b` (OS X) | `latextools:build`  |
 
 This invokes either `texify` (Windows, MikTeX distribution) or `latexmk` (TeXLive, all platforms, including MacTeX) to build the current TeX file.
 
@@ -110,9 +110,9 @@ Finally, if there were no errors, LaTeXTools will launch your PDF previewer and,
 
 ### Jump to current location in the PDF file
 
-|**Command:** | `latextools:jump-to-pdf`|
-|-|-|
-|**Keybinding:**| `C-l j`|
+| Keybinding | Command |
+|---|----|
+| `C-l j` | `latextools:jump-to-pdf`|
 
 Jumps to the location in the PDF file corresponding to the current cursor position. Multi-file documents are fully supported: see the [next section](#multi-file-documents).
 
@@ -129,7 +129,7 @@ The syntax is as follows: the first line of the file must be
 ### Customizing the build process
 
 You can select a specific tex engine and/or pass tex options in two ways. One is to use the package settings, documented in [the next section](#build-settings). The other is to use the following lines at the top of your tex source file; in a multi-file document, these must be in the root file.
-```tex
+```
 %! TEX program = ...
 %! TEX option = ...
 ```
@@ -150,9 +150,9 @@ Please note: passing options can both be a security risk (if e.g. you enable `wr
 
 ## Reference and Citation Completion
 
-| **Command:** | `latextools:ref-cite-complete` |
-|-|-|
-| **Keybinding:** | `C-l x` or auto-triggered |
+| Keybinding | Command |
+|---|----|
+| `C-l x` or auto-triggered | `latextools:ref-cite-complete` |
 
 The basic idea is to help you insert labels in `\ref{}` commands and bibtex keys in `\cite{}` commands. The appropriate key combination shows a list of available labels or keys, and you can easily select the appropriate one. Full filtering facilities are provided.
 
@@ -216,38 +216,43 @@ LaTeXTools provide facilities to quickly enter commands and environments, as wel
 
 ### Inserting commands and environments
 
-TODO HERE!!! Note IT'S NOT THE SAME FUNCTIONALITY! FIX THIS!!!
+*NOTE*: NOT YET IMPLEMENTED
 
-**Keybindings:** `C-l,c` for commands and `C-l,e` for environments
+| Keybinding | Command |
+|---|----|
+|`C-l,c`| `latextools:insert-command`|
+|`C-l,e`| `latextools:insert-environment`|
 
 To insert a LaTeX command such as `\color{}` or similar, type the command without backslash (i.e. `color`), then hit `C-l,c`. This will replace e.g. `color` with `\color{}` and place the cursor between the braces. Type the argument of the command, then hit Tab to exit the braces.
 
 Similarly, typing `C-l,e` gives you an environment: e.g. `test` becomes
-
+```
 	\begin{test}
 
 	\end{test}
-
+```
 and the cursor is placed inside the environment thus created. Again, Tab exits the environment.
 
 Note that all these commands are undoable: thus, if e.g. you accidentally hit `C-l,c` but you really meant `C-l,e`, a quick `C-z`, followed by `C-l,e`, will fix things.
 
 
-Wrapping existing text in commands and environments
----------------------------------------------------
+### Wrapping existing text in commands and environments
 
-**Keybindings:** `C-l,C-c`, `C-l, C-n`, etc.
+The following table assumes that the text `blah` is currently *selected*.
 
-The tab-triggered functionality just described is mostly useful if you are creating a command or environment from scratch. However, you sometimes have existing text, and just want to apply some formatting to it via a LaTeX command or environment, such as `\emph` or `\begin{theorem}...\end{theorem}`.
+| Keybinding | Result |
+|---|----|
+| `C-l C-c` | `blah` is replaced with `\cmd{blah}`; `cmd` is selected |
+| `C-l C-e` | `blah` is replaced with `\emph{blah}`|
+| `C-l C-b` | `blah` is replaced with `\textbf{blah}`|
+| `C-l C-u` | `blah` is replaced with `\underline{blah}`|
+| `C-l C-t` | `blah` is replaced with `\texttt{blah}`|
+| `C-l C-n` | `blah` is replaced with `\begin{env}`, `blah`, `\end{env}` on three separate lines; `env` is selected in the first and third lines.|
+
+The functionality just described is mostly useful if you are creating a command or environment from scratch. However, you sometimes have existing text, and just want to apply some formatting to it via a LaTeX command or environment, such as `\emph` or `\begin{theorem}...\end{theorem}`.
 
 LaTeXTools' wrapping facility helps you in just these circumstances. All commands below are activated via a key binding, and *require some text to be selected first*. Also, as a mnemonic aid, *all wrapping commands involve typing `C-l,C-something`* (which you can achieve by just holding the `C-` key down after typing `l`).
 
-- `C-l,C-c` wraps the selected text in a LaTeX command structure. If the currently selected text is `blah`, you get `\cmd{blah}`, and the letters `cmd` are highlighted. Replace them with whatever you want, then hit Tab: the cursor will move to the end of the command.
-- `C-l,C-e` gives you `\emph{blah}`, and the cursor moves to the end of the command.
-- `C-l,C-b` gives you `\textbf{blah}`
-- `C-l,C-u` gives you `\underline{blah}`
-- `C-l,C-t` gives you `\texttt{blah}`
-- `C-l,C-n` wraps the selected text in a LaTeX environment structure. You get `\begin{env}`,`blah`, `\end{env}` on three separate lines, with `env` selected. Change `env` to whatever environment you want, then hit Tab to move to the end of the environment.
-
+`C-l C-e`, `C-l C-b`, `C-l C-u` and `C-l C-t` should be self-explanatory. `C-l,C-c` wraps the selected text in a LaTeX command structure. If the currently selected text is `blah`, you get `\cmd{blah}`, and the letters `cmd` are highlighted. Replace them with whatever you want, then hit Tab: the cursor will move to the end of the command. Finally, `C-l,C-n` wraps the selected text in a LaTeX environment structure. You get `\begin{env}`,`blah`, `\end{env}` on three separate lines, with `env` selected. Change `env` to whatever environment you want, then hit Tab to move to the end of the environment.
 
 These commands also work if there is no selection. In this case, they try to do the right thing; for example, `C-l,C-e` gives `\emph{}` with the cursor between the curly braces.
