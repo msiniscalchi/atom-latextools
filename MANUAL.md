@@ -140,7 +140,7 @@ Please note: passing options can both be a security risk (if e.g. you enable `wr
 ### Build settings
 
 | Setting | CSON | Description |
-|-|-|-|
+|---|---|---|
 | *Darwin Texpath* <br> *Linux Texpath* <br> *Win32 Texpath* <br> *Win32 Distro* | | See the [Installation](#installation) section above.|
 | *Keep Focus* | `keepFocus` | If `true` (default), the focus remains on the Atom editor when the PDF file is opened in the previewer. If `false`, focus goes to the PDF viewer.|
 |*Forward Sync* | `forwardSync` | If `true` (default), a forward search is performed, so the PDF viewer displays the location corresponding to the current cursor position. If `false`, no forward search is performed.|
@@ -193,7 +193,7 @@ LaTeXTools now also looks `\addbibresource{}` commands, which provides basic com
 ### Completion Settings
 
 | Setting | CSON | Description |
-|-|-|-|
+|---|---|---|
 |*Cite Auto Trigger* | `citeAutoTrigger` | Automatically show the select view panel upon typing `\cite{` and friends (default: `true`)|
 |*Ref Auto Trigger* | `refAutoTrigger` | Automatically show the select view panel upon typing `\ref{` and friends (default: `true`)|
 | *Ref Add Parenthesis* | `refAddParenthesis` | Automatically add ')' if the reference was preceded by '(' (default: `false`)|
