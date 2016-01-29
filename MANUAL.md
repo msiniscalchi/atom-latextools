@@ -63,7 +63,7 @@ On Linux, `texlive` is the officially supported distribution. For the time being
 
 Make sure to install the `latexmk` package; you can use the `tlmgr` utility, or (possibly) your distribution's package manager.
 
-TODO explain how to configure inverse search
+To set up inverse search on Okular, go to "Settings", then "Configure Okular..." and then "Editor". In the "Editor" dropdown menu, choose "Custom Text Editor" and type "atom %f:%l" in the "Command" field. If you are on the Atom Beta channel, change atom to atom-beta.
 
 #### Settings
 
