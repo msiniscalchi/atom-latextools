@@ -8,7 +8,7 @@ Currently (v0.7.6, 1/28/2016), the following features are implemented:
 
 * Finally (as of v0.7.5), a readable User's Manual, though still *in progress*: see `MANUAL.md`. It currently covers installation, compiling and previewing, and reference / citation completion.
 * Compile and view PDF files, using the `MikTeX` or `texlive` distributions and the `SumatraPDF` previewer on Windows, `MacTeX` and `Skim` on OSX, and `texlive` and `okular` on Linux.
-* Select the TeX engine and pass options to it via `%! TEX` directives, or Atom settings.
+* Select the TeX engine and pass options to it via `% !TEX` directives, or Atom settings.
 * Forward and inverse search with the above PDF previewers
 * Parse the tex log output and list errors and warnings in the "LaTeXTools console." Jump to the line containing an error/warning by clicking on the error/warning message in the LaTeXTools Console.
 * Reference completion
@@ -16,7 +16,7 @@ Currently (v0.7.6, 1/28/2016), the following features are implemented:
 * Wrap selection LaTeX commands and environments.
 * Find the last environment opened with `\begin{env}` and close it with the corresponding `\end{env}`.
 * Matching `$` and smart quotes: typing `$` yields `$ $` with the cursor between the dollar signs; typing `'` or `"` yields one or two backquotes and one or two quotes, with the cursor in the middle. Wrapping existing text in dollar signs or quotes is also supported
-* Full support for multi-file projects by adding  `%!TEX root = master.tex` at the top of each included file. This supports error/warning reporting, forward / inverse search, and reference / citation completion.
+* Full support for multi-file projects by adding  `% !TEX root = master.tex` at the top of each included file. This supports error/warning reporting, forward / inverse search, and reference / citation completion.
 * Virtually all LaTeXTools snippets.
 
 

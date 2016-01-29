@@ -122,7 +122,7 @@ Multi-file documents are fully supported. You need to add a line at the top of e
 
 The syntax is as follows: the first line of the file must be
 ```
-%! TEX root = rootfile.tex
+% !TEX root = rootfile.tex
 ```
 (Of course, replace `rootfile.tex` with the name of your actual root file.) After you add this line, save your file---otherwise, this directive will not be recognized.
 
@@ -130,8 +130,8 @@ The syntax is as follows: the first line of the file must be
 
 You can select a specific tex engine and/or pass tex options in two ways. One is to use the package settings, documented in [the next section](#build-settings). The other is to use the following lines at the top of your tex source file; in a multi-file document, these must be in the root file.
 ```
-%! TEX program = ...
-%! TEX option = ...
+% !TEX program = ...
+% !TEX option = ...
 ```
 The acceptable values for `program` are currently `pdflatex` (the default engine), `xelatex` and `lualatex`. Options are passed to your engine, and hence depend upon your tex distribution.
 
