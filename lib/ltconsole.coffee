@@ -1,71 +1,86 @@
-LTConsoleView = require './ltconsole-view'
+{MessagePanelView, LineMessageView, PlainMessageView} =
+  require 'atom-message-panel'
 {CompositeDisposable} = require 'atom'
+path = require 'path'
+
+disposable = new CompositeDisposable
+
+# terrible hack to use the editor font
+setupLogCss = ->
+  # these seem to be the defaults...
+  FONT_DEFAULT = "Menlo, Consolas, 'DejaVu Sans Mono', monospace"
+  FONT_SIZE_DEFAULT = '12px'
+
+  for i in [0...document.styleSheets.length]
+    sheet = document.styleSheets[i]
+    if sheet.ownerNode.sourcePath? and
+        path.basename(sheet.ownerNode.sourcePath) is 'latextools.less'
+
+      font = atom.config.get 'editor.fontFamily' or FONT_DEFAULT
+      fontSize = atom.config.get 'editor.fontSize' or FONT_SIZE_DEFAULT
+      createLogRule sheet, font, fontSize
+
+      disposable.add atom.config.observe 'editor.fontFamily', (value) ->
+        font = value or FONT_DEFAULT
+        createLogRule sheet, font, fontSize
+
+      disposable.add atom.config.observe 'editor.fontSize', (value) ->
+        fontSize = value or FONT_SIZE_DEFAULT
+        createLogRule sheet, font, fontSize
+
+createLogRule = (sheet, font, fontSize) ->
+  index = 0
+  for i in [0...sheet.cssRules.length]
+    rule = sheet.cssRules[i]
+    if rule.selectorText is '.latextools-console-message'
+      sheet.deleteRule i
+      index = i
+      break
+
+  # style for actual message
+  sheet.insertRule(
+    ".latextools-console-message { font-family: #{font}; font-size: #{fontSize};",
+    index
+  )
 
 module.exports =
 class LTConsole
-  ltConsoleView: null
-  bottomPanel: null
-  subscriptions: null
-
   constructor: (state) ->
-    console.log("constructing LTConsole")
-    if state == undefined
-      state = {}
-    @ltConsoleView = new LTConsoleView(state.ltConsoleViewState)
-    @bottomPanel = atom.workspace.addBottomPanel(item: @ltConsoleView.getPanel(), visible: false)
-
-    # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
-    # Not sure I need it here, but let's play it safe
-    @subscriptions = new CompositeDisposable
-
-  destroy: ->
-    @bottomPanel.destroy()
-    @subscriptions.dispose()
-    @ltConsoleView.destroy()
-
-  serialize: ->
-    ltConsoleViewState: @ltConsoleView.serialize()
+    setupLogCss()
+    @messages = new MessagePanelView
+      title: '<strong>LaTeXTools Console</strong>'
+      rawTitle: true
+      closeMethod: 'hide'
+      autoScroll: true
+      className: 'latextools-console'
 
   # Public API:
-
   show: ->
-    console.log("ltconsole.show()")
-    @bottomPanel.show()
+    @messages.attach()
 
   hide: ->
-    console.log("ltconsole.hide()")
-    @bottomPanel.hide()
+    @messages.hide()
 
-  isVisible: ->
-    @bottomPanel.isVisible()
+  toggle: ->
+    @messages.toggle()
 
-  toggle_log: ->
-    if @isVisible()
-      @hide()
-    else
-      @show()
+  addContent: (message, {file, line, is_html, level} = {}) ->
+    is_html = false unless is_html?
+    # basically level should be "error" or "warning"
+    className = "latextools-console-message"
+    className += " text-#{level}" if level?
 
-  addContent: (t, br=true, is_html=false, cb=undefined) ->
-    el_span = document.createElement('span')
-    el_br = document.createElement('br')
-    el_span.onclick = cb if cb
-    if is_html
-      el_span.innerHTML = t
-    else
-      el_text = document.createTextNode(t)
-      el_span.appendChild(el_text)
-      el_text = null
-    el_span.appendChild(el_br) if br
-    @ltConsoleView.getElement().appendChild(el_span)
-    # scroll to bottom of content
-    @ltConsoleView.getElement().scrollTop = @ltConsoleView.getElement().scrollHeight
+    message = new PlainMessageView
+      message: message
+      raw: is_html,
+      className: className
+
+    if file?
+      line = 0 unless line?
+      message.element.onclick = ->
+        atom.workspace.open file, initialLine: line - 1
+
+    @messages.add message
 
   clear: ->
-    @ltConsoleView.getElement().innerHTML = ""
-
-  add_log: ->
-    if @bottomPanel.isVisible()
-      for i in [1..10]
-        do (i) =>
-          @addContent("Line #{i}", br=true, is_html=false, cb= =>
-            console.log("Line #{i} clicked"))
+    @messages.clear()

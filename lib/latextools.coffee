@@ -188,9 +188,9 @@ module.exports = Latextools =
 
     # Register command that toggles this view; DEBUG ONLY
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:toggle-log': =>
-      @ltConsole.toggle_log()
+      @ltConsole.toggle()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:add-log': =>
-      @ltConsole.add_log()
+      @ltConsole.addLog()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:clear-log': =>
       @ltConsole.clear()
 
