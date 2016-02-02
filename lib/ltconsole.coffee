@@ -76,7 +76,7 @@ class LTConsole
       className: className
 
     if file?
-      line = 0 unless line?
+      line = 1 unless line?
       message.element.onclick = ->
         atom.workspace.open file, initialLine: line - 1
 
