@@ -47,18 +47,41 @@ module.exports =
 class LTConsole
   constructor: (state) ->
     setupLogCss()
-    @messages = new MessagePanelView
-      title: '<strong>LaTeXTools Console</strong>'
-      rawTitle: true
-      closeMethod: 'hide'
-      autoScroll: true
-      className: 'latextools-console'
 
+    unless state?.messagePanelView?
+      @messages = new MessagePanelView
+        title: '<strong>LaTeXTools Console</strong>'
+        rawTitle: true
+        closeMethod: 'hide'
+        autoScroll: true
+        className: 'latextools-console'
+    else
+      @messages = new MessagePanelView state.messagePanelView
+
+    # don't display a summary
     @messages.setSummary summary: ''
+
+  destroy: ->
+    @messages.panel?.destroy()
+    @messages.panel = undefined
+
+  serialize: ->
+    messagePanelView:
+      title: @messages.title
+      rawTitle: @messages.rawTitle
+      speed: @messages.speed
+      autoScroll: @messages.autoScroll
+      closeMethod: @messages.closeMethod
+      recentMessagesAtTop: @messages.recentMessagesAtTop
+      position: @messages.position
+      className: @messages.className
+      # use the actual element height
+      maxHeight: @messages.body[0].style.maxHeight
 
   # Public API:
   show: ->
     @messages.attach()
+    @messages.show()
 
   hide: ->
     @messages.hide()
@@ -74,7 +97,7 @@ class LTConsole
 
     message = new PlainMessageView
       message: message
-      raw: is_html,
+      raw: is_html
       className: className
 
     if file?
