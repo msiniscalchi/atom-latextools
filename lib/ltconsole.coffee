@@ -3,7 +3,7 @@
 {CompositeDisposable} = require 'atom'
 path = require 'path'
 
-disposable = new CompositeDisposable
+disposable = undefined
 
 # terrible hack to use the editor font
 setupLogCss = ->
@@ -46,6 +46,7 @@ createLogRule = (sheet, font, fontSize) ->
 module.exports =
 class LTConsole
   constructor: (state) ->
+    disposable = new CompositeDisposable
     setupLogCss()
 
     unless state?.messagePanelView?
@@ -61,9 +62,14 @@ class LTConsole
     # don't display a summary
     @messages.setSummary summary: ''
 
+    # close the console if we switch to a non-LaTeX view
+    disposable.add atom.workspace.onDidStopChangingActivePaneItem (item) =>
+      @messages.close() unless item?.getGrammar?().scopeName is 'text.tex.latex'
+
   destroy: ->
     @messages.panel?.destroy()
     @messages.panel = undefined
+    disposable.dispose()
 
   serialize: ->
     messagePanelView:
