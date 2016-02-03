@@ -39,7 +39,7 @@ createLogRule = (sheet, font, fontSize) ->
 
   # style for actual message
   sheet.insertRule(
-    ".latextools-console-message { font-family: #{font}; font-size: #{fontSize};",
+    ".latextools-console-message { font-family: #{font}; font-size: #{fontSize}; }",
     index
   )
 
