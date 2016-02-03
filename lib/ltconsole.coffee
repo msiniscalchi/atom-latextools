@@ -54,6 +54,8 @@ class LTConsole
       autoScroll: true
       className: 'latextools-console'
 
+    @messages.setSummary summary: ''
+
   # Public API:
   show: ->
     @messages.attach()
