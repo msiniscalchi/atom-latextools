@@ -84,5 +84,8 @@ class LTConsole
 
     @messages.add message
 
+    # scroll to the bottom
+    @messages.updateScroll()
+
   clear: ->
     @messages.clear()
