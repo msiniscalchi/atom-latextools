@@ -1,7 +1,7 @@
-{MessagePanelView, LineMessageView, PlainMessageView} =
-  require 'atom-message-panel'
 {CompositeDisposable} = require 'atom'
 path = require 'path'
+LTConsoleView = require './views/ltconsole-view'
+LTConsoleMessageView = require './views/ltconsole-message-view'
 
 disposable = undefined
 
@@ -9,7 +9,7 @@ disposable = undefined
 setupLogCss = ->
   # these seem to be the defaults...
   FONT_DEFAULT = "Menlo, Consolas, 'DejaVu Sans Mono', monospace"
-  FONT_SIZE_DEFAULT = '12px'
+  FONT_SIZE_DEFAULT = '14px'
 
   for i in [0...document.styleSheets.length]
     sheet = document.styleSheets[i]
@@ -49,40 +49,23 @@ class LTConsole
     disposable = new CompositeDisposable
     setupLogCss()
 
-    unless state?.messagePanelView?
-      @messages = new MessagePanelView
+    unless state?.messages?
+      @messages = new LTConsoleView
         title: '<strong>LaTeXTools Console</strong>'
-        rawTitle: true
-        closeMethod: 'hide'
-        autoScroll: true
-        className: 'latextools-console'
+        isHtml: true
     else
-      @messages = new MessagePanelView state.messagePanelView
-
-    # don't display a summary
-    @messages.setSummary summary: ''
+      @messages = new LTConsoleView state.messages
 
     # close the console if we switch to a non-LaTeX view
     disposable.add atom.workspace.onDidStopChangingActivePaneItem (item) =>
-      @messages.close() unless item?.getGrammar?().scopeName is 'text.tex.latex'
+      @messages.hide() unless item?.getGrammar?().scopeName is 'text.tex.latex'
 
   destroy: ->
-    @messages.panel?.destroy()
-    @messages.panel = undefined
+    @messages.dispose()
     disposable.dispose()
 
   serialize: ->
-    messagePanelView:
-      title: @messages.title
-      rawTitle: @messages.rawTitle
-      speed: @messages.speed
-      autoScroll: @messages.autoScroll
-      closeMethod: @messages.closeMethod
-      recentMessagesAtTop: @messages.recentMessagesAtTop
-      position: @messages.position
-      className: @messages.className
-      # use the actual element height
-      maxHeight: @messages.body[0].style.maxHeight
+    messages: @messages.serialize()
 
   # Public API:
   show: ->
@@ -97,24 +80,18 @@ class LTConsole
 
   addContent: (message, {file, line, is_html, level} = {}) ->
     is_html = false unless is_html?
-    # basically level should be "error" or "warning"
-    className = "latextools-console-message"
-    className += " text-#{level}" if level?
+    classes = ["latextools-console-message"]
+    # level should be "error", "warning", or "info"
+    classes.push("text-#{level}") if level?
 
-    message = new PlainMessageView
+    message = new LTConsoleMessageView
       message: message
-      raw: is_html
-      className: className
-
-    if file?
-      line = 1 unless line?
-      message.element.onclick = ->
-        atom.workspace.open file, initialLine: line - 1
+      isHtml: is_html
+      classes: classes
+      line: line
+      file: file
 
     @messages.add message
-
-    # scroll to the bottom
-    @messages.updateScroll()
 
   clear: ->
     @messages.clear()

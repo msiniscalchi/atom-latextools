@@ -8,3 +8,26 @@
 // NOTE: this is actually configured in code
 .latextools-console-message {
 }
+
+.latextools-console > .panel-resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: @component-padding;
+  cursor: row-resize;
+  z-index: 3;
+}
+
+.latextools-console > .panel-heading > .heading-title {
+  cursor: pointer;
+}
+
+.latextools-console > .panel-body {
+  display: block;
+  overflow-y: scroll;
+}
+
+.latextools-console-message > .panel-body > span {
+  display: block;
+}

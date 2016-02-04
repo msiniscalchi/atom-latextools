@@ -34,7 +34,7 @@ class Builder extends LTool
       options.push "-latexoption=\"#{texopt}\""
 
     command = ["latexmk"].concat(options, "\"#{texfile}\"").join(' ')
-    @ltConsole.addContent(command,br=true)
+    @ltConsole.addContent(command)
 
     return command
 
