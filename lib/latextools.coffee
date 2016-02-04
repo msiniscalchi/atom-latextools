@@ -203,8 +203,11 @@ module.exports = Latextools =
       @builder.build()
     @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
       @viewer.jumpToPdf()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:ref-cite-complete': =>
-      @completionManager.refCiteComplete(keybinding=true)
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:ref-cite-complete': =>
+      # drop to JS to call this.getModel() which is the TextEditor the command
+      # is run on
+      te = `this.getModel()`
+      @completionManager.refCiteComplete(te, keybinding=true)
 
     # Snippet insertion: added in consumeSnippets
 
