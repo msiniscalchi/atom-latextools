@@ -23,7 +23,7 @@ class Builder extends LTool
   # ones. It also selects the appropriate tex compiler.
 
   latexmk: (dir, texfile, texfilename, user_options, user_program) ->
-    @ltConsole.addContent("latexmk builder",br=true)
+    @ltConsole.addContent("latexmk builder")
 
     user_program = 'pdf' if user_program is 'pdflatex'
 
@@ -34,12 +34,12 @@ class Builder extends LTool
       options.push "-latexoption=\"#{texopt}\""
 
     command = ["latexmk"].concat(options, "\"#{texfile}\"").join(' ')
-    @ltConsole.addContent(command,br=true)
+    @ltConsole.addContent(command)
 
     return command
 
   texify: (dir, texfile, texfilename, user_options, user_program) ->
-    @ltConsole.addContent("texify builder (internal)",br=true)
+    @ltConsole.addContent("texify builder")
 
     options = ["-b", "-p"]
 
@@ -58,7 +58,7 @@ class Builder extends LTool
     program = "pdflatex" # unused for now
 
     command = ["texify"].concat(options, "\"#{texfile}\"").join(' ')
-    @ltConsole.addContent(command,br=true)
+    @ltConsole.addContent(command)
 
     return command
 
@@ -128,9 +128,9 @@ class Builder extends LTool
     cmd_env = process.env
     if texpath
       cmd_env.PATH = current_path + path.delimiter + texpath
-      @ltConsole.addContent("setting PATH = #{process.env.PATH}")
+      @ltConsole.addContent("Setting PATH = #{process.env.PATH}")
 
-    @ltConsole.addContent("Processing file #{filebase} (#{filename}) in directory #{filedir}",br=true)
+    @ltConsole.addContent("Processing file #{filebase} (#{filename}) in directory #{filedir}")
 
     builder = atom.config.get("latextools.builder")
     builder = "texify-latexmk" if builder not in ["texify-latexmk"]
@@ -159,7 +159,7 @@ class Builder extends LTool
         # return
         # Parse error log
         fulllogfile = path.join(filedir, filename + ".log") # takes care of quotes
-        @ltConsole.addContent("Parsing " + fulllogfile, br=true)
+        @ltConsole.addContent("Parsing #{fulllogfile}")
         try
           log = fs.readFileSync(fulllogfile, 'utf8')
         catch error
@@ -176,32 +176,32 @@ class Builder extends LTool
         process.chdir(filedir)
         [errors, warnings] = parse_tex_log(log)
 
-        @ltConsole.addContent("ERRORS:", br=true)
+        @ltConsole.addContent("ERRORS:")
         for err in errors
           do (err) =>
             if err[1] == -1
               err_string = "#{err[0]}: #{err[2]} [#{err[3]}]"
-              @ltConsole.addContent(err_string, br=true)
+              @ltConsole.addContent err_string, level: 'error'
             else
               err_string = "#{err[0]}:#{err[1]}: #{err[2]} [#{err[3]}]"
-#              @ltConsole.addContent err_string, br=true
-              @ltConsole.addContent err_string, true, false, =>
-                atom.workspace.open(err[0], {initialLine: err[1]-1})
-                #te.setCursorBufferPosition([err[1]-1,0])
+              @ltConsole.addContent err_string,
+                file: err[0]
+                line: err[1]
+                level: 'error'
 
-        @ltConsole.addContent("WARNINGS:", br=true)
+        @ltConsole.addContent("WARNINGS:")
         for warn in warnings
           do (warn) =>
             if warn[1] == -1
               warn_string = "#{warn[0]}: #{warn[2]}"
-              @ltConsole.addContent(warn_string, br=true)
+              @ltConsole.addContent warn_string, level: 'warning'
             else
               warn_string = "#{warn[0]}:#{warn[1]}: #{warn[2]}"
-#              @ltConsole.addContent warn_string, br=true
-              @ltConsole.addContent warn_string, true, false, =>
-                atom.workspace.open(warn[0], {initialLine: warn[1]-1})
-                #te.setCursorBufferPosition([warn[1]-1,0])
+              @ltConsole.addContent warn_string,
+                file: warn[0]
+                line: warn[1]
+                level: 'warning'
 
         # Jump to PDF
-        @ltConsole.addContent("Jumping to PDF...", br=true)
+        @ltConsole.addContent("Jumping to PDF...")
         @viewer.jumpToPdf()

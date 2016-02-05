@@ -1,71 +1,97 @@
-LTConsoleView = require './ltconsole-view'
 {CompositeDisposable} = require 'atom'
+path = require 'path'
+LTConsoleView = require './views/ltconsole-view'
+LTConsoleMessageView = require './views/ltconsole-message-view'
+
+disposable = undefined
+
+# terrible hack to use the editor font
+setupLogCss = ->
+  # these seem to be the defaults...
+  FONT_DEFAULT = "Menlo, Consolas, 'DejaVu Sans Mono', monospace"
+  FONT_SIZE_DEFAULT = '14px'
+
+  for i in [0...document.styleSheets.length]
+    sheet = document.styleSheets[i]
+    if sheet.ownerNode.sourcePath? and
+        path.basename(sheet.ownerNode.sourcePath) is 'latextools.less'
+
+      font = atom.config.get 'editor.fontFamily' or FONT_DEFAULT
+      fontSize = atom.config.get 'editor.fontSize' or FONT_SIZE_DEFAULT
+      createLogRule sheet, font, fontSize
+
+      disposable.add atom.config.observe 'editor.fontFamily', (value) ->
+        font = value or FONT_DEFAULT
+        createLogRule sheet, font, fontSize
+
+      disposable.add atom.config.observe 'editor.fontSize', (value) ->
+        fontSize = value or FONT_SIZE_DEFAULT
+        createLogRule sheet, font, fontSize
+
+createLogRule = (sheet, font, fontSize) ->
+  index = 0
+  for i in [0...sheet.cssRules.length]
+    rule = sheet.cssRules[i]
+    if rule.selectorText is '.latextools-console-message'
+      sheet.deleteRule i
+      index = i
+      break
+
+  # style for actual message
+  sheet.insertRule(
+    ".latextools-console-message { font-family: #{font}; font-size: #{fontSize}; }",
+    index
+  )
 
 module.exports =
 class LTConsole
-  ltConsoleView: null
-  bottomPanel: null
-  subscriptions: null
-
   constructor: (state) ->
-    console.log("constructing LTConsole")
-    if state == undefined
-      state = {}
-    @ltConsoleView = new LTConsoleView(state.ltConsoleViewState)
-    @bottomPanel = atom.workspace.addBottomPanel(item: @ltConsoleView.getPanel(), visible: false)
+    disposable = new CompositeDisposable
+    setupLogCss()
 
-    # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
-    # Not sure I need it here, but let's play it safe
-    @subscriptions = new CompositeDisposable
+    unless state?.messages?
+      @messages = new LTConsoleView
+        title: '<strong>LaTeXTools Console</strong>'
+        isHtml: true
+    else
+      @messages = new LTConsoleView state.messages
+
+    # close the console if we switch to a non-LaTeX view
+    disposable.add atom.workspace.onDidStopChangingActivePaneItem (item) =>
+      @messages.hide() unless item?.getGrammar?().scopeName is 'text.tex.latex'
 
   destroy: ->
-    @bottomPanel.destroy()
-    @subscriptions.dispose()
-    @ltConsoleView.destroy()
+    @messages.dispose()
+    disposable.dispose()
 
   serialize: ->
-    ltConsoleViewState: @ltConsoleView.serialize()
+    messages: @messages.serialize()
 
   # Public API:
-
   show: ->
-    console.log("ltconsole.show()")
-    @bottomPanel.show()
+    @messages.attach()
+    @messages.show()
 
   hide: ->
-    console.log("ltconsole.hide()")
-    @bottomPanel.hide()
+    @messages.hide()
 
-  isVisible: ->
-    @bottomPanel.isVisible()
+  toggle: ->
+    @messages.toggle()
 
-  toggle_log: ->
-    if @isVisible()
-      @hide()
-    else
-      @show()
+  addContent: (message, {file, line, is_html, level} = {}) ->
+    is_html = false unless is_html?
+    classes = ["latextools-console-message"]
+    # level should be "error", "warning", or "info"
+    classes.push("text-#{level}") if level?
 
-  addContent: (t, br=true, is_html=false, cb=undefined) ->
-    el_span = document.createElement('span')
-    el_br = document.createElement('br')
-    el_span.onclick = cb if cb
-    if is_html
-      el_span.innerHTML = t
-    else
-      el_text = document.createTextNode(t)
-      el_span.appendChild(el_text)
-      el_text = null
-    el_span.appendChild(el_br) if br
-    @ltConsoleView.getElement().appendChild(el_span)
-    # scroll to bottom of content
-    @ltConsoleView.getElement().scrollTop = @ltConsoleView.getElement().scrollHeight
+    message = new LTConsoleMessageView
+      message: message
+      isHtml: is_html
+      classes: classes
+      line: line
+      file: file
+
+    @messages.add message
 
   clear: ->
-    @ltConsoleView.getElement().innerHTML = ""
-
-  add_log: ->
-    if @bottomPanel.isVisible()
-      for i in [1..10]
-        do (i) =>
-          @addContent("Line #{i}", br=true, is_html=false, cb= =>
-            console.log("Line #{i} clicked"))
+    @messages.clear()
