@@ -78,7 +78,7 @@ class LTConsole
   toggle: ->
     @messages.toggle()
 
-  addContent: (message, {file, line, is_html, level} = {}) ->
+  addContent: (message, {file, dir, line, is_html, level} = {}) ->
     is_html = false unless is_html?
     classes = ["latextools-console-message"]
     # level should be "error", "warning", or "info"
@@ -90,6 +90,7 @@ class LTConsole
       classes: classes
       line: line
       file: file
+      dir: dir
 
     @messages.add message
 
