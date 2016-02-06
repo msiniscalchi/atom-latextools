@@ -185,7 +185,7 @@ class Builder extends LTool
             else
               err_string = "#{err[0]}:#{err[1]}: #{err[2]} [#{err[3]}]"
               @ltConsole.addContent err_string,
-                file: path.join(filedir,err[0])
+                file: if path.isAbsolute(err[0]) then err[0] else path.join(filedir,err[0])
                 line: err[1]
                 level: 'error'
 
@@ -198,7 +198,7 @@ class Builder extends LTool
             else
               warn_string = "#{warn[0]}:#{warn[1]}: #{warn[2]}"
               @ltConsole.addContent warn_string,
-                file: path.join(filedir,warn[0])
+                file: if path.isAbsolute(warn[0]) then warn[0] else path.join(filedir,warn[0])
                 line: warn[1]
                 level: 'warning'
 
