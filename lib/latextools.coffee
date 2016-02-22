@@ -148,15 +148,12 @@ module.exports = Latextools =
           default: []
           items:
             type: 'string'
-        command:
-          description: "The exact command to run. <strong>Leave this blank</strong> unless you know what you are doing!"
-          type: 'array'
-          default: []
-          items:
-            type: 'string'
-        displayLog:
-          type: 'boolean'
-          default: false
+        # command:
+        #   description: "The exact command to run. <strong>Leave this blank</strong> unless you know what you are doing!"
+        #   type: 'array'
+        #   default: []
+        #   items:
+        #     type: 'string'
       order: 18
 
 # Still need image opening defaults
