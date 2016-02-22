@@ -25,10 +25,10 @@ module.exports = Latextools =
       type: 'boolean'
       default: false
       order: 3
-    fillAutoTrigger:
-      type: 'boolean'
-      default: true
-      order: 4
+    # fillAutoTrigger:
+    #   type: 'boolean'
+    #   default: true
+    #   order: 4
     keepFocus:
       type: 'boolean'
       default: true
@@ -38,17 +38,17 @@ module.exports = Latextools =
       default: true
       order: 6
 
-    commandCompletion:
-      type: 'string'
-      default: 'prefixed'
-      enum: ['always', 'prefixed', 'never']
-      order: 7
+    # commandCompletion:
+    #   type: 'string'
+    #   default: 'prefixed'
+    #   enum: ['always', 'prefixed', 'never']
+    #   order: 7
 
-    hideBuildPanel:
-      type: 'string'
-      default: 'never'
-      enum: ['always', 'no_errors', 'no_warnings', 'never']
-      order: 8
+    # hideBuildPanel:
+    #   type: 'string'
+    #   default: 'never'
+    #   enum: ['always', 'no_errors', 'no_warnings', 'never']
+    #   order: 8
 
     texFileExtensions:
       type: 'array'
@@ -57,27 +57,27 @@ module.exports = Latextools =
         type: 'string'
       order: 9
 
-    latextoolsSetSyntax:
-      type: 'boolean'
-      default: true
-      order: 10
+    # latextoolsSetSyntax:
+    #   type: 'boolean'
+    #   default: true
+    #   order: 10
 
-    temporaryFileExtensions:
-      type: 'array'
-      default: [
-		          ".blg",".bbl",".aux",".log",".brf",".nlo",".out",".dvi",".ps",
-		          ".lof",".toc",".fls",".fdb_latexmk",".pdfsync",".synctex.gz",
-              ".ind",".ilg",".idx"
-	             ]
-      items:
-        type: 'string'
-      order: 11
-    temporaryFilesIgnoredFolders:
-      type: 'array'
-      default: [".git", ".svn", ".hg"]
-      items:
-        type: 'string'
-      order: 12
+    # temporaryFileExtensions:
+    #   type: 'array'
+    #   default: [
+		#           ".blg",".bbl",".aux",".log",".brf",".nlo",".out",".dvi",".ps",
+		#           ".lof",".toc",".fls",".fdb_latexmk",".pdfsync",".synctex.gz",
+    #           ".ind",".ilg",".idx"
+	  #            ]
+    #   items:
+    #     type: 'string'
+    #   order: 11
+    # temporaryFilesIgnoredFolders:
+    #   type: 'array'
+    #   default: [".git", ".svn", ".hg"]
+    #   items:
+    #     type: 'string'
+    #   order: 12
 
     darwin:
       type: 'object'
@@ -103,9 +103,9 @@ module.exports = Latextools =
         atomExecutable:
           type: 'string'
           default: ""
-        keepFocusDelay:
-          type: 'number'
-          default: 0.5
+        # keepFocusDelay:
+        #   type: 'number'
+        #   default: 0.5
       order:14
 
     linux:
@@ -114,18 +114,18 @@ module.exports = Latextools =
         texpath:
           type: 'string'
           default: "$PATH:/usr/texbin"
-        python2:
-          type: 'string'
-          default: ""
+        # python2:
+        #   type: 'string'
+        #   default: ""
         atomExecutable:
           type: 'string'
           default: ""
-        syncWait:
-          type: 'number'
-          default: 1.5
-        keepFocusDelay:
-          type: 'number'
-          default: 0.5
+        # syncWait:
+        #   type: 'number'
+        #   default: 1.5
+        # keepFocusDelay:
+        #   type: 'number'
+        #   default: 0.5
       order: 15
 
     builder:
