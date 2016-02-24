@@ -200,5 +200,5 @@ class Builder extends LTool
                 level: 'warning'
 
         # Jump to PDF
-        @ltConsole.addContent("Jumping to PDF...", br=true)
+        @ltConsole.addContent("Jumping to PDF...")
         @viewer.jumpToPdf(te)
