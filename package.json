@@ -1,7 +1,7 @@
 {
   "name": "latextools",
   "main": "./lib/latextools",
-  "version": "0.7.4",
+  "version": "0.7.6",
   "description": "LaTeXTools for Atom: comprehensive support for LaTeX documents",
   "keywords": [
     "tex",
@@ -16,7 +16,7 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "atom-space-pen-views": ">=2.0.0"
+    "atom-space-pen-views": "^2.1.0"
   },
   "consumedServices": {
     "snippets": {

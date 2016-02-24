@@ -19,10 +19,7 @@ class CompletionManager extends LTool
     @sel2_view = new LTSelectList2View
 
 
-  refCiteComplete: (keybinding = false) ->
-
-    te = atom.workspace.getActiveTextEditor()
-
+  refCiteComplete: (te, keybinding = false) ->
     max_length = 100 # max length of ref/cite command, including backslash
     #ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
     ref_rx_rev = /^\{fer(?:qe|egap|v|V|otua|eman|c|C|egapc)?/
@@ -114,10 +111,12 @@ class CompletionManager extends LTool
       bibs = bibs.concat(b.split(','))
 
     # Trim and take care of .bib extension
-    bibs = ( if path.extname(b)=='.bib' then path.join(filedir, b.trim()) else path.join(filedir, b.trim() + '.bib') for b in bibs )
-
-    # Check to see if they exist
-    bibs = ( b for b in bibs when is_file(b) )
+    bibs = for b in bibs
+      b = path.resolve(filedir, b) unless path.isAbsolute(b)
+      b = b.trim() + '.bib' unless path.extname(b) is '.bib'
+      # Check to see if the file exists
+      continue unless is_file(b)
+      b
 
     if bibs.length == 0
       alert("Could not find bib files. Please check your \\bibliography statements")

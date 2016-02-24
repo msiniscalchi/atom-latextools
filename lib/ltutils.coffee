@@ -103,7 +103,7 @@ module.exports.find_in_files = (rootdir, src, rx) ->
   # Look for matches in the current file
   results = []
   while (r = rx.exec(src_content)) != null
-    console.log("found " + r[1] + " in " + file_path)
+    #console.log("found " + r[1] + " in " + file_path)
     results.push(r[1])
 
   # Now look for included files and recurse into them

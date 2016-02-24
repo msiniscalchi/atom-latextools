@@ -9,7 +9,7 @@ class Viewer extends LTool
 
   _jumpWindows: (texfile, pdffile, row, col, forward_sync, keep_focus) ->
     sumatra_cmd = atom.config.get("latextools.win32.sumatra")
-    sumatra_args = [] # ["-reuse-instance"]
+    sumatra_args = ["-reuse-instance"]
 
     if forward_sync
       sumatra_args = sumatra_args.concat(["-forward-search", '\"'+texfile+'\"', "#{row}"])
@@ -20,7 +20,7 @@ class Viewer extends LTool
     @ltConsole.addContent("Executing " + command, br = true)
 
     exec command, {}, (err, stdout, stderr) =>
-      if err > 1 # weirdness
+      if err && !(err.code == 1 && !stderr) # when it is already running, Sumatra returns error code 1 but no error message, while "the jump" works just fine
         @ltConsole.addContent("ERROR #{err.code}: ", br=true)
         @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
 

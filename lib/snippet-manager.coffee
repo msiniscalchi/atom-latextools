@@ -57,6 +57,32 @@ class SnippetManager extends LTool
     te.addSelectionForBufferRange(cmd_range_end)
 
 
+
+  insertCmdEnv: (what) ->
+
+    max_length = 100 # Maximum length of LaTeX command (should be enough!)
+
+    if !@snippetService
+      alert("Still waiting for the snippets service to activate...")
+      return
+
+    te = atom.workspace.getActiveTextEditor()
+
+    # Using Atom's API:
+    te.selectToBeginningOfWord()
+    range = te.getSelectedBufferRange()
+    arg = te.getTextInBufferRange(range)
+    te.setSelectedBufferRange(range, '')
+
+    if arg
+      snippet = switch what
+        when "command"
+          "\\\\#{arg}\\{$1\\}$0"
+        when "environment"
+          "\\\\begin\{#{arg}\}\n$1\n\\\\end\{#{arg}\}$0"
+      @snippetService.insertSnippet(snippet)
+
+
   wrapIn: (cmd) ->
 
     if !@snippetService
@@ -68,7 +94,11 @@ class SnippetManager extends LTool
     text = te.getTextInBufferRange(range)
 
     # Use snippets to easily remove selection, move cursor at end
-    snippet = "\\\\#{cmd}\\{#{text}\\}$0"
+    # (but only if there is some text)
+    if text
+      snippet = "\\\\#{cmd}\\{#{text}\\}$0"
+    else
+      snippet = "\\\\#{cmd}\\{$1\\}$0"
     @snippetService.insertSnippet(snippet)
 
 
