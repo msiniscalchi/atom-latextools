@@ -1,12 +1,12 @@
 # LaTeXTools for Atom
 
-by Marciano Siniscalchi
+by Ian Bacher and Marciano Siniscalchi
 
-This is an Atom port of the [LaTeXTools package](http://github.com/SublimeText/LaTeXTools) for Sublime Text (currently maintained by Ian Bacher and myself).
+This is an Atom port of the [LaTeXTools package](http://github.com/SublimeText/LaTeXTools) for Sublime Text.
 
-Currently (v0.7.6, 1/28/2016), the following features are implemented:
+Currently (v0.7.7, 2/26/2016), the following features are implemented:
 
-* Finally (as of v0.7.5), a readable User's Manual, though still *in progress*: see `MANUAL.md`. It currently covers installation, compiling and previewing, and reference / citation completion.
+* Finally (as of v0.7.5), a readable User's Manual, though still *in progress*: see the file `MANUAL.md` (also accessible [here](https://github.com/msiniscalchi/atom-latextools/blob/master/MANUAL.md)). It currently covers installation, compiling and previewing, and reference / citation completion.
 * Compile and view PDF files, using the `MikTeX` or `texlive` distributions and the `SumatraPDF` previewer on Windows, `MacTeX` and `Skim` on OSX, and `texlive` and `okular` on Linux.
 * Select the TeX engine and pass options to it via `% !TEX` directives, or Atom settings.
 * Forward and inverse search with the above PDF previewers

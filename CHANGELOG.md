@@ -52,3 +52,13 @@
 
 ## 0.7.6
 * Manual fixes
+
+## 0.7.7
+* Ian Bacher is now on board as a contributor!
+* Snazzy new resizable, colorized LaTeXTools Console, courtesy of Ian
+* Lazy-loading modules to improve start-up time
+* Settings: display only options that are actually honored
+* Insert LaTeX commands or environments
+* Allow absolute paths for bibliographies
+* Some ref/cite and other fixes
+* Updated manual

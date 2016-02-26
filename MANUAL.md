@@ -1,8 +1,8 @@
 # THE LATEXTOOLS MANUAL
 
-**Atom Edition** v0.7.6 (1/28/2016)
+**Atom Edition** v0.7.7 (2/26/2016)
 
-by Marciano Siniscalchi
+by Ian Bacher and Marciano Siniscalchi
 
 ## Introduction
 
@@ -34,7 +34,6 @@ To ensure that inverse search works, TODO ELABORATE
 
 #### Settings
 
-**NOTE:** only the options listed below are currently implemented. Disregard any other options you see in the Settings page.
 
 | Setting | CSON | Description |
 |------|----------|-------------|
@@ -104,7 +103,7 @@ This invokes either `texify` (Windows, MikTeX distribution) or `latexmk` (TeXLiv
 
 After compilation, LaTeXTools will show a panel ("LaTeXTools Console") at the bottom of the editor tab and display any errors or warnings. Every such error or warning is clickable: it will move the cursor to the offending line in the tex source, so that you can easily fix the problem.
 
-The LaTeXTools Console stays visible after compilation by default, even if there is no error. (This will become configurable in a later version.) To dismiss it, use `C-l  escape`. Make sure the focus is currently on a tex editor tab, or this keybinding will not work.
+The LaTeXTools Console stays visible after compilation by default, even if there is no error. (This will become configurable in a later version.) To dismiss it, use `C-l  escape`, or click the close box. Make sure the focus is currently on a tex editor tab, or this keybinding will not work. Also note that the console is resizable, using the mouse as usual.
 
 Finally, if there were no errors, LaTeXTools will launch your PDF previewer and, by default, jump to the location corresponding to the position of the cursor in the tex source file ("forward search"). Also, by default, the focus will remain on Atom. These behaviors are configurable via settings.
 
