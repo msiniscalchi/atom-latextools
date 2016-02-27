@@ -149,8 +149,14 @@ class Builder extends LTool
       cmd_env.MYTEST = "Hello, world!"
       command = command
 
+      options =
+        cwd: filedir
+        env: cmd_env
+        # 25 MB
+        maxBuffer: 26214400
+
       # cd to dir and run command; add output to console for now
-      exec command, {cwd: filedir, env: cmd_env}, (err, stdout, stderr) =>
+      exec command, options, (err, stdout, stderr) =>
         # If there were errors, print them and return
         # if err
         #   @ltConsole.addContent("BUILD ERROR!", br=true)
