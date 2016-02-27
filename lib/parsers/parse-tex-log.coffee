@@ -155,7 +155,7 @@ module.exports.parse_tex_log = (data) ->
 
   handle_warning = (l) ->
 
-    if files==[]
+    if files.length is 0
       location = "[no file]"
       parsing.push("PERR [handle_warning no files] " + l)
     else
@@ -315,7 +315,7 @@ module.exports.parse_tex_log = (data) ->
       err_line = err_match[1]
       err_text = err_match[2]
       # err_msg is set from last time
-      if files==[]
+      if files.length is 0
         location = "[no file]"
         parsing.push("PERR [STATE_REPORT_ERROR no files] " + line)
       else
@@ -373,7 +373,7 @@ module.exports.parse_tex_log = (data) ->
     # This will match both tex and pdftex Fatal Error messages
     if line.length>0 && line.indexOf("==> Fatal error occurred,") >= 0
       debug("Fatal error detected")
-      if errors == []
+      if errors.length is 0
         errors.push(["", -1, "TeX STOPPED: fatal errors occurred. Check the TeX log file for details",""])
       continue
 
