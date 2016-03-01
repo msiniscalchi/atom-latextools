@@ -244,13 +244,13 @@ The following table assumes that the text `blah` is currently *selected*.
 | `C-l C-e` | `blah` is replaced with `\emph{blah}`|
 | `C-l C-b` | `blah` is replaced with `\textbf{blah}`|
 | `C-l C-u` | `blah` is replaced with `\underline{blah}`|
-| `C-l C-t` | `blah` is replaced with `\texttt{blah}`|
+| `C-l C-m` | `blah` is replaced with `\texttt{blah}`|
 | `C-l C-n` | `blah` is replaced with `\begin{env}`, `blah`, `\end{env}` on three separate lines; `env` is selected in the first and third lines.|
 
 The functionality just described is mostly useful if you are creating a command or environment from scratch. However, you sometimes have existing text, and just want to apply some formatting to it via a LaTeX command or environment, such as `\emph` or `\begin{theorem}...\end{theorem}`.
 
 LaTeXTools' wrapping facility helps you in just these circumstances. All commands below are activated via a key binding, and *require some text to be selected first*. Also, as a mnemonic aid, *all wrapping commands involve typing `C-l C-something`* (which you can achieve by just holding the `C-` key down after typing `l`).
 
-`C-l C-e`, `C-l C-b`, `C-l C-u` and `C-l C-t` should be self-explanatory. `C-l C-c` wraps the selected text in a LaTeX command structure. If the currently selected text is `blah`, you get `\cmd{blah}`, and the letters `cmd` are highlighted. Replace them with whatever you want, then hit Tab: the cursor will move to the end of the command. Finally, `C-l C-n` wraps the selected text in a LaTeX environment structure. You get `\begin{env}`,`blah`, `\end{env}` on three separate lines, with `env` selected. Change `env` to whatever environment you want, then hit Tab to move to the end of the environment.
+`C-l C-e`, `C-l C-b`, `C-l C-u` and `C-l C-m` should be self-explanatory. `C-l C-c` wraps the selected text in a LaTeX command structure. If the currently selected text is `blah`, you get `\cmd{blah}`, and the letters `cmd` are highlighted. Replace them with whatever you want, then hit Tab: the cursor will move to the end of the command. Finally, `C-l C-n` wraps the selected text in a LaTeX environment structure. You get `\begin{env}`,`blah`, `\end{env}` on three separate lines, with `env` selected. Change `env` to whatever environment you want, then hit Tab to move to the end of the environment.
 
 These commands also work if there is no selection. In this case, they try to do the right thing; for example, `C-l C-e` gives `\emph{}` with the cursor between the curly braces.
