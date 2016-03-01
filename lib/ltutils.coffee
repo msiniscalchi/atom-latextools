@@ -44,6 +44,15 @@ module.exports.is_file = (fname) ->
   return s.isFile()
 
 
+# Check if a folder exists
+module.exports.is_dir = (dname) ->
+  try
+    s = fs.statSync dname
+  catch e
+    return false
+  s.isDirectory()
+
+
 # Find all matches of a regex starting from a master file
 # and working our way through all included files
 #
