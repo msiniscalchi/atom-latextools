@@ -58,7 +58,11 @@ class LTConsole
 
     # close the console if we switch to a non-LaTeX view
     disposable.add atom.workspace.onDidStopChangingActivePaneItem (item) =>
-      @messages.hide() unless item?.getGrammar?().scopeName is 'text.tex.latex'
+      for pane in atom.workspace.getPanes()
+        if pane.getActiveItem().getGrammar?().scopeName is 'text.tex.latex'
+          return
+      # no visible LaTeX editor in current window
+      @messages.hide()
 
   destroy: ->
     @messages.dispose()
