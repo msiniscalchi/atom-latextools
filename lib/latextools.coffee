@@ -307,8 +307,6 @@ module.exports = Latextools =
 
             @viewerRegistry.add 'pdf-view',
               require './viewers/atom-pdf-viewer'
-            @viewerRegistry.add 'command',
-              require './viewers/command-viewer'
 
             switch process.platform
               when 'darwin'
