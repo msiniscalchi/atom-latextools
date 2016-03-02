@@ -1,4 +1,5 @@
-{exec} = require 'child_process'
+{execFile} = require 'child_process'
+{quote} = require '../ltutils'
 
 module.exports =
 class BaseViewer
@@ -16,11 +17,11 @@ class BaseViewer
       message: "viewFile() is not implemented"
 
   runViewer: (command, callback = @handleExec) ->
-    if Array.isArray command
-      command = command.join ' '
-
-    @ltConsole.addContent "Executing #{command}"
-    exec command, callback
+    @ltConsole.addContent "Executing #{quote(command)}"
+    if command.length > 1
+      execFile command[0], command[1..], callback
+    else
+      execFile command[0], [], callback
 
   handleExec: (err, stdout, stderr) =>
     if err

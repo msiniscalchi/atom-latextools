@@ -22,7 +22,7 @@ class SkimViewer extends BaseViewer
     command = path.join command, 'Contents/SharedSupport/displayline'
 
     args.unshift command
-    args.push line, "\"#{pdfFile}\"", "\"#{texFile}\""
+    args.push line, "#{pdfFile}", "#{texFile}"
 
     @runViewer args
 

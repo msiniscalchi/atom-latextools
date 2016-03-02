@@ -7,12 +7,12 @@ class SumatraViewer extends BaseViewer
 
   forwardSync: (pdfFile, texFile, line, col, opts = {}) ->
     args = _getArgs()
-    args.push "-forward-search", "\"#{texFile}\"", "#{row}", "\"#{pdfFile}\""
+    args.push "-forward-search", "#{texFile}", "#{line}", "#{pdfFile}"
     @runViewer args
 
   viewFile: (pdfFile, opts = {}) ->
     args = _getArgs()
-    args.push "\"#{pdfFile}\""
+    args.push "#{pdfFile}"
     @runViewer args
 
   handleExec: (err, stdout, stderr) =>
