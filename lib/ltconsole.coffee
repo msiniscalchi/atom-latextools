@@ -11,8 +11,7 @@ setupLogCss = ->
   FONT_DEFAULT = "Menlo, Consolas, 'DejaVu Sans Mono', monospace"
   FONT_SIZE_DEFAULT = '14px'
 
-  for i in [0...document.styleSheets.length]
-    sheet = document.styleSheets[i]
+  for sheet in document.styleSheets
     if sheet.ownerNode.sourcePath? and
         path.basename(sheet.ownerNode.sourcePath) is 'latextools.less'
 
@@ -27,10 +26,11 @@ setupLogCss = ->
       disposable.add atom.config.observe 'editor.fontSize', (value) ->
         fontSize = value or FONT_SIZE_DEFAULT
         createLogRule sheet, font, fontSize
+      break
 
 createLogRule = (sheet, font, fontSize) ->
-  index = 0
-  for i in [0...sheet.cssRules.length]
+  index = sheet.cssRules.length
+  for i in [0...index]
     rule = sheet.cssRules[i]
     if rule.selectorText is '.latextools-console-message'
       sheet.deleteRule i
