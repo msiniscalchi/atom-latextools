@@ -29,7 +29,7 @@ module.exports.get_tex_root = (editor) ->
   else
     root = editor.getPath()
 
-  directives = parse_tex_directives editor
+  directives = parse_tex_directives editor, onlyFor: ['root']
   if directives.root?
     root = path.resolve(path.dirname(root), directives.root)
   return root

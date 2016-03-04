@@ -87,8 +87,8 @@ class Builder extends LTool
 
     # Get options and programs
     directives = parse_tex_directives fname,
-      multiValues = ['option'],
-      keyMaps = {'ts-program': 'program'}
+      multiValues: ['option'],
+      keyMaps: {'ts-program': 'program'}
 
     user_options = atom.config.get("latextools.builderSettings.options")
     user_options = user_options.concat directives.option

@@ -90,13 +90,13 @@ describe 'TeXCommentParser', ->
       result = parse_tex_directives(@editor)
       expect(result.root).toBe "C:\\Users\\user\\path\\to\\root.tex"
 
-    it 'should override a previous directive with a latter directive', ->
+    it 'should not override a previous directive with a latter directive', ->
       @editor.insertText("""
         %!TEX program = xelatex
         %!TEX program = lualatex
       """)
       result = parse_tex_directives(@editor)
-      expect(result.program).toBe 'lualatex'
+      expect(result.program).toBe 'xelatex'
 
     it 'should allow multivalued directives which do not get overridden', ->
       @editor.insertText("""
@@ -107,6 +107,15 @@ describe 'TeXCommentParser', ->
       expect(result.options).toContain '--shell-escape'
       expect(result.options).toContain '--draft-mode'
 
+    it 'should allow a single multivalue directive to be provided as a string', ->
+      @editor.insertText("""
+        %!TEX options = --shell-escape
+        %!TEX options = --draft-mode
+      """)
+      result = parse_tex_directives(@editor, multiValues: 'options')
+      expect(result.options).toContain '--shell-escape'
+      expect(result.options).toContain '--draft-mode'
+
     it 'should allow directives to be renamed', ->
       @editor.insertText("%!TEX TS-program=xelatex\n")
       result = parse_tex_directives(
@@ -114,6 +123,30 @@ describe 'TeXCommentParser', ->
       )
       expect(result.program).toBe 'xelatex'
       expect(result['ts-program']).toBeUndefined
+
+    it 'should only return values in the onlyFor list', ->
+      @editor.insertText("""
+        %!TEX program = xelatex
+        %!TEX root = ./root.tex
+        %!TEX options = --shell-escape
+      """)
+      result = parse_tex_directives(
+        @editor, onlyFor: ['root']
+      )
+      expect(result.root).toBe = './root.tex'
+      expect(result.program).toBeUndefined()
+      expect(result.options).toBeUndefined()
+
+    it 'should accept a string as an onlyFor parameter', ->
+      @editor.insertText("""
+        %!TEX program = xelatex
+        %!TEX root = ./root.tex
+        %!TEX options = --shell-escape
+      """)
+      result = parse_tex_directives(@editor, onlyFor: 'root')
+      expect(result.root).toBe = './root.tex'
+      expect(result.program).toBeUndefined()
+      expect(result.options).toBeUndefined()
 
     it 'should support reading from a file specified as a path', ->
       fixturesPath = path.join atom.project.getPaths()[0], 'parsers', \
