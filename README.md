@@ -2,7 +2,7 @@
 
 by Ian Bacher and Marciano Siniscalchi
 
-This is an Atom port of the [LaTeXTools package](http://github.com/SublimeText/LaTeXTools) for Sublime Text.
+This is an Atom port of the [LaTeXTools package](http://github.com/SublimeText/LaTeXTools) for Sublime Text. It aims to provide a 'one-stop' solution for all your TeXing needs.
 
 Currently (v0.8.0, 3/4/2016), the following features are implemented:
 
@@ -31,6 +31,6 @@ The package does **not** provide syntax highlighting. Rather, it is supposed to 
 
 *Warning*: you will see many package settings. The manual (`MANUAL.md`) describes the settings that are actually honored; other settings are place-holders for future functionality.
 
-A final note: there are a couple of other nice LaTeX packages for Atom. Each implements a specific function: compiling / viewing,  reference completion, etc. However, the objective of this package is to provide an integrated solution for your TeXing needs!
+A final note: there are a couple of other nice LaTeX packages for Atom. Each implements a specific function: compiling / viewing,  reference completion, etc. However, the objective of this package is to provide an integrated solution for TeX editing.
 
 Help is welcome!
