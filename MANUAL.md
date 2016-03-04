@@ -108,6 +108,8 @@ The LaTeXTools Console stays visible after compilation by default, even if there
 
 Finally, if there were no errors, LaTeXTools will launch your PDF previewer and, by default, jump to the location corresponding to the position of the cursor in the tex source file ("forward search"). Also, by default, the focus will remain on Atom. These behaviors are configurable via settings.
 
+The text in the LaTeXTools console is selectable as usual.
+
 ### Jump to current location in the PDF file
 
 | Keybinding | Command |
