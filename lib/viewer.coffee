@@ -6,90 +6,9 @@ module.exports =
 
 class Viewer extends LTool
 
-
-  _jumpWindows: (texfile, pdffile, row, col, forward_sync, keep_focus) ->
-    sumatra_cmd = atom.config.get("latextools.win32.sumatra")
-    sumatra_args = ["-reuse-instance"]
-
-    if forward_sync
-      sumatra_args = sumatra_args.concat(["-forward-search", '\"'+texfile+'\"', "#{row}"])
-
-    sumatra_args.push('\"'+pdffile+'\"')
-
-    command = sumatra_cmd + ' ' + sumatra_args.join(' ')
-    @ltConsole.addContent("Executing " + command, br = true)
-
-    exec command, {}, (err, stdout, stderr) =>
-      if err && !(err.code == 1 && !stderr) # when it is already running, Sumatra returns error code 1 but no error message, while "the jump" works just fine
-        @ltConsole.addContent("ERROR #{err.code}: ", br=true)
-        @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
-
-
-
-
-  _jumpDarwin: (texfile, pdffile, row, col, forward_sync, keep_focus) ->
-
-    if keep_focus
-      skim_args = "-r -g"
-    else
-      skim_args = "-r"
-
-    if forward_sync
-      skim_cmd = '/Applications/Skim.app/Contents/SharedSupport/displayline'
-      command = skim_cmd + " #{skim_args} #{row} \"#{pdffile}\" \"#{texfile}\""
-    else
-      displayfile_cmd = path.join(atom.packages.resolvePackagePath("latextools"), "lib/support/displayfile")
-      command = "sh " + displayfile_cmd + " #{skim_args} #{pdffile}"
-
-    @ltConsole.addContent("Executing " + command, br=true)
-
-    exec command, {}, (err, stdout, stderr) =>
-      if err  # weirdness
-        @ltConsole.addContent("ERROR #{err.code}: ", br=true)
-        @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
-
-
-
-  _jumpLinux: (texfile, pdffile, row, col, forward_sync, keep_focus) ->
-
-    console.log("in _jumpLinux")
-
-    if keep_focus
-      okular_args = "--unique --noraise"
-    else
-      okular_args = "--unique"
-
-    okular_cmd = 'okular'
-
-    if forward_sync
-      command = okular_cmd + " #{okular_args} \"#{pdffile}\#src:#{row} #{texfile}\""
-    else
-      command = okular_cmd + " #{okular_args} #{pdffile}"
-
-    @ltConsole.addContent("Executing " + command, br=true)
-
-    console.log(command)
-
-    exec command, {}, (err, stdout, stderr) =>
-      if err  # weirdness
-        @ltConsole.addContent("ERROR #{err.code}: ", br=true)
-        @ltConsole.addContent(line, br=true) for line in stderr.split('\n')
-
-
-
-  _jumpToPdf: (texfile, pdffile, row, col=1) ->
-
-    # TODO make modular, but for now...
-
-    forward_sync = atom.config.get("latextools.forwardSync")
-    keep_focus = atom.config.get("latextools.keepFocus")
-
-    switch process.platform
-      when "darwin" then @_jumpDarwin(texfile, pdffile, row, col, forward_sync, keep_focus)
-      when "win32" then @_jumpWindows(texfile, pdffile, row, col, forward_sync, keep_focus)
-      when "linux" then @_jumpLinux(texfile, pdffile, row, col, forward_sync, keep_focus)
-      else
-        alert("Sorry, no viewer for the current platform")
+  constructor: (viewerRegistry, ltConsole) ->
+    super(ltConsole)
+    @viewerRegistry = viewerRegistry
 
   jumpToPdf: (te) ->
     # if te isn't set, do nothing...
@@ -113,7 +32,6 @@ class Viewer extends LTool
     if parsed_master.ext in tex_exts && parsed_current.ext in tex_exts
       master_path_no_ext = path.join(parsed_master.dir, parsed_master.name)
 
-      @ltConsole.show()  # ensure console is visible
       @ltConsole.addContent("Jump to #{row},#{col}")
 
       pdf_file = master_path_no_ext + '.pdf'
@@ -127,4 +45,24 @@ class Viewer extends LTool
         )
         return
 
-      @_jumpToPdf(current_file, pdf_file, row, col)
+      forward_sync = atom.config.get("latextools.forwardSync")
+      keep_focus = atom.config.get("latextools.keepFocus")
+
+      viewerName = atom.config.get("latextools.viewer")
+      viewerClass = @viewerRegistry.get viewerName
+
+      @ltConsole.addContent("Using viewer #{viewerName}")
+
+      unless viewerClass?
+        alert("Could not find viewer #{viewerName}. Please check your config.")
+        return if viewerName is 'default'
+        viewerClass = @viewerRegistry.get 'default'
+        return unless viewerClass?
+
+      viewer = new viewerClass(@ltConsole)
+
+      if forward_sync
+        viewer.forwardSync pdf_file, current_file, row, col,
+          keepFocus: keep_focus
+      else
+        viewer.viewFile pdf_file, keepFocus: keep_focus
