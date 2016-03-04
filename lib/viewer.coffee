@@ -1,4 +1,4 @@
-{LTool,get_tex_root} = require './ltutils'
+{LTool, get_tex_root, is_file} = require './ltutils'
 {exec, execFile} = require 'child_process'
 path = require 'path'
 
@@ -112,5 +112,19 @@ class Viewer extends LTool
     tex_exts = atom.config.get("latextools.texFileExtensions")
     if parsed_master.ext in tex_exts && parsed_current.ext in tex_exts
       master_path_no_ext = path.join(parsed_master.dir, parsed_master.name)
+
+      @ltConsole.show()  # ensure console is visible
       @ltConsole.addContent("Jump to #{row},#{col}")
-      @_jumpToPdf(current_file,master_path_no_ext + ".pdf",row,col)
+
+      pdf_file = master_path_no_ext + '.pdf'
+      if not is_file(pdf_file)
+        log_file = master_path_no_ext + '.log'
+        @ltConsole.addContent(
+          "Could not find PDF file #{pdf_file}. If no errors appeared from " +
+          "the build, please check your log file, #{log_file}",
+          file: log_file,
+          level: 'error'
+        )
+        return
+
+      @_jumpToPdf(current_file, pdf_file, row, col)
