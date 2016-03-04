@@ -49,7 +49,8 @@ class LTConsoleView
 
     # body
     @body = document.createElement 'div'
-    @body.classList.add 'panel-body', 'padded'
+    @body.classList.add 'panel-body', 'padded', 'native-key-bindings'
+    @body.setAttribute 'tabindex', -1
     @element.appendChild @body
     # end body
     # end DOM
