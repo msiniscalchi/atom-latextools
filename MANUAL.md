@@ -1,6 +1,6 @@
 # THE LATEXTOOLS MANUAL
 
-**Atom Edition** v0.7.7 (2/26/2016)
+**Atom Edition** v0.8.0 (3/04/2016)
 
 by Ian Bacher and Marciano Siniscalchi
 
@@ -15,10 +15,11 @@ LaTeXTools simplifies the preparation of LaTeX documents on the Atom text editor
 
 If you are reading this document, you have already installed LaTeXTools, so congratulations :) In any event, installation is performed in the usual way, from `Settings|Install` in Atom, or using the `apm` command.
 
-You will need to install two additional Atom packages. The second is, strictly speaking, optional, but you are likely to need it if you soft-wrap your lines.
+You will need to install one additional Atom package, and possibly one or two more. The second is, strictly speaking, optional, but you are likely to need it if you soft-wrap your lines. The third is entirely optional--only install it if you are not happy with native PDF viewers on your platform.
 
 * `language-latex`: this is required for LaTeX syntax highlighting. It is also necessary for snippets to work correctly, as it defines text scopes for LaTeX text and math.
 * `grammar-token-limit`: Atom currently has a known limitation: the syntax highlighter will stop working after 100 tokens in a single line. You  will get no highlighting, or inconsistent highligting. This package allows you to raise that limit. I use 300. Don't go crazy, but experiment.
+* `pdf-view`: a Javascript-based PDF viewer that integrates nicely with Atom. It now supports both forward and inverse search.
 
 You should also make sure that the `atom` executable is installed and on your path. TODO ELABORATE
 
@@ -28,7 +29,7 @@ On Windows, both `miktex` and `texlive` are supported distributions. You need to
 
 If you use `texlive`, make sure you also install `latexmk`. (This is included in the full install, but may be omitted if you install a smaller subset of the distribution.)
 
-`SumatraPDF` is the only supported viewer. The reason is that it supports inverse and forward search; other viewers do not.
+`SumatraPDF` is the only supported viewer (in addition to the Atom-based `pdf-view`). The reason is that it supports inverse and forward search; other viewers do not.
 
 To ensure that inverse search works, TODO ELABORATE
 
@@ -45,7 +46,7 @@ To ensure that inverse search works, TODO ELABORATE
 
 ### OS X
 
-On OS X, use the `MacTeX` distribution. The only currently supported PDF viewer is `Skim`, which supports forward and inverse search.
+On OS X, use the `MacTeX` distribution. The only currently supported PDF viewer (in addition to the Atom-based `pdf-view`) is `Skim`, which supports forward and inverse search.
 
 If you install the "base" distribution (not the full one), you need to install `latexmk` separately using the `tlmgr` package manager.
 
@@ -58,7 +59,7 @@ To set up inverse search on Skim, go to the Preferences menu, select the Sync ta
 
 ### Linux
 
-On Linux, `texlive` is the officially supported distribution. For the time being, only the `okular` viewer is supported. It does provide forward and inverse search.
+On Linux, `texlive` is the officially supported distribution. For the time being, only the `okular` viewer is supported (in addition to the Atom-based `pdf-view`). It does provide forward and inverse search.
 
 Make sure to install the `latexmk` package; you can use the `tlmgr` utility, or (possibly) your distribution's package manager.
 
@@ -146,6 +147,15 @@ Please note: passing options can both be a security risk (if e.g. you enable `wr
 | *Builder* | `builder` | Currently, a single option is available, `texify-latexmk`.|
 | *Builder Settings Program* | `builderSettings.program`| One of `pdflatex`, `xelatex`, `lualatex`. Selects the tex engine to use.|
 | *Builder Settings Options* | `builderSettings.options` | Array of command-line options to pass to the tex engine.|
+
+### Viewer settings
+
+Note: these are *in addition* to any platform settings that may be relevant to you (e.g., settings for `SumatraPDF`), and the above focus- and sync-related bulild settings.
+
+| Setting | CSON | Description |
+|---|---|---|
+| *Viewer* | `viewer` | `default` (native, platform-specific viewer) or `pdf-view` (Atom-based).|
+
 
 ## Reference and Citation Completion
 
