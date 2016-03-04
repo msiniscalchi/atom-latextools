@@ -62,11 +62,8 @@ class Builder extends LTool
 
     return command
 
-  build: ->
-    te = atom.workspace.getActiveTextEditor()
-
-    @ltConsole.show()
-    @ltConsole.clear()
+  build: (te) ->
+    return unless te?
 
     # save on build
     # if unsaved, run saveAs
@@ -204,4 +201,4 @@ class Builder extends LTool
 
         # Jump to PDF
         @ltConsole.addContent("Jumping to PDF...")
-        @viewer.jumpToPdf()
+        @viewer.jumpToPdf(te)

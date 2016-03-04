@@ -197,10 +197,16 @@ module.exports = Latextools =
       @ltConsole.show()
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:build': =>
       @requireIfNeeded ['viewer', 'builder']
-      @builder.build()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'latextools:jump-to-pdf': =>
+      # drop to JS to call this.getModel() which is the TextEditor the command
+      # is run on
+      te = `this.getModel()`
+      @builder.build(te)
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:jump-to-pdf': =>
       @requireIfNeeded ['viewer']
-      @viewer.jumpToPdf()
+      # drop to JS to call this.getModel() which is the TextEditor the command
+      # is run on
+      te = `this.getModel()`
+      @viewer.jumpToPdf(te)
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:ref-cite-complete': =>
       @requireIfNeeded ['completion-manager', 'snippet-manager']
       # drop to JS to call this.getModel() which is the TextEditor the command
@@ -249,7 +255,6 @@ module.exports = Latextools =
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:double-quote': =>
       @requireIfNeeded ['snippet-manager']
       @snippetManager.quotes('``', '\'\'', '"')
-
 
 
     # Autotriggered functionality
