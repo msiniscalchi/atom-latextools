@@ -17,8 +17,10 @@ class SnippetManager extends LTool
   wrapInCommand: ->
 
     # In case we haven't gotten the snippets service yet
-    if !@snippetService
-      alert("Still waiting for the snippets service to activate...")
+    unless @snippetService?
+      atom.notifications.addInfo(
+        "Still waiting for the snippets service to activate..."
+      )
       return
 
     te = atom.workspace.getActiveTextEditor()
@@ -37,8 +39,10 @@ class SnippetManager extends LTool
   wrapInEnvironment: ->
 
     # In case we haven't gotten the snippets service yet
-    if !@snippetService
-      alert("Still waiting for the snippets service to activate...")
+    unless @snippetService?
+      atom.notifications.addInfo(
+        "Still waiting for the snippets service to activate..."
+      )
       return
 
     te = atom.workspace.getActiveTextEditor()
@@ -62,8 +66,10 @@ class SnippetManager extends LTool
 
     max_length = 100 # Maximum length of LaTeX command (should be enough!)
 
-    if !@snippetService
-      alert("Still waiting for the snippets service to activate...")
+    unless @snippetService?
+      atom.notifications.addInfo(
+        "Still waiting for the snippets service to activate..."
+      )
       return
 
     te = atom.workspace.getActiveTextEditor()
@@ -85,8 +91,10 @@ class SnippetManager extends LTool
 
   wrapIn: (cmd) ->
 
-    if !@snippetService
-      alert("Still waiting for the snippets service to activate...")
+    unless @snippetService?
+      atom.notifications.addInfo(
+        "Still waiting for the snippets service to activate..."
+      )
       return
 
     te = atom.workspace.getActiveTextEditor()
@@ -124,7 +132,7 @@ class SnippetManager extends LTool
       stop()
 
     if !found
-      alert("No unmatched \\begin")
+      atom.notifications.addError "Could not find unmatched \\begin"
 
   # Handle dollar-sign matching
   # If there is a $ *after* the cursor, just move past it.

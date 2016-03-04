@@ -37,9 +37,14 @@ class Viewer extends LTool
       pdf_file = master_path_no_ext + '.pdf'
       if not is_file(pdf_file)
         log_file = master_path_no_ext + '.log'
-        @ltConsole.addContent(
+        message =
           "Could not find PDF file #{pdf_file}. If no errors appeared from " +
-          "the build, please check your log file, #{log_file}",
+          "the build, please check your log file, #{log_file}"
+
+        atom.notifications.addError message
+
+        @ltConsole.addContent(
+          message,
           file: log_file,
           level: 'error'
         )
@@ -54,7 +59,9 @@ class Viewer extends LTool
       @ltConsole.addContent("Using viewer #{viewerName}")
 
       unless viewerClass?
-        alert("Could not find viewer #{viewerName}. Please check your config.")
+        atom.notifications.addError(
+          "Could not find viewer #{viewerName}. Please check your config."
+        )
         return if viewerName is 'default'
         viewerClass = @viewerRegistry.get 'default'
         return unless viewerClass?
