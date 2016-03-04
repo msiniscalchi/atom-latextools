@@ -62,3 +62,12 @@
 * Allow absolute paths for bibliographies
 * Some ref/cite and other fixes
 * Updated manual
+
+## 0.8.0
+* Support for `pdf-view`!
+* Modularized viewer code to facilitate future support for other viewers
+* Selectable console text
+* Fixed an issue with the log parser
+* Increased the size of the exec buffer to avoid errors with large projects
+* Report error when no PDF is created
+* Various internal improvements and fixes
