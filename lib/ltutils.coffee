@@ -44,6 +44,27 @@ module.exports.is_file = (fname) ->
   return s.isFile()
 
 
+# Check if a folder exists
+module.exports.is_dir = (dname) ->
+  try
+    s = fs.statSync dname
+  catch e
+    return false
+  s.isDirectory()
+
+
+# Convenience method to convert an array of args into an escaped string
+module.exports.quote = (list) ->
+  (for s in list
+    if /["\s]/.test(s) and not /'/.test(s)
+      "'#{s.replace(/(['\\])/g, '\\$1')}'"
+    else if /["'\s]/.test(s)
+      "\"#{s.replace(/(["'\\$`!])/g, '\\$1')}\""
+    else
+      String(s).replace(/([\\$`(){}!#&*|])/g, '\\$1')
+  ).join ' '
+
+
 # Find all matches of a regex starting from a master file
 # and working our way through all included files
 #
