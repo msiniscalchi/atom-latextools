@@ -5,13 +5,15 @@ class AtomPdfViewer extends BaseViewer
   _forwardSync = (view, texFile, line) ->
     view?.forwardSync?(texFile, line)
 
+  _activateItem = (item) ->
+    pane = atom.workspace.paneForItem(item)
+    pane.activate()
+    pane.activateItem(item)
+
   _getActivePaneItem = (pdfFile, opts = {}) ->
     for item of atom.workspace.getPaneItems()
       if item.filePath is pdfFile
-        unless opts.keepFocus
-          pane = atom.workspace.paneForItem(item)
-          pane.activate()
-          pane.activateItem(item)
+        _activateItem(item) unless opts.keepFocus
         return item
 
   _open = (pdfFile, opts = {}, callback = null) ->
@@ -19,11 +21,9 @@ class AtomPdfViewer extends BaseViewer
       cb = callback
       current = atom.workspace.getActivePaneItem()
       callback = (view) ->
-        pane = atom.workspace.paneForItem(current)
-        pane.activate()
-        pane.activateItem(current)
+        _activateItem(current)
         cb(view)
-  
+
     atom.workspace.open(
       pdfFile,
       split: 'right',
