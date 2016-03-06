@@ -1,6 +1,6 @@
 # THE LATEXTOOLS MANUAL
 
-**Atom Edition** v0.8.0 (3/04/2016)
+**Atom Edition** v0.8.0 (3/6/2016)
 
 by Ian Bacher and Marciano Siniscalchi
 
@@ -157,6 +157,23 @@ Note: these are *in addition* to any platform settings that may be relevant to y
 | Setting | CSON | Description |
 |---|---|---|
 | *Viewer* | `viewer` | `default` (native, platform-specific viewer) or `pdf-view` (Atom-based).|
+
+
+### Notes on pdf-view
+
+The Atom `pdf-view` package is supported as of v. 0.8.0. A couple of comments are in order.
+
+First, `pdf-view` uses the `synctex` command-line utility to implement backward and forward search. This means that you must have the `synctex` binary somewhere on your path; alternatively, `pdf-view` has a setting that allows you to specify where it is.
+
+The issue is how to make sure you have the `synctex` binary. If you are on Mac OS X and you installed the full MacTeX distro, you do---there is nothing else you need to do. If, however, you didn't install it, then you need to figure out how to add it using the MacTeX `tlmgr` utility. The same applies to TeXLive on Linux (and Windows): either you installed the entire distribution, or you must add the relevant package.
+
+On Windows, MikTeX does *not* provide `synctex` at all. On my machine, I installed the minimal TeXLive scheme, then added the `synctex` package (search for `synctex` in the TeXLive package manager). Then, I pointed `pdf-view` to the right location (the TeXLive binary directory). Just to be clear: the TeXLive distro is *not needed*; it was just the easiest, laziest way for me to get `synctex`. I could not find a stand-alone binary. If anyone has a better idea of how to get this to work, let me know!
+
+Second: by default, LaTeXTools opens the PDF preview in a separate pane, side-by-side with the pane containing the TeX source. (Remember, a pane is a collection of tabs in Atom). This works well if you have a large screen, or good eyesight. If neither of these apply to you (I have a 13in laptop and horrible eyesight!) you can simply drag the PDF tab to the pane containing the tab with your TeX source. Forward and inverse search will continue to work, but you now have the full width of your Atom window available for the TeX and PDF views (of course, you will need to switch between the two tabs).
+
+Note that the *Keep Focus* and *Forward Sync* settings are honored. If you keep the TeX and PDF files side by side, you probably want to leave *Keep Focus* on (the default). Otherwise, you probably want to set *Keep Focus* to false, so upon compilation the PDF tab is displayed.
+
+Finally, forward search in `pdf-viw` is not perfect. Basically, `pdf-view` gets the page right, but does not scroll the document up/down so the relevant line (the one corresponding to the cursor position in the TeX file) is visible. This is a `pdf-view` limitation.
 
 
 ## Reference and Citation Completion

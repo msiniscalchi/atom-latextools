@@ -4,7 +4,7 @@ by Ian Bacher and Marciano Siniscalchi
 
 This is an Atom port of the [LaTeXTools package](http://github.com/SublimeText/LaTeXTools) for Sublime Text. It aims to provide a 'one-stop' solution for all your TeXing needs.
 
-Currently (v0.8.0, 3/4/2016), the following features are implemented:
+Currently (v0.8.0, 3/6/2016), the following features are implemented:
 
 * Finally (as of v0.7.5), a readable User's Manual, though still *in progress*: see the file `MANUAL.md` (also accessible [here](https://github.com/msiniscalchi/atom-latextools/blob/master/MANUAL.md)). It currently covers installation, compiling and previewing, and reference / citation completion.
 * Compile and view PDF files, using the `MikTeX` or `texlive` distributions and the `SumatraPDF` previewer on Windows, `MacTeX` and `Skim` on OSX, and `texlive` and `okular` on Linux. Alternatively, use the [pdf-view](https://atom.io/packages/pdf-view) package.
