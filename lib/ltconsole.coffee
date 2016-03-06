@@ -60,7 +60,7 @@ class LTConsole
     disposable.add atom.workspace.onDidStopChangingActivePaneItem (item) =>
       for pane in atom.workspace.getPanes()
         activeItem = pane.getActiveItem()
-        if activeItem? and activeItem.getGrammar?().scopeName is 'text.tex.latex'
+        if activeItem? and activeItem.getGrammar?()?.scopeName is 'text.tex.latex'
           return
       # no visible LaTeX editor in current window
       @messages.hide()
