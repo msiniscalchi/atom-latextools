@@ -143,7 +143,7 @@
   'longrightarrow':
     'prefix': 'rightarrow'
     'body': 'longrightarrow'
-  'Leftarrow':
+  'Rightarrow':
     'prefix': 'Rar'
     'body': '\\\\Rightarrow'
   'Longrightarrow':
@@ -180,14 +180,8 @@
   'mathbb':
     'prefix': 'bb'
     'body': '\\\\mathbb{$1}$0'
-  'mathit':
-    'prefix': 'it'
-    'body': '\\\\mathit{$1}$0'
-  'mathbf':
-    'prefix': 'bf'
-    'body': '\\\\mathbf{$1}$0'
   'mathrm':
-    'prefix': 'bb'
+    'prefix': 'rm'
     'body': '\\\\mathrm{$1}$0'
   'mathsf':
     'prefix': 'sf'
