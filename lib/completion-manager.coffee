@@ -119,7 +119,10 @@ class CompletionManager extends LTool
       b
 
     if bibs.length == 0
-      alert("Could not find bib files. Please check your \\bibliography statements")
+      atom.notifications.addWarning(
+        "Could not find any bib files. " +
+        "Please check your \\bibliography statements"
+      )
       return
 
     # If it's a single string, put it in an array
@@ -133,7 +136,10 @@ class CompletionManager extends LTool
       item_fmt = atom.config.get("latextools.citePanelFormat")
 
       if item_fmt.length != 2
-        alert "Incorrect citePanelFormat specification. Check your preferences!"
+        atom.notifications.addError(
+          "Incorrect citePanelFormat specification. Check your preferences!",
+          detail: "Expected 2 entries but got #{item_fmt.length}"
+        )
         return
 
       # Inelegant but safe

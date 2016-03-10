@@ -11,7 +11,8 @@ get_bib_completions = (bibfile) ->
   try
     bib = fs.readFileSync(bibfile, 'utf-8').split('\n')
   catch error
-    alert("cannot read " + bibfile)
+    atom.notifications.addError "cannot read #{bibfile}",
+      detail: error.toString()
     return
 
   keywords = []

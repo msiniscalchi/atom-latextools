@@ -94,7 +94,7 @@ module.exports.find_in_files = (rootdir, src, rx) ->
         break
 
     if not_found
-      alert("Could not find #{src}")
+      atom.notifications.addWarning "Could not find #{src}"
       return null
 
     # i = 0 # old-style looping
@@ -116,7 +116,8 @@ module.exports.find_in_files = (rootdir, src, rx) ->
   try
     src_content = fs.readFileSync(file_path, 'utf-8')
   catch e
-    alert("Could not read #{file_path}; encoding issues?")
+    atom.notifications.addError "Could not read #{file_path}; encoding issues?",
+      detail: e.toString()
     return null
 
   src_content = src_content.replace(/%.*/g, "")

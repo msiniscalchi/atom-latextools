@@ -71,7 +71,9 @@ class Builder extends LTool
       atom.workspace.paneForItem(te)?.saveItem(te)
 
     unless te.getPath()?
-      alert 'Please save your file before attempting to build'
+      atom.notifications.addError(
+        'Please save your file before attempting to build'
+      )
       return
 
     if te.isModified()
@@ -167,8 +169,10 @@ class Builder extends LTool
           log = fs.readFileSync(fulllogfile, 'utf8')
         catch error
           @ltConsole.addContent("Could not read log file!")
-          console.log("Could not read log file #{fulllogfile}")
-          console.log(error)
+          atom.notifications.addError(
+            "Could not read log file #{fulllogfile}",
+            detail: error
+          )
           return
 
 
@@ -214,6 +218,15 @@ class Builder extends LTool
                 file: file
                 line: warn[1]
                 level: 'warning'
+
+        unless errors.length > 0
+          atom.notifications.addSuccess(
+            "Build completed with 0 errors and #{warnings.length} warnings"
+          )
+        else
+          atom.notifications.addError(
+            "Build completed with #{errors.length} errors and #{warnings.length} warnings"
+          )
 
         # Jump to PDF
         @ltConsole.addContent("Jumping to PDF...")
