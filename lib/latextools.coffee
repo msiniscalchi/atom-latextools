@@ -4,6 +4,7 @@ Viewer = null
 ViewerRegistry = null
 CompletionManager = null
 SnippetManager = null
+deleteTempFiles = null
 {Disposable, CompositeDisposable} = require 'atom'
 path = require 'path'
 
@@ -68,22 +69,22 @@ module.exports = Latextools =
     #   default: true
     #   order: 10
 
-    # temporaryFileExtensions:
-    #   type: 'array'
-    #   default: [
-		#           ".blg",".bbl",".aux",".log",".brf",".nlo",".out",".dvi",".ps",
-		#           ".lof",".toc",".fls",".fdb_latexmk",".pdfsync",".synctex.gz",
-    #           ".ind",".ilg",".idx"
-	  #            ]
-    #   items:
-    #     type: 'string'
-    #   order: 11
-    # temporaryFilesIgnoredFolders:
-    #   type: 'array'
-    #   default: [".git", ".svn", ".hg"]
-    #   items:
-    #     type: 'string'
-    #   order: 12
+    temporaryFileExtensions:
+      type: 'array'
+      default: [
+        ".blg",".bbl",".aux",".log",".brf",".nlo",".out",".dvi",".ps",
+        ".lof",".toc",".fls",".fdb_latexmk",".pdfsync",".synctex.gz",
+        ".ind",".ilg",".idx"
+      ]
+      items:
+        type: 'string'
+      order: 11
+    temporaryFilesIgnoredFolders:
+      type: 'array'
+      default: [".git", ".svn", ".hg"]
+      items:
+        type: 'string'
+      order: 12
 
     darwin:
       type: 'object'
@@ -223,6 +224,12 @@ module.exports = Latextools =
       # is run on
       te = `this.getModel()`
       @completionManager.refCiteComplete(te, keybinding=true)
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:delete-temp-files': =>
+      deleteTempFiles ?= require './commands/delete-temp-files'
+      # drop to JS to call this.getModel() which is the TextEditor the command
+      # is run on
+      te = `this.getModel()`
+      deleteTempFiles(te)
 
     # Snippet insertion
 
