@@ -29,35 +29,35 @@
   'numbered eqn':
     'prefix': 'beqn'
     'body': '\\\\begin{equation}\n$0\n\\\\end{equation}\n'
-  'gathern':
+  'gather':
     'prefix': 'bga'
     'body': '\\\\begin{gather*}\n$0\n\\\\end{gather*}\n'
-  'gather':
+  'gathern':
     'prefix': 'bgan'
     'body': '\\\\begin{gather}\n$0\n\\\\end{gather}\n'
-  'alignn':
-    'prefix': 'bga'
-    'body': '\\\\begin{align*}\n$0\n\\\\end{align*}\n'
   'align':
-    'prefix': 'bgan'
+    'prefix': 'bal'
+    'body': '\\\\begin{align*}\n$0\n\\\\end{align*}\n'
+  'alignn':
+    'prefix': 'baln'
     'body': '\\\\begin{align}\n$0\n\\\\end{align}\n'
-  'alignatn':
-    'prefix': 'bga'
-    'body': '\\\\begin{alignat*}\n$0\n\\\\end{alignat*}\n'
   'alignat':
-    'prefix': 'bgan'
+    'prefix': 'baa'
+    'body': '\\\\begin{alignat*}\n$0\n\\\\end{alignat*}\n'
+  'alignatn':
+    'prefix': 'baan'
     'body': '\\\\begin{alignat}\n$0\n\\\\end{alignat}\n'
-  'flalignn':
-    'prefix': 'bga'
-    'body': '\\\\begin{flalign*}\n$0\n\\\\end{flalign*}\n'
   'flalign':
-    'prefix': 'bgan'
+    'prefix': 'bfl'
+    'body': '\\\\begin{flalign*}\n$0\n\\\\end{flalign*}\n'
+  'flalignn':
+    'prefix': 'bfln'
     'body': '\\\\begin{flalign}\n$0\n\\\\end{flalign}\n'
-  'multilinen':
-    'prefix': 'bga'
-    'body': '\\\\begin{multiline*}\n$0\n\\\\end{multiline*}\n'
   'multiline':
-    'prefix': 'bgan'
+    'prefix': 'bml'
+    'body': '\\\\begin{multiline*}\n$0\n\\\\end{multiline*}\n'
+  'multilinen':
+    'prefix': 'bmln'
     'body': '\\\\begin{multiline}\n$0\n\\\\end{multiline}\n'
 
   'itemize':
