@@ -15,9 +15,18 @@ class SkimViewer extends BaseViewer
 
     command = '/Applications/Skim.app'
     if not is_dir(command)
-      command = execSync(
-        'osascript -e "POSIX path of (path to app id \"net.sourceforge.skim-app.skim\")"'
-      ).replace /^\s+|\s+$/g
+      try
+        command = execSync(
+          'osascript -e "POSIX path of (path to app id \\"net.sourceforge.skim-app.skim\\")"'
+        ).toString().replace /^\s+|\s+$/g, ''
+      catch error
+        atom.notifications.addError(
+          'Cannot find <a href="http://skim-app.sourceforge.net/">Skim.app</a>' +
+          ' on your system. Please ensure that Skim is installed before' +
+          ' attempting to run the viewer.'
+          dismissable: true
+        )
+        return
 
     command = path.join command, 'Contents/SharedSupport/displayline'
 
