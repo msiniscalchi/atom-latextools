@@ -1,8 +1,11 @@
 {CompositeDisposable} = require 'atom'
+LTPanelView = require './ltpanel-view'
 
 module.exports =
-class LTConsoleView
+class LTConsoleView extends LTPanelView
   constructor: ({title, isHtml, height, collapsed} = {}) ->
+    super
+  
     # create DOM
     @element = document.createElement 'div'
     @element.classList.add 'latextools-console'
@@ -55,7 +58,6 @@ class LTConsoleView
     # end body
     # end DOM
 
-    @isAttached = false
     @messages = []
 
     if title?
@@ -70,19 +72,6 @@ class LTConsoleView
     @collapse() if collapsed? and collapsed
 
   # public API
-  attach: (panel) ->
-    return if @isAttached
-    @panel = panel
-    if @panel?
-      # hackish
-      @panel.item = @element
-      @panel.show()
-    else
-      @panel = atom.workspace.addBottomPanel
-        item: @element
-        visible: true
-    @isAttached = true
-
   add: (message) ->
     @messages.push message
     @body.appendChild message.getElement()
@@ -92,13 +81,6 @@ class LTConsoleView
     e?.stopPropagation()
     message?.dispose() for message in @messages
     @messages = []
-
-  show: ->
-    @panel?.show()
-
-  hide: (e) =>
-    e?.stopPropagation()
-    @panel?.hide()
 
   toggle: (e) =>
     e?.stopPropagation()
@@ -152,6 +134,11 @@ class LTConsoleView
     @body.style.height = "#{@initialHeight + @startY - e.clientY}px"
 
   # internal API
+  createPanel: ->
+    atom.workspace.addBottomPanel
+      item: @element
+      visible: true
+
   dispose: ->
     # dispose of messages
     @clear()
@@ -160,8 +147,7 @@ class LTConsoleView
     @headingTitle.removeEventListener 'click', @toggle
     @toggleButton.removeEventListener 'click', @toggle
     @closeButton.removeEventListener 'click', @hide
-    # kill the panel
-    @panel?.destroy()
+    super
 
   serialize: ->
     title: @title
