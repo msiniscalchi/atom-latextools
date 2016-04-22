@@ -29,7 +29,7 @@ class AtomPdfViewer extends BaseViewer
       split: 'right',
       activatePane: not opts.keepFocus
       searchAllPanes: true
-    ).done callback
+    ).then callback
 
   forwardSync: (pdfFile, texFile, line, col, opts = {}) ->
     view = _getActivePaneItem pdfFile
