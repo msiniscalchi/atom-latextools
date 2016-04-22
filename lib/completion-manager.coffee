@@ -1,6 +1,6 @@
 {LTool,get_tex_root,find_in_files,is_file} = require './ltutils'
-LTSelectListView = require './ltselectlist-view'
-LTSelectList2View = require './ltselectlist2-view'
+LTSimpleSelectList = require './views/ltsimple-select-list-view'
+LTTwoLineSelectList = require './views/lttwo-line-select-list-view'
 #get_ref_completions = require './get-ref-completions'
 get_bib_completions = require './parsers/get-bib-completions'
 path = require 'path'
@@ -15,8 +15,8 @@ class CompletionManager extends LTool
 
   constructor: (@ltconsole) ->
     super
-    @sel_view = new LTSelectListView
-    @sel2_view = new LTSelectList2View
+    @sel_view = new LTSimpleSelectList
+    @sel2_view = new LTTwoLineSelectList
 
 
   refCiteComplete: (te, keybinding = false) ->
