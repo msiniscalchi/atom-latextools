@@ -1,7 +1,7 @@
 BaseViewer = require './base-viewer'
 
 module.exports =
-class SumatraViewer extends BaseViewer
+class OkularViewer extends BaseViewer
   _getArgs = (opts = {}) ->
     args = ["--unique"]
     args.push "--noraise" if opts?.keepFocus
