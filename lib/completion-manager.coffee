@@ -82,7 +82,7 @@ class CompletionManager extends LTool
 
     # TODO add partially specified label to search field
     @sel_view.setItems(labels)
-    @sel_view.start (item) =>
+    @sel_view.start te, (item) =>
       te.insertText(item)
       # see if we need to skip a brace
       pt = te.getCursorBufferPosition()
@@ -161,7 +161,7 @@ class CompletionManager extends LTool
         bibentries.push( {"primary": primary, "secondary": secondary, "id": keywords[i]} )
 
     @sel2_view.setItems(bibentries)
-    @sel2_view.start (item) =>
+    @sel2_view.start te, (item) =>
       te.insertText(item.id)
       # see if we need to skip a brace
       pt = te.getCursorBufferPosition()
