@@ -229,11 +229,12 @@ class LTSelectListView extends LTPanelView
     clearTimeout(@scheduledTimeout)
     @scheduleTimeout = setTimeout((=> @populateList() if @isAttached), 50)
 
-  show: ->
-    @previouslyFocusedElement = document.activeElement
+  show: (te) ->
+    if te?
+      @previouslyFocusedElement = atom.views.getView(te)
     super
     @filterEditor.focus()
 
   hide: ->
     super
-    @previouslyFocusedElement?.focus()
+    @previouslyFocusedElement?.focus?()

@@ -12,8 +12,8 @@ class LTSimpleSelectList extends LTSelectListView
   cancelled: ->
     @hide()
 
-  start: (@callback) ->
-    @show()
+  start: (te, @callback) ->
+    @show(te)
 
   getPanel: ->
     return @panel
