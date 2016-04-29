@@ -24,7 +24,12 @@ class CompletionManager extends LTool
     #ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
     ref_rx_rev = /^\{fer(?:qe|egap|v|V|otua|eman|c|C|egapc)?/
     #cite_rx = /\\cite[a-z\*]*?(?:\[.*?\]){0,2}\{/
-    cite_rx_rev = /^([^{},]*)(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
+    # Avoid trigger-happy autocomplete: only match (and capture) text
+    # after commas or braces *if* invoked from keybinding
+    if keybinding
+      cite_rx_rev = /^([^{},]*)(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
+    else
+      cite_rx_rev = /^(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
 
     current_point = te.getCursorBufferPosition()
     initial_point = [current_point.row, Math.max(0,current_point.column - max_length)]
