@@ -233,6 +233,9 @@ class LTSelectListView extends LTPanelView
     if te?
       @previouslyFocusedElement = atom.views.getView(te)
     super
+    # Erase old text in filter editor
+    # TODO: set programmatically? Maybe via API?
+    @filterEditor.getModel().setText("")
     @filterEditor.focus()
 
   hide: ->
