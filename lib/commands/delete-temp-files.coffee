@@ -19,17 +19,18 @@ module.exports = (te) ->
   fileHandler = (file) ->
     new Promise (resolve, reject) ->
       filePath = file.getPath()
-      parsedFile = path.parse(filePath)
-      if parsedFile.ext in tempFileExts
-        file.exists().then(
-          fs.unlink filePath, (error) ->
-            if error?
-              reject error
-            else
-              resolve filePath
-        )
-      else
-        resolve filePath
+      for ext in tempFileExts
+        if filePath.endsWith(ext)
+          file.exists().then(
+            fs.unlink filePath, (error) ->
+              if error?
+                reject error
+              else
+                resolve filePath
+          )
+          return
+
+      resolve filePath
 
   folderHandler = (directory) ->
     promises = []
