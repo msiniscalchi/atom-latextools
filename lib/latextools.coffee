@@ -339,7 +339,7 @@ module.exports = Latextools =
             @builder = new Builder(@ltConsole)
             @builder.viewer = @viewer # NOTE: MUST be loaded first!
         when "completion-manager"
-          CompletionManager ?= require './completion-manager'
+          CompletionManager ?= require('./completion-manager').CompletionManager
           @completionManager ?= new CompletionManager(@ltConsole)
         when "snippet-manager"
           SnippetManager ?= require './snippet-manager'
