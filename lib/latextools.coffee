@@ -224,6 +224,15 @@ module.exports = Latextools =
       # is run on
       te = `this.getModel()`
       @completionManager.refCiteComplete(te, keybinding=true)
+    @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:ref-cite-keypress': (e) =>
+      e.abortKeyBinding()
+      @requireIfNeeded ['completion-manager', 'snippet-manager']
+      # drop to JS to call this.getModel() which is the TextEditor the command
+      # is run on
+      te = `this.getModel()`
+      setTimeout (=>
+        @completionManager.refCiteComplete(te)
+      ), 50
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:delete-temp-files': =>
       deleteTempFiles ?= require './commands/delete-temp-files'
       # drop to JS to call this.getModel() which is the TextEditor the command
@@ -272,23 +281,6 @@ module.exports = Latextools =
     @subscriptions.add atom.commands.add 'atom-text-editor', 'latextools:double-quote': =>
       @requireIfNeeded ['snippet-manager']
       @snippetManager.quotes('``', '\'\'', '"')
-
-
-    # Autotriggered functionality
-    # add autocomplete to every text editor that has a tex file
-    atom.workspace.observeTextEditors (te) =>
-      if !( path.extname(te.getPath()) in atom.config.get('latextools.texFileExtensions') )
-        return
-      @subscriptions.add te.onDidStopChanging =>
-        # it doesn't make sense to trigger completions on an inactive text editor
-        if te isnt atom.workspace.getActiveTextEditor()
-          return
-        @requireIfNeeded ['completion-manager', 'snippet-manager']
-        @completionManager.refCiteComplete(te, keybinding=false) \
-        if atom.config.get("latextools.refAutoTrigger") or
-          atom.config.get("latextools.citeAutoTrigger")
-
-        # add more here?
 
   deactivate: ->
     @subscriptions.dispose()
