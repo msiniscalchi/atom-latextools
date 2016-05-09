@@ -6,7 +6,87 @@ get_bib_completions = require './parsers/get-bib-completions'
 path = require 'path'
 fs = require 'fs'
 
-module.exports =
+# ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
+module.exports.ref_rx_rev = ref_rx_rev =
+  /^\{fer(?:qe|egap|v|V|otua|eman|c|C|egapc)?\\/
+
+# Avoids trigger-happy autocomplete
+# Multipart regex break-down:
+# 1. \(hyphen|foreign)(text|block)quote* - csquotes
+# 2. \hybridblockquote* - csquotes
+# 3. \(hyphen|foreign)(text|block)cquote* - csquotes
+# 4. \hybridcquote* - csquotes
+# 5. \(text|block)cquote* - csquotes
+# 6. \volcite* - biblatex
+# 7. \volcites* - biblatex
+# 8. \cites* - biblatex
+# 9. most \cite commands
+# 10. \cite<> etc. - apacite
+module.exports.cite_rx_rev = cite_rx_rev = ///^
+(?:
+(?:(?:,[^\[\],]*)*\[\}[^\{]*\{
+  \*?etouq(?:kcolb|txet)(?:ngierof|nehpyh))|
+(?:(?:,[^\[\],]*)*\[\}[^\{]*\{
+  \*?etouq(?:kcolbdirbyh))|
+(?:(?:,[^\[\],]*)*\[\*?etouq(?:kcolb|txet))|
+(?:(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}\}[^\{]*\{
+  \*?etouqc(?:kcolb|txet)(?:ngierof|nehpyh))|
+(?:(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}\}[^\{]*\{
+  \*?etouqc(?:kcolbdirbyh))|
+(?:(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}
+  \*?etouqc(?:kcolb|txet))|
+(?:(?:,[^{},]*)*\{(?:\][^\[]*\[)?\}[^\{}]*\{(?:\][^\[]*\[)?
+  eticlo[v|V](?:p|P|f|ft|s|S|t|T|a|A)?)|
+(?:(?:,[^{},]*)*\{(?:\][^\[]*\[)?\}[^\{}]*\{(?:\][^\[]*\[)?
+  (?:\}[^\{}]*\{(?:\][^\[]*\[)?\}[^\{}]*\{(?:\][^\[]*\[)?)*
+  (?:\)[^(]*\(){0,2}
+  seticlo[v|V](?:p|P|f|ft|s|S|t|T|a|A)?)|
+(?:(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}
+  (?:\}[^\}]*\{(?:\][^\[]*\[){0,2})*
+  (?:[\.\*\?]){0,2}(?:\)[^(]*\(){0,2}(?!elyts)(?:[a-zX\*]*?)
+  seti(?:C|c(?!lov)[a-z]*[A-Z]?))|
+(?:(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}
+  (?:[\.\*\?]){0,2}(?!\*?teser|elyts)(?:[a-zX\*]*?)
+  eti(?:C|c(?!lov|m\\)[a-z]*[A-Z]?))|
+(?:(?:,[^{},]*)*\{(?:\][^\[]*\[)?
+  (?:>[^<]*<)?(?:(?:PN)?raey|rohtua|PN|A)?etic(?:lluf|trohs)?(?:ksam)?)
+)\\
+///
+
+# differs from the above in having capture groups to capture any
+# input
+module.exports.cite_rx_rev_key_press = cite_rx_rev_key_press = ///^
+(?:
+(?:([^\[\],]*)(?:,[^\[\],]*)*\[\}[^\{]*\{
+  \*?etouq(?:kcolb|txet)(?:ngierof|nehpyh))|
+(?:([^\[\],]*)(?:,[^\[\],]*)*\[\}[^\{]*\{
+  \*?etouq(?:kcolbdirbyh))|
+(?:([^\[\],]*)(?:,[^\[\],]*)*\[\*?etouq(?:kcolb|txet))|
+(?:([^{},]*)(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}\}[^\{]*\{
+  \*?etouqc(?:kcolb|txet)(?:ngierof|nehpyh))|
+(?:([^{},]*)(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}\}[^\{]*\{
+  \*?etouqc(?:kcolbdirbyh))|
+(?:([^{},]*)(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}
+  \*?etouqc(?:kcolb|txet))|
+(?:([^{},]*)(?:,[^{},]*)*\{(?:\][^\[]*\[)?\}[^\{}]*\{(?:\][^\[]*\[)?
+  eticlo[v|V](?:p|P|f|ft|s|S|t|T|a|A)?)|
+(?:([^{},]*)(?:,[^{},]*)*\{(?:\][^\[]*\[)?\}[^\{}]*\{(?:\][^\[]*\[)?
+  (?:\}[^\{}]*\{(?:\][^\[]*\[)?\}[^\{}]*\{(?:\][^\[]*\[)?)*
+  (?:\)[^(]*\(){0,2}
+  seticlo[v|V](?:p|P|f|ft|s|S|t|T|a|A)?)|
+(?:([^{},]*)(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}
+  (?:\}[^\}]*\{(?:\][^\[]*\[){0,2})*
+  (?:[\.\*\?]){0,2}(?:\)[^(]*\(){0,2}(?!elyts)(?:[a-zX\*]*?)
+  seti(?:C|c(?!lov)[a-z]*[A-Z]?))|
+(?:([^{},]*)(?:,[^{},]*)*\{(?:\][^\[]*\[){0,2}
+  (?:[\.\*\?]){0,2}(?!\*?teser|elyts)(?:[a-zX\*]*?)
+  eti(?:C|c(?!lov|m\\)[a-z]*[A-Z]?))|
+(?:([^{},]*)(?:,[^{},]*)*\{(?:\][^\[]*\[)?
+  (?:>[^<]*<)?(?:(?:PN)?raey|rohtua|PN|A)?etic(?:lluf|trohs)?(?:ksam)?)
+)\\
+///
+
+module.exports.CompletionManager =
 
 class CompletionManager extends LTool
   sel_view: null
@@ -21,15 +101,12 @@ class CompletionManager extends LTool
 
   refCiteComplete: (te, keybinding = false) ->
     max_length = 100 # max length of ref/cite command, including backslash
-    #ref_rx = /\\(?:eq|page|v|V|auto|name|c|C|cpage)?ref\{/
-    ref_rx_rev = /^\{fer(?:qe|egap|v|V|otua|eman|c|C|egapc)?/
-    #cite_rx = /\\cite[a-z\*]*?(?:\[.*?\]){0,2}\{/
-    # Avoid trigger-happy autocomplete: only match (and capture) text
-    # after commas or braces *if* invoked from keybinding
-    if keybinding
-      cite_rx_rev = /^([^{},]*)(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
-    else
-      cite_rx_rev = /^(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
+
+    cite_rx_rev =
+      if keybinding
+        cite_rx_rev_key_press
+      else
+        cite_rx_rev
 
     current_point = te.getCursorBufferPosition()
     initial_point = [current_point.row, Math.max(0, current_point.column - max_length)]
