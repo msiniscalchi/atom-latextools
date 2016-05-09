@@ -32,7 +32,7 @@ class CompletionManager extends LTool
       cite_rx_rev = /^(?:,[^{},]*)*\{(?:\].*?\[){0,2}([a-zX*]*?)etic\\/
 
     current_point = te.getCursorBufferPosition()
-    initial_point = [current_point.row, Math.max(0,current_point.column - max_length)]
+    initial_point = [current_point.row, Math.max(0, current_point.column - max_length)]
     range = [initial_point, current_point]
     line = te.getTextInBufferRange(range)
 
@@ -44,14 +44,19 @@ class CompletionManager extends LTool
     # TODO: pass initial match to select list
 
     if (keybinding or atom.config.get("latextools.refAutoTrigger")) and
-    m = ref_rx_rev.exec(line)
+        m = ref_rx_rev.exec(line)
       console.log("found match")
       @refComplete(te)
+      return true
     else if (keybinding or atom.config.get("latextools.citeAutoTrigger")) and
-    m = cite_rx_rev.exec(line)
+        m = cite_rx.exec(line)
       console.log("found match")
       console.log(m)
       @citeComplete(te)
+      return true
+    else
+      return false
+
 
     # got_ref = false
     # te.backwardsScanInBufferRange ref_rx, range, ({match, stop}) =>

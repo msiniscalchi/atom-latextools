@@ -12,6 +12,8 @@
   '`' : 'latextools:backquote'
   '\'': 'latextools:quote'
   '"' : 'latextools:double-quote'
+  '{' : 'latextools:ref-cite-keypress'
+  ',' : 'latextools:ref-cite-keypress'
 
 "body:not([class~='platform-darwin']) atom-text-editor[data-grammar~='latex']":
   'ctrl-l ctrl-l': 'editor:select-line'
