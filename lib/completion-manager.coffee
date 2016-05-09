@@ -49,7 +49,7 @@ class CompletionManager extends LTool
       @refComplete(te)
       return true
     else if (keybinding or atom.config.get("latextools.citeAutoTrigger")) and
-        m = cite_rx.exec(line)
+        m = cite_rx_rev.exec(line)
       console.log("found match")
       console.log(m)
       @citeComplete(te)
