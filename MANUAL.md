@@ -1,6 +1,6 @@
 # THE LATEXTOOLS MANUAL
 
-**Atom Edition** v0.8.0 (3/6/2016)
+**Atom Edition** v0.8.1 (5/13/2016)
 
 by Ian Bacher and Marciano Siniscalchi
 
@@ -102,7 +102,7 @@ This invokes either `texify` (Windows, MikTeX distribution) or `latexmk` (TeXLiv
 
 **Note**: as specified in the [Installation](#installation) section, this means that you must make sure that `latexmk` is installed if you use TeXlive (or MacTeX, which is basically the OS X version of TeXLive). Otherwise, building will fail.
 
-After compilation, LaTeXTools will show a panel ("LaTeXTools Console") at the bottom of the editor tab and display any errors or warnings. Every such error or warning is clickable: it will move the cursor to the offending line in the tex source, so that you can easily fix the problem.
+After compilation, LaTeXTools will show a panel ("LaTeXTools Console") at the bottom of the editor tab and display any errors or warnings. Every such error or warning is clickable: it will move the cursor to the offending line in the tex source, so that you can easily fix the problem. As of version 0.8.1, errors and warnings are also displayed using standard Atom notifications.
 
 The LaTeXTools Console stays visible after compilation by default, even if there is no error. (This will become configurable in a later version.) To dismiss it, use `C-l  escape`, or click the close box. Make sure the focus is currently on a tex editor tab, or this keybinding will not work. Also note that the console is resizable, using the mouse as usual.
 
@@ -127,6 +127,23 @@ The syntax is as follows: the first line of the file must be
 % !TEX root = rootfile.tex
 ```
 (Of course, replace `rootfile.tex` with the name of your actual root file.) After you add this line, save your file---otherwise, this directive will not be recognized.
+
+
+### Deleting temporary files
+
+| Keybinding | Command |
+|---|----|
+| `C-l backspace` | `latextools:delete-temp-files`|
+
+Deletes the many temporary files created by tex and friends during typesetting. Under "standard" typesetting circumstances, only the `.tex` source and `.pdf` output files are preserved. However, precisely which files are deleted can be configured (see settings below).
+
+The command visits all subdirectories of the directory containing the current tex file (or root tex file, for multi-file documents). A setting controls which directories are ignored (useful if you are using version control).
+
+| Setting | CSON | Description |
+|---|---|---|
+| *Temporary File Extensions* | `temporaryFileExtensions` | Array containing the extensions of all files to be considered temporary |
+| *Temporary Files Ignored Folders* | `temporaryFilesIgnoredFolders` | Subdirectories to ignore when recursively deleting |
+
 
 ### Customizing the build process
 
@@ -187,6 +204,8 @@ The basic idea is to help you insert labels in `\ref{}` commands and bibtex keys
 In order to find all applicable labels and bibtex keys, the plugin looks at the **saved** file. So, if you invoke this command and do not see the label or key you just entered, perhaps you haven't saved the file.
 
 Only bibliographies in external `.bib` files are supported: no `\bibitem...`. Sorry.
+
+As of version 0.8.1, citation commands from natbib, apacite and csquote are supported.
 
 Multi-file documents are fully supported.
 
