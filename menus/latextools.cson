@@ -2,8 +2,8 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Toggle latextools'
-      'command': 'latextools:toggle'
+      'label': 'Jump to PDF'
+      'command': 'latextools:jump-to-pdf'
     }
   ]
 'menu': [
