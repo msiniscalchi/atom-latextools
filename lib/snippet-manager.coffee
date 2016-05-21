@@ -26,7 +26,7 @@ class SnippetManager extends LTool
     te = atom.workspace.getActiveTextEditor()
     range = te.getSelectedBufferRange()
     text = te.getTextInBufferRange(range)
-    text = text.replace("\\", "\\\\")
+    text = text.replace(/\\/g, "\\\\")
 
     te.transact =>
       te.setTextInBufferRange(range, "")
