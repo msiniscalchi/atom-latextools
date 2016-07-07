@@ -95,7 +95,7 @@ module.exports.find_in_files = (rootdir, src, rx) ->
 
     if not_found
       atom.notifications.addWarning "Could not find #{src}"
-      return null
+      return []
 
     # i = 0 # old-style looping
     # while not_found && i < tex_exts.length
@@ -118,7 +118,7 @@ module.exports.find_in_files = (rootdir, src, rx) ->
   catch e
     atom.notifications.addError "Could not read #{file_path}; encoding issues?",
       detail: e.toString()
-    return null
+    return []
 
   src_content = src_content.replace(/%.*/g, "")
 
