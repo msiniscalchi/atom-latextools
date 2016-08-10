@@ -41,7 +41,7 @@ class Builder extends LTool
   texify: (dir, texfile, texfilename, user_options, user_program) ->
     @ltConsole.addContent("texify builder")
 
-    options = ["-b", "-p"]
+    options = ["-p", "--tex-option=\"-interaction=nonstopmode\""]
 
     user_program = switch user_program
       when 'pdflatex' then 'pdftex'
