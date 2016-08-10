@@ -297,16 +297,17 @@ module.exports = Latextools =
   # Private: ensure modules are loaded on demand
   requireIfNeeded: (modules) ->
     # ltConsole is needed by all, so load it
-    unless LTConsole?
-      LTConsole = require './ltconsole'
-      @ltConsole = new LTConsole @state.ltConsoleState
+    LTConsole ?= require './ltconsole'
+    @ltConsole ?= new LTConsole @state.ltConsoleState
 
     for m in modules
       console.log("requiring if needed: #{m}")
       switch m
         when "viewer"
-          unless Viewer?
-            ViewerRegistry = require './viewer-registry'
+          ViewerRegistry ?= require './viewer-registry'
+          Viewer ?= require './viewer'
+
+          unless @viewerRegistry?
             @viewerRegistry = new ViewerRegistry
 
             @viewerRegistry.add 'pdf-view',
@@ -323,13 +324,15 @@ module.exports = Latextools =
                 @viewerRegistry.add ['default', 'okular'],
                   require './viewers/okular-viewer'
 
-            Viewer = require './viewer'
-            @viewer = new Viewer @viewerRegistry, @ltConsole
+          @viewer ?= new Viewer @viewerRegistry, @ltConsole
         when "builder"
-          unless Builder?
-            Builder = require './builder'
+          Builder ?= require './builder'
+          unless @builder?
             @builder = new Builder(@ltConsole)
-            @builder.viewer = @viewer # NOTE: MUST be loaded first!
+
+            # ensure viewer is loaded before builder
+            requireIfNeeded ['viewer'] unless @viewer?
+            @builder.viewer = @viewer
         when "completion-manager"
           CompletionManager ?= require('./completion-manager').CompletionManager
           @completionManager ?= new CompletionManager(@ltConsole)
