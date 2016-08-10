@@ -138,6 +138,8 @@ module.exports.parse_tex_log = (data) ->
   file_useless1_rx = /\{\"?(?:\.|\.\.\/)*[^\.]+\.[^\{\}]*\"?\}(.*)/
   # Useless file #2: <filename.ext>; capture subsequent text
   file_useless2_rx = /<\"?(?:\.|\.\.\/)*[^\.]+\.[^>]*\"?>(.*)/
+  # attempt to filter out package continuation messages
+  file_package_rx = /^\s*\([a-zA-Z]+\)\s{4,}.+/
   pagenum_begin_rx = /\s*\[\d*(.*)/
   line_rx = /^l\.(\d+)\s(.*)/    # l.nn <text>
   warning_rx = /^(.*?) Warning: (.+)/ # Warnings, first line
@@ -232,6 +234,11 @@ module.exports.parse_tex_log = (data) ->
       # A bit inefficient as we duplicate some of the code below for filename matching
       file_match = file_rx.exec(line)
       if file_match
+        if line.startsWith('runsystem') or file_package_rx.exec(line)
+          debug("Ignoring possible file: #{line}")
+          file_match = false
+
+      if file_match
         debug("MATCHED (long line)")
         file_name = file_match[1]
         file_extra = file_match[2] + file_match[3] # don't call it "extra"
@@ -271,7 +278,12 @@ module.exports.parse_tex_log = (data) ->
           # HEURISTIC: if extra line begins with "Package:" "File:" "Document Class:",
           # or other "well-known markers",
           # we just had a long file name, so do not add
-          if extralen>0 && (extra.slice(0,5)=="File:" || extra.slice(0,8)=="Package:" || extra.slice(0,15)=="Document Class:") || (extra.slice(0,9)=="LaTeX2e <") || extra.match(assignment_rx)
+          if extralen > 0 and (
+            extra.slice(0,5) == "File:" or
+            extra.slice(0,8) == "Package:" or
+            extra.slice(0,11) == "Dictionary:" or
+            extra.slice(0,15) == "Document Class:"
+          ) or extra.slice(0,9) == "LaTeX2e <" or extra.match(assignment_rx)
             debug("Found File: and friends, or LaTeX2e, or assignment_rx match")
             extend_line = false
             # no need to recycle extra, as it's nothing we are interested in
@@ -283,6 +295,15 @@ module.exports.parse_tex_log = (data) ->
             debug("Found [...]")
             extend_line = false
             recycle_extra = true # make sure we process the "l.<nn>" line!
+          # if "extra" (next line) starts with a ( and we already have a valid
+          # file, this is likely the start of something else we need to process
+          # as a file, so add a space
+          else if extralen > 0 and extra[0] == '(' and isfile(file_name)
+            line = "#{line} #{extra}"
+            debug("Extended #{line}")
+            linelen += extralen + 1
+            if extralen < 79
+              extend_line = false
           else
             line += extra
             debug("Extended: " + line)
@@ -341,7 +362,12 @@ module.exports.parse_tex_log = (data) ->
       debug(line)
 
     # Skip things that are clearly not file names, though they may trigger false positives
-    if line.length>0 && (line.slice(0,5)=="File:" || line.slice(0,8)=="Package:" || line.slice(0,15)=="Document Class:") || (line.slice(0,9)=="LaTeX2e <")
+    if line.length > 0 and (
+      line.slice(0,5) == "File:" or
+      line.slice(0,8) == "Package:" or
+      line.slice(0,11) == "Dictionary:" or
+      line.slice(0,15) == "Document Class:"
+    ) or line.slice(0,9) == "LaTeX2e <" or line.match(assignment_rx)
       continue
 
     # Are we done? Get rid of extra spaces, just in case (we may have extended a line, etc.)
