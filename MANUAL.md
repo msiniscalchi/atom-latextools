@@ -1,6 +1,6 @@
 # THE LATEXTOOLS MANUAL
 
-**Atom Edition** v0.8.1 (5/13/2016)
+**Atom Edition** v0.8.2 (8/10/2016)
 
 by Ian Bacher and Marciano Siniscalchi
 

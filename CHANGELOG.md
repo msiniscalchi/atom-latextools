@@ -1,3 +1,11 @@
+## 0.8.2
+* Add a context menu item to jump to pdf
+* Improve snippets to support text with backslashes
+* Ensure Okular is always run in the `--unique` instance
+* Fix an issue where TeXify would not stop running if `\end{document}` wasn't found
+* Improved heuristics for parse_tex_log
+* Fix several minor issues (#65, #104)
+
 ## 0.8.1
 * Use notifications for more user-friendly warnings / errors
 * Added "delete temp files" command (`C-l backspace`)
