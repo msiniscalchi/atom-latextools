@@ -50,7 +50,7 @@ class SnippetManager extends LTool
     te = atom.workspace.getActiveTextEditor()
     range = te.getSelectedBufferRange()
     text = te.getTextInBufferRange(range)
-    text = text.replace("\\", "\\\\")
+    text = text.replace(/\\/g, "\\\\")
 
     te.transact =>
       te.setTextInBufferRange(range, "")
@@ -104,7 +104,7 @@ class SnippetManager extends LTool
     te = atom.workspace.getActiveTextEditor()
     range = te.getSelectedBufferRange()
     text = te.getTextInBufferRange(range)
-    text = text.replace("\\", "\\\\")
+    text = text.replace(/\\/g, "\\\\")
 
     # Use snippets to easily remove selection, move cursor at end
     # (but only if there is some text)
@@ -152,7 +152,7 @@ class SnippetManager extends LTool
 
     # First, check if there is a selection, and if so, add $..$ around it
     if text =  te.getSelectedText()
-      text = text.replace("\\", "\\\\")
+      text = text.replace(/\\/g, "\\\\")
       range = te.getSelectedBufferRange()
       te.setSelectedBufferRange(range, '')
       @snippetService.insertSnippet("\$#{text}\$")
@@ -187,7 +187,7 @@ class SnippetManager extends LTool
 
     # First, check if there is a selection, and if so, add quotes around it
     if text =  te.getSelectedText()
-      text = text.replace("\\", "\\\\")
+      text = text.replace(/\\/g, "\\\\")
       range = te.getSelectedBufferRange()
       te.setSelectedBufferRange(range, '')
       # Use snippet to leave selection on (same as ST)
