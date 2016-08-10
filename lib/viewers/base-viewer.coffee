@@ -23,6 +23,11 @@ class BaseViewer
     else
       execFile command[0], [], callback
 
+  doAfterPause: (func) ->
+    setTimeout func,
+      atom.config.get("latextools.#{process.platform}.syncWait") * 1000 or
+      1000
+
   handleExec: (err, stdout, stderr) =>
     if err
       @ltConsole.addContent("ERROR #{err.code}")
