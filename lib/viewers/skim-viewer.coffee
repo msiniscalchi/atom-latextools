@@ -40,7 +40,9 @@ class SkimViewer extends BaseViewer
 
     command = path.join(
       atom.packages.resolvePackagePath("latextools"),
-      "lib/displayfile"
+      "lib",
+      "support",
+      "displayfile"
     )
 
     args.unshift command
