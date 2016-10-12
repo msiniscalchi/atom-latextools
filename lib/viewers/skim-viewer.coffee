@@ -46,6 +46,7 @@ class SkimViewer extends BaseViewer
     )
 
     args.unshift command
-    args.push "\"#{pdfFile}\""
+    args.unshift '/bin/bash'
+    args.push "#{pdfFile}"
 
     @runViewer args
