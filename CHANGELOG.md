@@ -1,3 +1,11 @@
+## 0.8.4
+* Show context menu item only in TeX files
+* Actually get displayfile script to work
+
+## 0.8.3
+* Correct path to displayfile script
+* Fix reported error for Atom v1.12
+
 ## 0.8.2
 * Add a context menu item to jump to pdf
 * Improve snippets to support text with backslashes
