@@ -1,3 +1,6 @@
+## 0.8.5
+* Remove duplicate key map to work on v1.12
+
 ## 0.8.4
 * Show context menu item only in TeX files
 * Actually get displayfile script to work
