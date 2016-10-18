@@ -17,7 +17,6 @@
 
 "body:not([class~='platform-darwin']) atom-text-editor[data-grammar~='latex']":
   'ctrl-l ctrl-l': 'editor:select-line'
-  'ctrl-l c': 'latextools:clear-log'
   'ctrl-l escape': 'latextools:hide-ltconsole'
   'ctrl-l shift-escape': 'latextools:show-ltconsole'
   'ctrl-l backspace': 'latextools:delete-temp-files'
@@ -37,7 +36,6 @@
 
 "body.platform-darwin atom-text-editor[data-grammar~='latex']":
   'cmd-l cmd-l': 'editor:select-line'
-  'cmd-l c': 'latextools:clear-log'
   'cmd-l escape': 'latextools:hide-ltconsole'
   'cmd-l shift-escape': 'latextools:show-ltconsole'
   'cmd-l backspace': 'latextools:delete-temp-files'
